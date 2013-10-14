@@ -37,6 +37,11 @@
 
 static NSMutableDictionary *objectDict;
 
+- (void)resetDirty {
+    dirty = NO;
+    dirtyFields = [[NSMutableArray alloc] init];
+}
+
 #pragma mark Constructors
 
 + (CatalyzeObject *)objectWithClassName:(NSString *)className {
@@ -251,8 +256,6 @@ static NSMutableDictionary *objectDict;
 
 - (void)retrieveInBackgroundWithBlock:(CatalyzeObjectResultBlock)block {
     NSString *url = [self lookupURL:NO];
-    NSString *tempString = [NSString stringWithFormat:@"%@_id",[self catalyzeClassName]];
-    url = [url stringByAppendingFormat:@"?%@=%@",tempString,[self objectForKey:tempString]];
     [self.httpManager doGet:url block:^(int status, NSDictionary *response, NSError *error) {
         if (!error) {
             NSString *cname = [self catalyzeClassName];

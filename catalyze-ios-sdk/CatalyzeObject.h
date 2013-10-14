@@ -53,6 +53,8 @@
 
 @property (nonatomic, retain) CatalyzeHTTPManager *httpManager;
 
+- (void)resetDirty;
+
 #pragma mark Constructors
 
 /** @name Constructors */

@@ -109,13 +109,18 @@ typedef enum {
 /** @name LogIn */
 
 /**
- For logging into the catalyze.io API, you must launch a browser and follow the step outlined
+ For logging into the catalyze.io API, you must launch a browser and follow the steps outlined
  in the catalyze.io API documentation.  This method is used for log in and sign up.  A browser is
  launched and after successful authentication, brought back to the application.  For this to work
  properly, ensure that your iOS callback URL Scheme was set in your 
  application:didFinishLaunchingWithOptions: method.
  */
-+ (void)logIn;
+
++ (void)logInWithUsernameInBackground:(NSString *)username password:(NSString *)password block:(CatalyzeHTTPResponseBlock)block;
+
+/** @name SignUp */
+
++ (void)signUpWithUsernameInBackground:(NSString *)username password:(NSString *)password firstName:(NSString *)firstName lastName:(NSString *)lastName block:(CatalyzeHTTPResponseBlock)block;
 
 /** @name Extras */
 

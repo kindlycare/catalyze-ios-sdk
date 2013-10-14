@@ -53,16 +53,14 @@
     for (NSString *s in [[url query] componentsSeparatedByString:@"&"]) {
         NSArray *part = [s componentsSeparatedByString:@"="];
         if ([[part objectAtIndex:0] isEqualToString:@"userId"]) {
-            NSLog(@"found userId: %@",[part objectAtIndex:1]);
             [[NSUserDefaults standardUserDefaults] setInteger:[[part objectAtIndex:1] integerValue] forKey:@"catalyze_user_id"];
+            [[NSUserDefaults standardUserDefaults] synchronize];
         } else if ([[part objectAtIndex:0] isEqualToString:@"sessionToken"]) {
-            NSLog(@"found sessionToken: %@",[part objectAtIndex:1]);
             [[NSUserDefaults standardUserDefaults] setValue:[part objectAtIndex:1] forKey:@"Authorization"];
+            [[NSUserDefaults standardUserDefaults] synchronize];
         } else if ([[part objectAtIndex:0] isEqualToString:@"new"]) {
-            NSLog(@"found new: %@",[part objectAtIndex:1]);
             new = [[part objectAtIndex:1] boolValue];
         } else if ([[part objectAtIndex:0] isEqualToString:@"authorized"]) {
-            NSLog(@"found authorized: %@",[part objectAtIndex:1]);
             authenticated = [[part objectAtIndex:1] boolValue];
         }
     }
