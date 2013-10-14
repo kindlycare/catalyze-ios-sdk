@@ -53,7 +53,7 @@ static const BOOL CATALYZE_DEBUG = NO;
  @param scheme the url scheme used for login callbacks that redirects a user back to their application on successful authentication
  @param appId the id of the application on the catalyze.io API
  */
-+ (void)setApplicationKey:(NSString *)applicationKey URLScheme:(NSString *)scheme applicationId:(NSNumber *)appId;
++ (void)setApiKey:(NSString *)applicationKey URLScheme:(NSString *)scheme applicationId:(NSString *)appId;
 
 /**
  @return the app key set by the developer in application:didFinishLaunchingWithOptions:

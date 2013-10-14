@@ -18,7 +18,7 @@
 
 @implementation Catalyze
 
-+ (void)setApplicationKey:(NSString *)applicationKey URLScheme:(NSString *)scheme applicationId:(NSNumber *)appId {
++ (void)setApiKey:(NSString *)applicationKey URLScheme:(NSString *)scheme applicationId:(NSString *)appId {
     [[NSUserDefaults standardUserDefaults] setValue:applicationKey forKey:@"app_key"];
     [[NSUserDefaults standardUserDefaults] setValue:scheme forKey:@"url_scheme"];
     [[NSUserDefaults standardUserDefaults] setValue:appId forKey:@"app_id"];
