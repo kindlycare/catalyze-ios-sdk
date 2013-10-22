@@ -92,7 +92,7 @@ static CatalyzeUser *currentUser;
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
-    self = [self init];
+    self = [super init];
     if (self) {
         [self setPhoneNumber:[aDecoder decodeObjectForKey:kEncodeKeyPhoneNumber]];
         [self setGender:[CatalyzeUser stringToGender:[aDecoder decodeObjectForKey:kEncodeKeyGender]]];
@@ -181,6 +181,7 @@ static CatalyzeUser *currentUser;
         }
         
         [currentUser resetDirty];
+        [CatalyzeUser saveCurrentUser];
         
         [[NSUserDefaults standardUserDefaults] setInteger:[[dict valueForKey:@"id"] integerValue] forKey:@"catalyze_user_id"];
         [[NSUserDefaults standardUserDefaults] setValue:[dict valueForKey:@"sessionToken"] forKey:@"Authorization"];
