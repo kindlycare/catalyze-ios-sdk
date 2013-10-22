@@ -112,7 +112,13 @@ static CatalyzeUser *currentUser;
 }
 
 - (void)logout {
-    [self.httpManager doGet:[NSString stringWithFormat:@"%@/%@/auth/signout",kCatalyzeBaseURL,[Catalyze applicationId]] block:^(int status, NSDictionary *response, NSError *error) {
+    [self logoutWithBlock:^(int status, NSDictionary *response, NSError *error) {}];
+}
+
+- (void)logoutWithBlock:(CatalyzeHTTPResponseBlock)block {
+
+    [self.httpManager doGet:[NSString stringWithFormat:@"%@/auth/signout",kCatalyzeBaseURL] block:^(int status, NSDictionary *response, NSError *error) {
+        
         if (!error) {
             currentUser = nil;
             
@@ -125,7 +131,12 @@ static CatalyzeUser *currentUser;
         } else {
             NSLog(@"Logout unsuccessful");
         }
+        
+        block(status, response, error);
+    
     }];
+
+
 }
 
 - (BOOL)isAuthenticated {

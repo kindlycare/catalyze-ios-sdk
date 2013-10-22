@@ -81,6 +81,7 @@ typedef enum {
  and tells the API to destroy your session token.
  */
 - (void)logout;
+- (void)logoutWithBlock:(CatalyzeHTTPResponseBlock)block;
 
 /**
  @return YES if the CatalyzeUser has been logged in and has a valid session, otherwise NO
