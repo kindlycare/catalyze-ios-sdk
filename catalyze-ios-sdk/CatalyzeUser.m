@@ -166,7 +166,7 @@ static CatalyzeUser *currentUser;
     AFHTTPClient *httpClient = [[AFHTTPClient alloc] initWithBaseURL:url];
     [httpClient setDefaultHeader:@"X-Api-Key" value:[NSString stringWithFormat:@"ios %@ %@",[[NSBundle mainBundle] bundleIdentifier], [Catalyze applicationKey]]];
     [httpClient setParameterEncoding:AFJSONParameterEncoding];
-    [httpClient postPath:[NSString stringWithFormat:@"https://api.catalyze.io/v1/%@/auth/signin/json",[Catalyze applicationId]] parameters:body success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [httpClient postPath:[NSString stringWithFormat:@"https://api.catalyze.io/v1/auth/signin"] parameters:body success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if (!responseObject) {
             responseObject = [NSDictionary dictionary]; // FIXME: does this work?
         }
