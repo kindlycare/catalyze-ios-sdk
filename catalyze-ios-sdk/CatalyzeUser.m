@@ -236,7 +236,9 @@ static CatalyzeUser *currentUser;
 }
 
 - (void)setUsername:(NSString *)username {
-    [self setObject:username forKey:@"username"];
+    if (username != nil) {
+        [self setObject:username forKey:@"username"];
+    }
 }
 
 - (NSString *)userId {
@@ -244,7 +246,9 @@ static CatalyzeUser *currentUser;
 }
 
 - (void)setUserId:(NSString *)userId {
-    [self setObject:userId forKey:@"id"];
+    if (userId != nil) {
+        [self setObject:userId forKey:@"id"];
+    }
 }
 
 - (NSString *)firstName {
@@ -252,7 +256,9 @@ static CatalyzeUser *currentUser;
 }
 
 - (void)setFirstName:(NSString *)firstName {
-    [self setObject:firstName forKey:@"firstName"];
+    if (firstName != nil) {
+        [self setObject:firstName forKey:@"firstName"];
+    }
 }
 
 - (NSString *)lastName {
@@ -260,7 +266,9 @@ static CatalyzeUser *currentUser;
 }
 
 - (void)setLastName:(NSString *)lastName {
-    [self setObject:lastName forKey:@"lastName"];
+    if (lastName != nil) {
+        [self setObject:lastName forKey:@"lastName"];
+    }
 }
 
 - (NSString *)street {
@@ -268,7 +276,9 @@ static CatalyzeUser *currentUser;
 }
 
 - (void)setStreet:(NSString *)street {
-    [self setObject:street forKey:@"street"];
+    if (street != nil) {
+        [self setObject:street forKey:@"street"];
+    }
 }
 
 - (NSString *)city {
@@ -276,7 +286,9 @@ static CatalyzeUser *currentUser;
 }
 
 - (void)setCity:(NSString *)city {
-    [self setObject:city forKey:@"city"];
+    if (city != nil) {
+        [self setObject:city forKey:@"city"];
+    }
 }
 
 - (NSString *)state {
@@ -284,7 +296,9 @@ static CatalyzeUser *currentUser;
 }
 
 - (void)setState:(NSString *)state {
-    [self setObject:state forKey:@"state"];
+    if (state != nil) {
+        [self setObject:state forKey:@"state"];
+    }
 }
 
 - (NSString *)zipCode {
@@ -292,7 +306,9 @@ static CatalyzeUser *currentUser;
 }
 
 - (void)setZipCode:(NSString *)zipCode {
-    [self setObject:zipCode forKey:@"zipCode"];
+    if (zipCode != nil) {
+        [self setObject:zipCode forKey:@"zipCode"];
+    }
 }
 
 - (NSString *)country {
@@ -300,7 +316,9 @@ static CatalyzeUser *currentUser;
 }
 
 - (void)setCountry:(NSString *)country {
-    [self setObject:country forKey:@"country"];
+    if (country != nil) {
+        [self setObject:country forKey:@"country"];
+    }
 }
 
 - (NSString *)address {
@@ -312,9 +330,11 @@ static CatalyzeUser *currentUser;
 }
 
 - (void)setBirthDate:(NSDate *)birthDate {
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"yyyy-MM-dd"];
-    [self setObject:[dateFormatter stringFromDate:birthDate] forKey:@"dateOfBirth"];
+    if (birthDate != nil) {
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateFormat:@"yyyy-MM-dd"];
+        [self setObject:[dateFormatter stringFromDate:birthDate] forKey:@"dateOfBirth"];
+    }
 }
 
 - (NSNumber *)age {
@@ -322,7 +342,9 @@ static CatalyzeUser *currentUser;
 }
 
 - (void)setAge:(NSNumber *)age {
-    [self setObject:age forKey:@"age"];
+    if (age != nil) {
+        [self setObject:age forKey:@"age"];
+    }
 }
 
 - (CatalyzeUserGender)gender {
@@ -338,7 +360,10 @@ static CatalyzeUser *currentUser;
 }
 
 - (void)setPhoneNumber:(NSString *)phoneNumber {
-    [self setObject:phoneNumber forKey:@"phoneNumber"];
+    if (phoneNumber != nil) {
+        [self setObject:phoneNumber forKey:@"phoneNumber"];
+    }
+
 }
 
 @end
