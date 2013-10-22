@@ -161,7 +161,7 @@ static CatalyzeUser *currentUser;
 
 + (void)logInWithUsernameInBackground:(NSString *)username password:(NSString *)password block:(CatalyzeHTTPResponseBlock)block {
     currentUser = [CatalyzeUser user];
-    NSDictionary *body = [NSDictionary dictionaryWithObjectsAndKeys:username,@"email",password,@"password", nil];
+    NSDictionary *body = [NSDictionary dictionaryWithObjectsAndKeys:username,@"username",password,@"password", nil];
     NSURL *url = [NSURL URLWithString:@""];
     AFHTTPClient *httpClient = [[AFHTTPClient alloc] initWithBaseURL:url];
     [httpClient setDefaultHeader:@"X-Api-Key" value:[NSString stringWithFormat:@"ios %@ %@",[[NSBundle mainBundle] bundleIdentifier], [Catalyze applicationKey]]];
