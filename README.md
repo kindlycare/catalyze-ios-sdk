@@ -1,9 +1,9 @@
 Using the catalyze.io iOS SDK
 =============================
 
-The first thing you must do is set-up an Application on the developer console.  You will need the following information about your Application: access key and application id.  After this is complete, you MUST call 
+The first thing you must do is set-up an Application on the developer console.  You will need the following information about your Application: api key and application id.  After this is complete, you MUST call 
 
-    [Catalyze setApplicationKey:@"{appKey}" URLScheme:@"{scheme}" applicationId:[NSNumber numberWithLong:{appId}]];
+    [Catalyze setApiKey:@"{apiKey}" applicationId:@"{appId}"];
 
 in `application:didFinishLaunchingWithOptions:`.  Note: all methods that require a network request are run asynchronously. 
 
@@ -11,7 +11,7 @@ Don't forget to `#import "Catalyze.h"` whenever you need to use the iOS SDK.
 
 Objects
 -------
-Every data class in the iOS SDK is a subclass of CatalyzeObject.  A CatalyzeObject by itself, represents an Object that can be stored on the catalyze.io API in a pre defined custom class.  These custom classes must be created in the developer console before being used or referenced within an app or the API will return a 4XX or 500 status code. 
+Every data class in the iOS SDK is a subclass of CatalyzeObject.  A CatalyzeObject by itself, represents an Object that can be stored on the catalyze.io API in a pre defined custom class.  These custom classes must be created in the developer console before being used or referenced within an app or the API will return a 4XX status code. 
 
 Creating Objects
 ----------------
@@ -27,7 +27,7 @@ Now that you have a CatalyzeObject you can save values, retrieve values, and cre
 
 You can also initialize an object with a its unique identifier.  This is useful when the id is known, but you have to fetch the object from the API because all of the other data for that Entry is not stored locally.  To do this simply
 
-    CatalyzeObject *myNewObject = [CatalyzeObject objectWithClassName:@"{customClassName}" dictionary:[NSDictionary dictionaryWithObjectsAndKeys:5,@"id", nil]];
+    CatalyzeObject *myNewObject = [CatalyzeObject objectWithClassName:@"{customClassName}" dictionary:[NSDictionary dictionaryWithObjectsAndKeys:@"4eab4-acde-bbab-34221",@"id", nil]];
     [myNewObject retrieveInBackgroundWithBlock:^(CatalyzeObject *object, NSError *error) {
             //take action here
             //the object is passed back in the block, but its not needed since you have a reference to myNewObject
@@ -50,6 +50,10 @@ Asynchronous with callback:
 Asynchronous and perform a selector on the main thread:
 
     [catalyzeObjectInstance saveInBackgroundWithTarget:self selector:@selector(takeAction:)];
+    
+Referenced Objects
+------------------
+On the catalyze.io API you can also have references to a custom class inside another custom class.  Let's say you have a custom class called "MovieStar" and another called "Address".  When you create "MovieStar" in the developer console, you can specify a column as being a reference.  References are of type CatalyzeReference in the iOS SDK.
 
 Users
 -----
@@ -84,24 +88,12 @@ Log in
 ------
 Log in by calling
 
-    [CatalyzeUser login];
-
-A browser will open and tell you how to login.  Afterwards you will be redirected to your application.  You must override the method
-
-    application:handleOpenURL: 
-
-in your App Delegate file.  Inside `handleOpenURL:` simply pass on the URL and let Catalyze take care of the rest.
-
-    [Catalyze handleOpenURL:url withBlock:^(BOOL authenticated, BOOL newUser) {
-            if (authenticated) {
-                if (newUser) {
-                    //user has successfully signed in and is a brand new user
-                } else {
-                    //user is a returning user but has successfully signed in
-                }
-            } else {
-                //user did not successfully log in, should display an error here
-            }
+    [CatalyzeUser logInWithUsernameInBackground:username password:password block:^(int status, NSDictionary *response, NSError *error) {
+        if (error) {
+            // show wrong username / password message
+        } else {
+            // user was logged in and you can now get the user by calling [CatalyzeUser currentUser];
+        }
     }];
 
 Logout
@@ -138,7 +130,7 @@ The first is performed after the User hits the Return key on their keyboard.  Th
     [textField setDelegate:healthDelegate];
     // add the text field to the screen
 
-Dont forgot to implement the two methods specified in the HealthCompletionDelegate protocol
+Don't forget to implement the two methods specified in the HealthCompletionDelegate protocol
 
     - (void)showSuggestions:(NSArray *)suggestions {
         NSLog(@"show these suggestions: %@",suggestions);
