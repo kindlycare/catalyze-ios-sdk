@@ -30,7 +30,7 @@
 - (id)initWithClassName:(NSString *)newClassName {
     self = [super init];
     if (self) {
-        [self setCatalyzeClassName:newClassName];
+        _catalyzeClassName = newClassName;
         self.httpManager = [[CatalyzeHTTPManager alloc] init];
     }
     return self;
@@ -42,49 +42,6 @@
 }
 
 #pragma mark -
-#pragma mark Properties
-
-- (NSString *)catalyzeClassName {
-    return _catalyzeClassName;
-}
-
-- (void)setCatalyzeClassName:(NSString *)catalyzeClassName {
-    _catalyzeClassName = catalyzeClassName;
-}
-
-- (NSString *)queryField {
-    return _queryField;
-}
-
-- (void)setQueryField:(NSString *)queryField {
-    _queryField = queryField;
-}
-
-- (id)queryValue {
-    return _queryValue;
-}
-
-- (void)setQueryValue:(id)queryValue {
-    _queryValue = queryValue;
-}
-
-- (void)setPageNumber:(int)pageNumber {
-    _pageNumber = pageNumber;
-}
-
-- (int)pageNumber {
-    return _pageNumber;
-}
-
-- (void)setPageSize:(int)pageSize {
-    _pageSize = pageSize;
-}
-
-- (int)pageSize {
-    return _pageSize;
-}
-
-#pragma mark -
 #pragma mark Retrieve
 
 - (void)retrieveInBackgroundWithBlock:(CatalyzeArrayResultBlock)block {
@@ -93,7 +50,7 @@
     [params setObject:_queryValue forKey:@"searchBy"];
     [params setObject:[NSNumber numberWithInt:_pageSize] forKey:@"pageSize"];
     [params setObject:[NSNumber numberWithInt:_pageNumber] forKey:@"pageNumber"];
-    [self.httpManager doQueryPost:[NSString stringWithFormat:@"%@/%@/classes/%@/query",kCatalyzeBaseURL,[Catalyze applicationId],[self catalyzeClassName]] withParams:params block:^(int status, NSArray *response, NSError *error) {
+    [self.httpManager doQueryPost:[NSString stringWithFormat:@"%@/classes/%@/query",kCatalyzeBaseURL,[self catalyzeClassName]] withParams:params block:^(int status, NSArray *response, NSError *error) {
         if (block) {
             block(response, error);
         }

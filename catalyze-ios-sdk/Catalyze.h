@@ -15,7 +15,7 @@
  */
 
 /**
- catalyze.io iOS SDK BETA version 1.0.0
+ catalyze.io iOS SDK BETA version 0.2.0
  
  The catalyze.io iOS SDK is the preferred way of interacting with the catalyze.io 
  API when developing for iOS.  Functionalities include user, session, custom classes and data, 
@@ -29,7 +29,7 @@
  "#import Catalyze.h" at the top of the file.
  
  **NOTE:**
- Developers must set their app key, url scheme, and app id in 
+ Developers must set their api key and app id in
  application:didFinishLaunchingWithOptions: or an exception will be thrown on the first network 
  request.
  */
@@ -53,31 +53,16 @@ static const BOOL CATALYZE_DEBUG = NO;
  @param scheme the url scheme used for login callbacks that redirects a user back to their application on successful authentication
  @param appId the id of the application on the catalyze.io API
  */
-+ (void)setApiKey:(NSString *)applicationKey URLScheme:(NSString *)scheme applicationId:(NSString *)appId;
++ (void)setApiKey:(NSString *)apiKey applicationId:(NSString *)appId;
 
 /**
  @return the app key set by the developer in application:didFinishLaunchingWithOptions:
  */
-+ (NSString *)applicationKey;
-
-/**
- @return the url scheme set by the developer in application:didFinishLaunchingWithOptions:
- */
-+ (NSString *)URLScheme;
++ (NSString *)apiKey;
 
 /**
  @return the app id set by the developer in application:didFinishLaunchingWithOptions:
  */
 + (NSString *)applicationId;
-
-/**
- After authentication, the User is directed back to the application.  The method 
- application:handleOpenURL: is called in the App Delegate file.  Passing this URL onto this method
- takes care of the rest.  The result block indicates if authentication was successful or not.
- 
- @param url the URL that the catalyze.io API redirected the User to after authentication
- @param block the block that is performed after all values are saved from the given URL
- */
-+ (void)handleOpenURL:(NSURL *)url withBlock:(CatalyzeHandleOpenURLBlock)block;
 
 @end

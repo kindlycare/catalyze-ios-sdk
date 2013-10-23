@@ -25,6 +25,7 @@
 @property int retrieveCount;
 @property int saveCount;
 @property int currentCount;
+@property (strong, nonatomic) NSMutableDictionary *objectDict;
 
 @end
 
@@ -34,8 +35,9 @@
 @synthesize retrieveCount = _retrieveCount;
 @synthesize saveCount = _saveCount;
 @synthesize currentCount = _currentCount;
+@synthesize objectDict = _objectDict;
 
-static NSMutableDictionary *objectDict;
+//static NSMutableDictionary *objectDict;
 
 - (void)resetDirty {
     dirty = NO;
@@ -60,7 +62,7 @@ static NSMutableDictionary *objectDict;
     self = [super init];
     if (self) {
         _protected = [NSArray arrayWithObjects:@"__class_name",@"id",@"username", nil];
-        objectDict = [[NSMutableDictionary alloc] init];
+        _objectDict = [[NSMutableDictionary alloc] init];
         [self setCatalyzeClassName:newClassName];
         _retrieveCount = -1;
         _saveCount = -1;
@@ -96,31 +98,33 @@ static NSMutableDictionary *objectDict;
 }
 
 - (NSArray *)allKeys {
-    return [objectDict allKeys];
+    return [_objectDict allKeys];
 }
 
 #pragma mark -
 #pragma mark Get and set
 
 - (id)objectForKey:(NSString *)key {
-    if (!objectDict) {
-        objectDict = [[NSMutableDictionary alloc] init];
+    if (!_objectDict) {
+        _objectDict = [[NSMutableDictionary alloc] init];
     }
-    if ([objectDict objectForKey:key] == [NSNull null]) {
+    if ([_objectDict objectForKey:key] == [NSNull null]) {
         //if we are keeping it as NSNull for the next network call, make the user believe
         //the object was actually removed from the dictionary
         return nil;
     }
-    return [objectDict objectForKey:key];
+    return [_objectDict objectForKey:key];
 }
 
 - (void)setObject:(id)object forKey:(NSString *)key {
-    if (!objectDict) {
-        objectDict = [[NSMutableDictionary alloc] init];
+    if (!_objectDict) {
+        _objectDict = [[NSMutableDictionary alloc] init];
     }
-    [dirtyFields addObject:key];
-    dirty = YES;
-    [objectDict setObject:object forKey:key];
+    if (object) {
+        [dirtyFields addObject:key];
+        dirty = YES;
+        [_objectDict setObject:object forKey:key];
+    }
 }
 
 - (void)removeObjectForKey:(NSString *)key {
@@ -132,7 +136,9 @@ static NSMutableDictionary *objectDict;
 }
 
 - (void)setValue:(id)value forKey:(NSString *)key {
-    [self setObject:value forKey:key];
+    if (value) {
+        [self setObject:value forKey:key];
+    }
 }
 
 - (void)removeValueForKey:(NSString *)key {
@@ -346,9 +352,11 @@ static NSMutableDictionary *objectDict;
 - (NSString *)lookupURL:(BOOL)post {
     NSString *retval;
     if ([self.catalyzeClassName isEqualToString:kCatalyzeUser]) {
-        retval = [NSString stringWithFormat:@"%@/%@/user",kCatalyzeBaseURL,[Catalyze applicationId]];
+        retval = [NSString stringWithFormat:@"%@/user",kCatalyzeBaseURL];
+    } else if ([self.catalyzeClassName isEqualToString:kCatalyzeReference]) {
+        retval = [NSString stringWithFormat:@"%@/classes/%@/%@/ref/%@",kCatalyzeBaseURL,[self valueForKey:@"__reference_parent_class"],[self valueForKey:@"__reference_parent_id"],[self valueForKey:@"__reference_name"]];
     } else {
-        retval = [NSString stringWithFormat:@"%@/%@/classes/%@",kCatalyzeBaseURL,[Catalyze applicationId],[self catalyzeClassName]];
+        retval = [NSString stringWithFormat:@"%@/classes/%@",kCatalyzeBaseURL,[self catalyzeClassName]];
         if (!post) {
             retval = [NSString stringWithFormat:@"%@/%@",retval,[self objectForKey:@"id"]];
         }
@@ -357,7 +365,7 @@ static NSMutableDictionary *objectDict;
 }
 
 - (NSDictionary *)prepSendDict {
-    NSMutableDictionary *sendDict = [NSMutableDictionary dictionaryWithDictionary:objectDict];
+    NSMutableDictionary *sendDict = [NSMutableDictionary dictionaryWithDictionary:_objectDict];
     for (NSString *s in [sendDict allKeys]) {
         if ([_protected containsObject:s]) {
             [sendDict removeObjectForKey:s];

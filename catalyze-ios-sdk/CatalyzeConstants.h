@@ -90,6 +90,8 @@ typedef void (^CatalyzeHandleOpenURLBlock)(BOOL authenticated, BOOL newUser);
  */
 #define kCatalyzeUser @"user"
 
+#define kCatalyzeReference @"reference"
+
 /**
  The base URL for the catalyze.io API.  All URLs begin with this URL.
  */

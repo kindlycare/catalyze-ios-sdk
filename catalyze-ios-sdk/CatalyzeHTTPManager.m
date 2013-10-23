@@ -38,7 +38,7 @@
     NSURL *url = [NSURL URLWithString:@""];
     AFHTTPClient *httpClient = [[AFHTTPClient alloc] initWithBaseURL:url];
     [httpClient setDefaultHeader:@"Authorization" value:[NSString stringWithFormat:@"Bearer %@",[[NSUserDefaults standardUserDefaults] valueForKey:@"Authorization"]]];
-    [httpClient setDefaultHeader:@"X-Api-Key" value:[NSString stringWithFormat:@"ios %@ %@",[[NSBundle mainBundle] bundleIdentifier], [Catalyze applicationKey]]];
+    [httpClient setDefaultHeader:@"X-Api-Key" value:[NSString stringWithFormat:@"ios %@ %@",[[NSBundle mainBundle] bundleIdentifier], [Catalyze apiKey]]];
     [httpClient setParameterEncoding:AFJSONParameterEncoding];
     [httpClient getPath:urlString parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if (!responseObject) {
@@ -50,12 +50,6 @@
             NSLog(@"error - %@ - %@", error, [error localizedDescription]);
         }
         if ([[operation response] statusCode] == 401 && !_returned401) {
-            /*_operationHolder = operation;
-            _errorHolder = error;
-            _returned401 = YES;
-            [self loginWithBlock:^(int status, NSDictionary *response, NSError *error) {
-                [self doGet:urlString block:block];
-            }];*/
             block([[operation response] statusCode], nil, error);
         } else {
             _returned401 = NO;
@@ -71,11 +65,11 @@
     NSURL *url = [NSURL URLWithString:@""];
     AFHTTPClient *httpClient = [[AFHTTPClient alloc] initWithBaseURL:url];
     [httpClient setDefaultHeader:@"Authorization" value:[NSString stringWithFormat:@"Bearer %@",[[NSUserDefaults standardUserDefaults] valueForKey:@"Authorization"]]];
-    [httpClient setDefaultHeader:@"X-Api-Key" value:[NSString stringWithFormat:@"ios %@ %@",[[NSBundle mainBundle] bundleIdentifier], [Catalyze applicationKey]]];
+    [httpClient setDefaultHeader:@"X-Api-Key" value:[NSString stringWithFormat:@"ios %@ %@",[[NSBundle mainBundle] bundleIdentifier], [Catalyze apiKey]]];
     [httpClient setParameterEncoding:AFJSONParameterEncoding];
     [httpClient postPath:urlString parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if (!responseObject) {
-            responseObject = [NSDictionary dictionary]; // FIXME: does this work?
+            responseObject = [[NSData alloc] init];
         }
         block([[operation response] statusCode], [NSJSONSerialization JSONObjectWithData:responseObject options:kNilOptions error:nil], nil);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -83,12 +77,6 @@
             NSLog(@"error - %@ - %@", error, [error localizedDescription]);
         }
         if ([[operation response] statusCode] == 401 && !_returned401) {
-            /*_operationHolder = operation;
-            _errorHolder = error;
-            _returned401 = YES;
-            [self loginWithBlock:^(int status, NSDictionary *response, NSError *error) {
-                [self doPost:urlString withParams:params block:block];
-            }];*/
             block([[operation response] statusCode], nil, error);
         } else {
             _returned401 = NO;
@@ -104,11 +92,11 @@
     NSURL *url = [NSURL URLWithString:@""];
     AFHTTPClient *httpClient = [[AFHTTPClient alloc] initWithBaseURL:url];
     [httpClient setDefaultHeader:@"Authorization" value:[NSString stringWithFormat:@"Bearer %@",[[NSUserDefaults standardUserDefaults] valueForKey:@"Authorization"]]];
-    [httpClient setDefaultHeader:@"X-Api-Key" value:[NSString stringWithFormat:@"ios %@ %@",[[NSBundle mainBundle] bundleIdentifier], [Catalyze applicationKey]]];
+    [httpClient setDefaultHeader:@"X-Api-Key" value:[NSString stringWithFormat:@"ios %@ %@",[[NSBundle mainBundle] bundleIdentifier], [Catalyze apiKey]]];
     [httpClient setParameterEncoding:AFJSONParameterEncoding];
     [httpClient postPath:urlString parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if (!responseObject) {
-            responseObject = [NSDictionary dictionary]; // FIXME: does this work?
+            responseObject = [[NSData alloc] init];
         }
         block([[operation response] statusCode], [NSJSONSerialization JSONObjectWithData:responseObject options:kNilOptions error:nil], nil);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -116,12 +104,6 @@
             NSLog(@"error - %@ - %@", error, [error localizedDescription]);
         }
         if ([[operation response] statusCode] == 401 && !_returned401) {
-            /*_operationHolder = operation;
-             _errorHolder = error;
-             _returned401 = YES;
-             [self loginWithBlock:^(int status, NSDictionary *response, NSError *error) {
-             [self doPost:urlString withParams:params block:block];
-             }];*/
             block([[operation response] statusCode], nil, error);
         } else {
             _returned401 = NO;
@@ -137,11 +119,11 @@
     NSURL *url = [NSURL URLWithString:@""];
     AFHTTPClient *httpClient = [[AFHTTPClient alloc] initWithBaseURL:url];
     [httpClient setDefaultHeader:@"Authorization" value:[NSString stringWithFormat:@"Bearer %@",[[NSUserDefaults standardUserDefaults] valueForKey:@"Authorization"]]];
-    [httpClient setDefaultHeader:@"X-Api-Key" value:[NSString stringWithFormat:@"ios %@ %@",[[NSBundle mainBundle] bundleIdentifier], [Catalyze applicationKey]]];
+    [httpClient setDefaultHeader:@"X-Api-Key" value:[NSString stringWithFormat:@"ios %@ %@",[[NSBundle mainBundle] bundleIdentifier], [Catalyze apiKey]]];
     [httpClient setParameterEncoding:AFJSONParameterEncoding];
     [httpClient putPath:urlString parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if (!responseObject) {
-            responseObject = [NSDictionary dictionary]; // FIXME: does this work?
+            responseObject = [[NSData alloc] init];
         }
         block([[operation response] statusCode], [NSJSONSerialization JSONObjectWithData:responseObject options:kNilOptions error:nil], nil);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -149,12 +131,6 @@
             NSLog(@"error - %@ - %@", error, [error localizedDescription]);
         }
         if ([[operation response] statusCode] == 401 && !_returned401) {
-            /*_operationHolder = operation;
-            _errorHolder = error;
-            _returned401 = YES;
-            [self loginWithBlock:^(int status, NSDictionary *response, NSError *error) {
-                [self doPut:urlString withParams:params block:block];
-            }];*/
             block([[operation response] statusCode], nil, error);
         } else {
             _returned401 = NO;
@@ -170,11 +146,11 @@
     NSURL *url = [NSURL URLWithString:@""];
     AFHTTPClient *httpClient = [[AFHTTPClient alloc] initWithBaseURL:url];
     [httpClient setDefaultHeader:@"Authorization" value:[NSString stringWithFormat:@"Bearer %@",[[NSUserDefaults standardUserDefaults] valueForKey:@"Authorization"]]];
-    [httpClient setDefaultHeader:@"X-Api-Key" value:[NSString stringWithFormat:@"ios %@ %@",[[NSBundle mainBundle] bundleIdentifier], [Catalyze applicationKey]]];
+    [httpClient setDefaultHeader:@"X-Api-Key" value:[NSString stringWithFormat:@"ios %@ %@",[[NSBundle mainBundle] bundleIdentifier], [Catalyze apiKey]]];
     [httpClient setParameterEncoding:AFJSONParameterEncoding];
     [httpClient deletePath:urlString parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if (!responseObject) {
-            responseObject = [NSDictionary dictionary]; // FIXME: does this work?
+            responseObject = [[NSData alloc] init];
         }
         block([[operation response] statusCode], [NSJSONSerialization JSONObjectWithData:responseObject options:kNilOptions error:nil], nil);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -182,12 +158,6 @@
             NSLog(@"error - %@ - %@", error, [error localizedDescription]);
         }
         if ([[operation response] statusCode] == 401 && !_returned401) {
-            /*_operationHolder = operation;
-            _errorHolder = error;
-            _returned401 = YES;
-            [self loginWithBlock:^(int status, NSDictionary *response, NSError *error) {
-                [self doDelete:urlString block:block];
-            }];*/
             block([[operation response] statusCode], nil, error);
         } else {
             _returned401 = NO;

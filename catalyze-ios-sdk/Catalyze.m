@@ -18,53 +18,24 @@
 
 @implementation Catalyze
 
-+ (void)setApiKey:(NSString *)applicationKey URLScheme:(NSString *)scheme applicationId:(NSString *)appId {
-    [[NSUserDefaults standardUserDefaults] setValue:applicationKey forKey:@"app_key"];
-    [[NSUserDefaults standardUserDefaults] setValue:scheme forKey:@"url_scheme"];
++ (void)setApiKey:(NSString *)apiKey applicationId:(NSString *)appId {
+    [[NSUserDefaults standardUserDefaults] setValue:apiKey forKey:@"api_key"];
     [[NSUserDefaults standardUserDefaults] setValue:appId forKey:@"app_id"];
     [[NSUserDefaults standardUserDefaults] synchronize];
-    (void)[[CatalyzeUser alloc] init];
 }
 
-+ (NSString *)applicationKey {
-    if (![[NSUserDefaults standardUserDefaults] valueForKey:@"app_key"]) {
-        NSLog(@"Warning! Application key not set! Please call [Catalyze setApplicationId:URLScheme:applicationId:] in your AppDelegate's applcatinDidFinishLaunchingWithOptions: method");
++ (NSString *)apiKey {
+    if (![[NSUserDefaults standardUserDefaults] valueForKey:@"api_key"]) {
+        NSLog(@"Warning! Application key not set! Please call [Catalyze setApiKey:URLScheme:applicationId:] in your AppDelegate's applicationDidFinishLaunchingWithOptions: method");
     }
-    return [[NSUserDefaults standardUserDefaults] valueForKey:@"app_key"];
-}
-
-+ (NSString *)URLScheme {
-    if (![[NSUserDefaults standardUserDefaults] valueForKey:@"url_scheme"]) {
-        NSLog(@"Warning! URL Scheme not set! Please call [Catalyze setApplicationId:URLScheme:applicationId:] in your AppDelegate's applcatinDidFinishLaunchingWithOptions: method");
-    }
-    return [[NSUserDefaults standardUserDefaults] valueForKey:@"url_scheme"];
+    return [[NSUserDefaults standardUserDefaults] valueForKey:@"api_key"];
 }
 
 + (NSString *)applicationId {
     if (![[NSUserDefaults standardUserDefaults] valueForKey:@"app_id"]) {
-        NSLog(@"Warning! Application id not set! Please call [Catalyze setApplicationId:URLScheme:applicationId:] in your AppDelegate's applcatinDidFinishLaunchingWithOptions: method");
+        NSLog(@"Warning! Application id not set! Please call [Catalyze setApiKey:URLScheme:applicationId:] in your AppDelegate's applicationDidFinishLaunchingWithOptions: method");
     }
     return [[NSUserDefaults standardUserDefaults] valueForKey:@"app_id"];
-}
-
-+ (void)handleOpenURL:(NSURL *)url withBlock:(CatalyzeHandleOpenURLBlock)block {
-    BOOL authenticated = NO;
-    BOOL new = NO;
-    for (NSString *s in [[url query] componentsSeparatedByString:@"&"]) {
-        NSArray *part = [s componentsSeparatedByString:@"="];
-        if ([[part objectAtIndex:0] isEqualToString:@"userId"]) {
-            [[NSUserDefaults standardUserDefaults] setInteger:[[part objectAtIndex:1] integerValue] forKey:@"catalyze_user_id"];
-            [[NSUserDefaults standardUserDefaults] synchronize];
-        } else if ([[part objectAtIndex:0] isEqualToString:@"sessionToken"]) {
-            [[NSUserDefaults standardUserDefaults] setValue:[part objectAtIndex:1] forKey:@"Authorization"];
-            [[NSUserDefaults standardUserDefaults] synchronize];
-        } else if ([[part objectAtIndex:0] isEqualToString:@"new"]) {
-            new = [[part objectAtIndex:1] boolValue];
-        } else if ([[part objectAtIndex:0] isEqualToString:@"authorized"]) {
-            authenticated = [[part objectAtIndex:1] boolValue];
-        }
-    }
-    block(authenticated, new);
 }
 
 @end
