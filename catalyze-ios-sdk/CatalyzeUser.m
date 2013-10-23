@@ -92,7 +92,7 @@ static CatalyzeUser *currentUser;
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
-    self = [self init];
+    self = [super init];
     if (self) {
         [self setPhoneNumber:[aDecoder decodeObjectForKey:kEncodeKeyPhoneNumber]];
         [self setGender:[CatalyzeUser stringToGender:[aDecoder decodeObjectForKey:kEncodeKeyGender]]];
@@ -112,7 +112,13 @@ static CatalyzeUser *currentUser;
 }
 
 - (void)logout {
-    [self.httpManager doGet:[NSString stringWithFormat:@"%@/%@/auth/signout",kCatalyzeBaseURL,[Catalyze applicationId]] block:^(int status, NSDictionary *response, NSError *error) {
+    [self logoutWithBlock:^(int status, NSDictionary *response, NSError *error) {}];
+}
+
+- (void)logoutWithBlock:(CatalyzeHTTPResponseBlock)block {
+
+    [self.httpManager doGet:[NSString stringWithFormat:@"%@/auth/signout",kCatalyzeBaseURL] block:^(int status, NSDictionary *response, NSError *error) {
+        
         if (!error) {
             currentUser = nil;
             
@@ -125,7 +131,12 @@ static CatalyzeUser *currentUser;
         } else {
             NSLog(@"Logout unsuccessful");
         }
+        
+        block(status, response, error);
+    
     }];
+
+
 }
 
 - (BOOL)isAuthenticated {
@@ -161,12 +172,12 @@ static CatalyzeUser *currentUser;
 
 + (void)logInWithUsernameInBackground:(NSString *)username password:(NSString *)password block:(CatalyzeHTTPResponseBlock)block {
     currentUser = [CatalyzeUser user];
-    NSDictionary *body = [NSDictionary dictionaryWithObjectsAndKeys:username,@"email",password,@"password", nil];
+    NSDictionary *body = [NSDictionary dictionaryWithObjectsAndKeys:username,@"username",password,@"password", nil];
     NSURL *url = [NSURL URLWithString:@""];
     AFHTTPClient *httpClient = [[AFHTTPClient alloc] initWithBaseURL:url];
     [httpClient setDefaultHeader:@"X-Api-Key" value:[NSString stringWithFormat:@"ios %@ %@",[[NSBundle mainBundle] bundleIdentifier], [Catalyze applicationKey]]];
     [httpClient setParameterEncoding:AFJSONParameterEncoding];
-    [httpClient postPath:[NSString stringWithFormat:@"https://api.catalyze.io/v1/%@/auth/signin/json",[Catalyze applicationId]] parameters:body success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [httpClient postPath:[NSString stringWithFormat:@"https://api.catalyze.io/v1/auth/signin"] parameters:body success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if (!responseObject) {
             responseObject = [NSDictionary dictionary]; // FIXME: does this work?
         }
@@ -181,6 +192,7 @@ static CatalyzeUser *currentUser;
         }
         
         [currentUser resetDirty];
+        [CatalyzeUser saveCurrentUser];
         
         [[NSUserDefaults standardUserDefaults] setInteger:[[dict valueForKey:@"id"] integerValue] forKey:@"catalyze_user_id"];
         [[NSUserDefaults standardUserDefaults] setValue:[dict valueForKey:@"sessionToken"] forKey:@"Authorization"];
@@ -235,7 +247,9 @@ static CatalyzeUser *currentUser;
 }
 
 - (void)setUsername:(NSString *)username {
-    [self setObject:username forKey:@"username"];
+    if (username != nil) {
+        [self setObject:username forKey:@"username"];
+    }
 }
 
 - (NSString *)userId {
@@ -243,7 +257,9 @@ static CatalyzeUser *currentUser;
 }
 
 - (void)setUserId:(NSString *)userId {
-    [self setObject:userId forKey:@"id"];
+    if (userId != nil) {
+        [self setObject:userId forKey:@"id"];
+    }
 }
 
 - (NSString *)firstName {
@@ -251,7 +267,9 @@ static CatalyzeUser *currentUser;
 }
 
 - (void)setFirstName:(NSString *)firstName {
-    [self setObject:firstName forKey:@"firstName"];
+    if (firstName != nil) {
+        [self setObject:firstName forKey:@"firstName"];
+    }
 }
 
 - (NSString *)lastName {
@@ -259,7 +277,9 @@ static CatalyzeUser *currentUser;
 }
 
 - (void)setLastName:(NSString *)lastName {
-    [self setObject:lastName forKey:@"lastName"];
+    if (lastName != nil) {
+        [self setObject:lastName forKey:@"lastName"];
+    }
 }
 
 - (NSString *)street {
@@ -267,7 +287,9 @@ static CatalyzeUser *currentUser;
 }
 
 - (void)setStreet:(NSString *)street {
-    [self setObject:street forKey:@"street"];
+    if (street != nil) {
+        [self setObject:street forKey:@"street"];
+    }
 }
 
 - (NSString *)city {
@@ -275,7 +297,9 @@ static CatalyzeUser *currentUser;
 }
 
 - (void)setCity:(NSString *)city {
-    [self setObject:city forKey:@"city"];
+    if (city != nil) {
+        [self setObject:city forKey:@"city"];
+    }
 }
 
 - (NSString *)state {
@@ -283,7 +307,9 @@ static CatalyzeUser *currentUser;
 }
 
 - (void)setState:(NSString *)state {
-    [self setObject:state forKey:@"state"];
+    if (state != nil) {
+        [self setObject:state forKey:@"state"];
+    }
 }
 
 - (NSString *)zipCode {
@@ -291,7 +317,9 @@ static CatalyzeUser *currentUser;
 }
 
 - (void)setZipCode:(NSString *)zipCode {
-    [self setObject:zipCode forKey:@"zipCode"];
+    if (zipCode != nil) {
+        [self setObject:zipCode forKey:@"zipCode"];
+    }
 }
 
 - (NSString *)country {
@@ -299,7 +327,9 @@ static CatalyzeUser *currentUser;
 }
 
 - (void)setCountry:(NSString *)country {
-    [self setObject:country forKey:@"country"];
+    if (country != nil) {
+        [self setObject:country forKey:@"country"];
+    }
 }
 
 - (NSString *)address {
@@ -311,9 +341,11 @@ static CatalyzeUser *currentUser;
 }
 
 - (void)setBirthDate:(NSDate *)birthDate {
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"yyyy-MM-dd"];
-    [self setObject:[dateFormatter stringFromDate:birthDate] forKey:@"dateOfBirth"];
+    if (birthDate != nil) {
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateFormat:@"yyyy-MM-dd"];
+        [self setObject:[dateFormatter stringFromDate:birthDate] forKey:@"dateOfBirth"];
+    }
 }
 
 - (NSNumber *)age {
@@ -321,7 +353,9 @@ static CatalyzeUser *currentUser;
 }
 
 - (void)setAge:(NSNumber *)age {
-    [self setObject:age forKey:@"age"];
+    if (age != nil) {
+        [self setObject:age forKey:@"age"];
+    }
 }
 
 - (CatalyzeUserGender)gender {
@@ -337,7 +371,10 @@ static CatalyzeUser *currentUser;
 }
 
 - (void)setPhoneNumber:(NSString *)phoneNumber {
-    [self setObject:phoneNumber forKey:@"phoneNumber"];
+    if (phoneNumber != nil) {
+        [self setObject:phoneNumber forKey:@"phoneNumber"];
+    }
+
 }
 
 @end

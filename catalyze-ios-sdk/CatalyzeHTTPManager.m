@@ -42,7 +42,7 @@
     [httpClient setParameterEncoding:AFJSONParameterEncoding];
     [httpClient getPath:urlString parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if (!responseObject) {
-            responseObject = [NSDictionary dictionary]; // FIXME: does this work?
+            responseObject = [[NSData alloc] init];
         }
         block([[operation response] statusCode], [NSJSONSerialization JSONObjectWithData:responseObject options:kNilOptions error:nil], nil);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
