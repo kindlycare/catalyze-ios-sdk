@@ -1,7 +1,29 @@
+Getting Started
+===============
+
+To begin, clone the iOS SDK repository to your computer. If you are starting a new project, open Xcode and create one. After it's created, simply copy the iOS SDK folder anywhere into your project directory. With your Xcode project open, click on the File menu and then "Add Files to 'yourProjectName'...". Navigate to the directory of the iOS SDK and click Add. You're now ready to use the iOS SDK in your application.
+
+License
+--------
+
+    Copyright 2013 catalyze.io, Inc.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
 Using the catalyze.io iOS SDK
 =============================
 
-The first thing you must do is set-up an Application on the developer console.  You will need the following information about your Application: api key and application id.  After this is complete, you MUST call 
+The first thing you must do is set-up an Application on the [developer console][1].  You will need the following information about your Application: api key and application id.  After this is complete, you MUST call 
 
     [Catalyze setApiKey:@"{apiKey}" applicationId:@"{appId}"];
 
@@ -177,3 +199,5 @@ If you want to query your own Entries, you simply set the "queryField" to be "pa
                 NSLog(@"query completed successfully - %@",objects);
             }
     }];
+
+[1]: https://developer.catalyze.io
