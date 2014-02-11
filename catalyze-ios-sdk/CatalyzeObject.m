@@ -153,8 +153,8 @@
 }
 
 - (void)createInBackgroundWithBlock:(CatalyzeBooleanResultBlock)block {
-    NSLog(@"calling POST for creation");
-    NSDictionary *sendDict = [self prepSendDict];
+    NSString *className = [self catalyzeClassName];
+    NSDictionary *sendDict = [self prepSendDict:YES];
     if (sendDict.count > 0) {
         [self.httpManager doPost:[self lookupURL:YES] withParams:sendDict block:^(int status, NSDictionary *response, NSError *error) {
             NSLog(@"created");
@@ -166,6 +166,7 @@
                 for (NSString *s in [response allKeys]) {
                     [self setObject:[response objectForKey:s] forKey:s];
                 }
+                [self setCatalyzeClassName:className];
                 [dirtyFields removeAllObjects];
             }
             if (block) {
@@ -193,7 +194,8 @@
 }
 
 - (void)saveInBackgroundWithBlock:(CatalyzeBooleanResultBlock)block {
-    NSDictionary *sendDict = [self prepSendDict];
+    NSString *className = [self catalyzeClassName];
+    NSDictionary *sendDict = [self prepSendDict:NO];
     if (sendDict.count > 0) {
         [self.httpManager doPut:[self lookupURL:NO] withParams:sendDict block:^(int status, NSDictionary *response, NSError *error) {
             if (!error) {
@@ -201,6 +203,7 @@
                 for (NSString *s in [response allKeys]) {
                     [self setObject:[response objectForKey:s] forKey:s];
                 }
+                [self setCatalyzeClassName:className];
                 [dirtyFields removeAllObjects];
             }
             if (block) {
@@ -364,7 +367,7 @@
     return retval;
 }
 
-- (NSDictionary *)prepSendDict {
+- (NSDictionary *)prepSendDict:(BOOL)post {
     NSMutableDictionary *sendDict = [NSMutableDictionary dictionaryWithDictionary:_objectDict];
     for (NSString *s in [sendDict allKeys]) {
         if ([_protected containsObject:s]) {
@@ -377,9 +380,11 @@
     NSMutableDictionary *outerSendDict = [NSMutableDictionary dictionary];
     if ([[self catalyzeClassName] isEqualToString:kCatalyzeUser]) {
         outerSendDict = [NSMutableDictionary dictionaryWithDictionary:sendDict];
-    } else {
+    } else if (post) {
         //we have a custom class, so all fields must be under the content key
         [outerSendDict setObject:sendDict forKey:@"content"];
+    } else {
+        outerSendDict = [NSMutableDictionary dictionaryWithDictionary:sendDict];
     }
     return outerSendDict;
 }
