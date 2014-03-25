@@ -59,11 +59,10 @@ typedef void (^CatalyzeObjectResultBlock)(CatalyzeObject *object, NSError *error
  used in CatalyzeHTTPManager.
  
  @param status the HTTP status code received from the network request.
- @param response the raw dictionary of key value pairs that the catalyze.io server
- responded with
+ @param response the raw string that the catalyze.io server responded with
  @param error any error that went wrong during the request, nil if successful
  */
-typedef void (^CatalyzeHTTPResponseBlock)(int status, NSDictionary *response, NSError *error);
+typedef void (^CatalyzeHTTPResponseBlock)(int status, NSString *response, NSError *error);
 
 /**
  The completion block used when a network request is finished and an array of objects
@@ -86,13 +85,6 @@ typedef void (^CatalyzeHTTPArrayResponseBlock)(int status, NSArray *response, NS
 typedef void (^CatalyzeHandleOpenURLBlock)(BOOL authenticated, BOOL newUser);
 
 /**
- The catalyzeClassName stored in CatalyzeObject for a CatalyzeUser
- */
-#define kCatalyzeUser @"user"
-
-#define kCatalyzeReference @"reference"
-
-/**
  The base URL for the catalyze.io API.  All URLs begin with this URL.
  */
-#define kCatalyzeBaseURL @"https://api.catalyze.io/v1"
+#define kCatalyzeBaseURL @"https://apiv2.catalyze.io"

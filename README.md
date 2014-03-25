@@ -1,7 +1,9 @@
 Getting Started
 ===============
 
-To begin, clone the iOS SDK repository to your computer. If you are starting a new project, open Xcode and create one. After it's created, simply copy the iOS SDK folder anywhere into your project directory. With your Xcode project open, click on the File menu and then "Add Files to 'yourProjectName'...". Navigate to the directory of the iOS SDK and click Add. You're now ready to use the iOS SDK in your application.
+Installation
+------------
+The preferred method of installation is through [cocoapods][2]. Simply add ```pod 'CatalyzeSDK', '~> 2.0'``` to your Podfile, run ```pod install``` and you will be ready to start developing. Optionally if you do not use cocoapods or have an existing project that has not integrated cocoapods, you can clone this repository to your computer. Simply copy the iOS SDK folder anywhere into your project directory by clicking on the File menu and then "Add Files to 'yourProjectName'...". Navigate to the directory of the iOS SDK and click Add. You're now ready to use the iOS SDK in your application.
 
 License
 --------
@@ -23,17 +25,16 @@ License
 Using the catalyze.io iOS SDK
 =============================
 
-The first thing you must do is set-up an Application on the [developer console][1].  You will need the following information about your Application: api key and application id.  After this is complete, you MUST call 
+The first thing you must do is set-up an Application on the [developer console][1].  You will need the following information about your Application: api key and application id. Please be aware that there are three components to an api key: the type, identifier, and id. A complete api key looks like ```ios io.catalyze.sdk 426881c0-f39b-4d52-82de-be509d5450f6``` or more generally ```<type> <identifier> <id>```. For the iOS SDK you only need the <id>.  After you have this information, you MUST call 
 
     [Catalyze setApiKey:@"{apiKey}" applicationId:@"{appId}"];
 
 in `application:didFinishLaunchingWithOptions:`.  Note: all methods that require a network request are run asynchronously. 
-
 Don't forget to `#import "Catalyze.h"` whenever you need to use the iOS SDK.
 
 Objects
 -------
-Every data class in the iOS SDK is a subclass of CatalyzeObject.  A CatalyzeObject by itself, represents an Object that can be stored on the catalyze.io API in a pre defined custom class.  These custom classes must be created in the developer console before being used or referenced within an app or the API will return a 4XX status code. 
+A CatalyzeObject represents an Object that can be stored on the catalyze.io API in a pre defined custom class.  These custom classes must be created in the developer console before being used or referenced within an app or the API will return a 4XX status code. 
 
 Creating Objects
 ----------------
@@ -77,46 +78,65 @@ Referenced Objects
 ------------------
 On the catalyze.io API you can also have references to a custom class inside another custom class.  Let's say you have a custom class called "MovieStar" and another called "Address".  When you create "MovieStar" in the developer console, you can specify a column as being a reference.  References are of type CatalyzeReference in the iOS SDK.
 
-Users
------
-In the iOS SDK, Users are a subclass of CatalyzeObject.  There are a few important differences to note however.  You cannot simply save data on a CatalyzeUser.  It has to belong to the User’s "extras".  So instead of using the methods
+CatalyzeUser
+------------
+Before you can perform any action on the Catalyze API, you need to authenticate. This is done by logging in or signing up through CatalyzeUser. A CatalyzeUser represents any entity logging in to an application. Specific data is tied to this user and any CatalyzeObjects created while the user is logged in are tied to their account.
+
+Similarly to CatalyzeObjects, you can save any information you want to a user but it is called an 'extra'. This is because there are a number of predefined data elements on a CatalyzeUser listed below.  So instead of using the methods
 
     setObject:forKey:
     removeObjectForKey:
     objectForKey:
 
-You will use these for a CatalyzeUser instead
+You will use these for extras on a CatalyzeUser
 
     setExtra:forKey:
     removeExtraForKey:
     extraForKey:
 
-A CatalyzeUser also has a list of supported fields that are validated by the catalyze.io API.  These are
-* firstName
-* lastName
-* dateOfBirth
+The full list of supported fields on a CatalyzeUser are
+* usersId
+* active
+* createdAt
+* updatedAt
+* username
+* email*
+* name*
+* dob
 * age
-* phoneNumber
-* street
-* city
-* state
-* zipCode
-* country
+* phoneNumber*
+* addresses**
 * gender
+* maritalStatus
+* religion
+* race
+* ethnicity
+* guardians**
+* confCode
+* languages**
+* socialIds**
+* mrns**
+* healthPlans**
+* avatar
+* ssn
+* profilePhoto
+* extras
 
 All of these fields have getters and setters on a CatalyzeUser object.  All other data must be stored as an Extra.
+
+Some fields are not primitive data types. Those marked with a ```*``` above are nested objects. Those marked with a ```**``` are arrays of nested objects. Those objects and their corresponding properties can be viewed in the respective classes. 
 
 Log in
 ------
 Log in by calling
 
-    [CatalyzeUser logInWithUsernameInBackground:username password:password block:^(int status, NSDictionary *response, NSError *error) {
-        if (error) {
-            // show wrong username / password message
-        } else {
-            // user was logged in and you can now get the user by calling [CatalyzeUser currentUser];
-        }
-    }];
+    [CatalyzeUser logInWithUsernameInBackground:username password:password block:^(int status, NSString *response, NSError *error) {
+            if (!error) {
+                NSLog(@"successful login");
+            } else {
+                [[[UIAlertView alloc] initWithTitle:@"Login Error" message:@"Wrong username / password" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil] show];
+            }
+        }];
 
 Logout
 ------
@@ -130,13 +150,13 @@ Updating/Saving your User
 -------------------------
 Now that we are logged into an Application lets save some supported fields to our User. If we wanted to update our first name, last name, age, and an extra field:
 
-    [[CatalyzeUser currentUser] setFirstName:@"John"];
-    [[CatalyzeUser currentUser] setLastName:@"Smith"];
+    [[[CatalyzeUser currentUser] name] setFirstName:@"John"];
+    [[[CatalyzeUser currentUser] name] setLastName:@"Smith"];
     [[CatalyzeUser currentUser] setAge:[NSNumber numberWithInt:32]];
     [[CatalyzeUser currentUser] setExtra:[NSNumber numberWithBool:YES] forKey:@”on_medication”];
     [[CatalyzeUser currentUser] saveInBackground];
 
-Since CatalyzeUser is a subclass of CatalyzeObject, all of the same methods for saving a CatalyzeObject apply to saving a CatalyzeUser as well.
+Note: All of the same methods for saving a CatalyzeObject apply to saving a CatalyzeUser as well.
 
 Health Vocabularies
 -------------------
@@ -188,7 +208,7 @@ To use CatalyzeQuery you must initialize the object with the name of the custom 
 If you want to query your own Entries, you simply set the "queryField" to be "parentId" and the "queryValue" to the User’s id.
 
     CatalyzeQuery *myQuery = [CatalyzeQuery queryWithClassName:@”{myCustomClass}”];
-    [query setQueryValue:[[CatalyzeUser currentUser] userId]];
+    [query setQueryValue:[[CatalyzeUser currentUser] usersId]];
     [query setQueryField:@"parentId"];
     [query setPageNumber:1];
     [query setPageSize:100];
@@ -200,4 +220,5 @@ If you want to query your own Entries, you simply set the "queryField" to be "pa
             }
     }];
 
-[1]: https://developer.catalyze.io
+[1]: https://devportal.catalyze.io
+[2]: http://cocoapods.org/

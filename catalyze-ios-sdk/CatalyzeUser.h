@@ -14,292 +14,61 @@
  *    limitations under the License.
  */
 
-/**
-A CatalyzeUser is used to represent Users on the catalyze.io API.
- 
-Since there can only be one User logged into the system at a time, the static
-method [CatalyzeUser currentUser] is provided to access this User from
-anywhere in your code.
-
-The currentUser is set by making the following call:
- 
-    [CatalyzeUser logIn];
-
-To get and save pre-defined information for the currentUser, it would look like this:
- 
-    NSString *firstName = [[CatalyzeUser currentUser] firstName];
-    [[CatalyzeUser currentUser] setLastName:@"Appleseed"];
-
-Or to get and save custom fields on the currentUser, it would look like this:
-
-    NSString *preferredPharmacy = [[CatalyzeUser currentUser] extraForKey:@"preferred_pharmacy];
-    [[CatalyzeUser currentUser] setExtra:@"1234 5th Street, Milwaukee, WI, 53202" forKey:@"preferred_pharmacy"];
- 
-*/
-
 #import <Foundation/Foundation.h>
+#import "CatalyzeObjectProtocol.h"
 #import "CatalyzeConstants.h"
-#import "CatalyzeObject.h"
+#import "Email.h"
+#import "Name.h"
+#import "PhoneNumber.h"
+#import "JSONObject.h"
 
-typedef enum {
-    CatalyzeUserGenderFemale,
-    CatalyzeUserGenderMale,
-    CatalyzeUserGenderUndifferentiated,
-    CatalyzeUserGenderNil
-} CatalyzeUserGender;
+@interface CatalyzeUser : JSONObject<NSCoding, CatalyzeObjectProtocol>
 
-@interface CatalyzeUser : CatalyzeObject<NSCoding>
+@property (strong, nonatomic) NSString *usersId;
+@property (strong, nonatomic) NSNumber *active;
+@property (strong, nonatomic) NSDate *createdAt;
+@property (strong, nonatomic) NSDate *updatedAt;
+@property (strong, nonatomic) NSString *username;
+@property (strong, nonatomic) Email *email;
+@property (strong, nonatomic) Name *name;
+@property (strong, nonatomic) NSDate *dob;
+@property (strong, nonatomic) NSNumber *age;
+@property (strong, nonatomic) PhoneNumber *phoneNumber;
+@property (strong, nonatomic) NSMutableArray *addresses;
+@property (strong, nonatomic) NSString *gender;
+@property (strong, nonatomic) NSString *maritalStatus;
+@property (strong, nonatomic) NSString *religion;
+@property (strong, nonatomic) NSString *race;
+@property (strong, nonatomic) NSString *ethnicity;
+@property (strong, nonatomic) NSMutableArray *guardians;
+@property (strong, nonatomic) NSString *confCode;
+@property (strong, nonatomic) NSMutableArray *languages;
+@property (strong, nonatomic) NSMutableArray *socialIds;
+@property (strong, nonatomic) NSMutableArray *mrns;
+@property (strong, nonatomic) NSMutableArray *healthPlans;
+@property (strong, nonatomic) NSString *avatar;
+@property (strong, nonatomic) NSString *ssn;
+@property (strong, nonatomic) NSString *profilePhoto;
+@property (strong, nonatomic) NSMutableDictionary *extras;
 
-/** @name Conversions */
-
-/**
- Converts a given CatalyzeUserGender to its string representation.
- 
- @param gender the CatalyzeUserGender enum to be converted into a string
- @return the string representation of the given CatalyzeUserGender enum
- */
-+ (NSString *)genderToString:(CatalyzeUserGender)gender;
-
-/**
- Converts a given string into a CatalyzeUserGender enum.
- 
- @param genderString the string representing a CatalyzeUserGender to be converted
- @return the CatalyzeUserGender enum specified by the given string
- */
-+ (CatalyzeUserGender)stringToGender:(NSString *)genderString;
-
-/** @name Current User */
-
-/**
- @return The current CatalyzeUser
- */
 + (CatalyzeUser *)currentUser;
 
-/** @name User */
-
-/**
- Logout clears all locally stored information about the User including session information 
- and tells the API to destroy your session token.
- */
 - (void)logout;
 
 - (void)logoutWithBlock:(CatalyzeHTTPResponseBlock)block;
 
-/**
- @return YES if the CatalyzeUser has been logged in and has a valid session, otherwise NO
- */
 - (BOOL)isAuthenticated;
 
-/** @name Initializers */
-
-/**
- This is a convenience method for alloc init'ing a new CatalyzeUser.  This CatalyzeUser
- is **not** the currentUser and is **not** logged in automatically.  Before saving this user
- to the catalyze.io API the firstName and lastName **must** be set.
- 
- Usage:
- 
-    CatalyzeUser *newUser = [CatalyzeUser user];
-    [newUser setFirstName:@"John"];
-    [newUser setLastName:@"Appleseed"];
- 
- @return A new instance of CatalyzeUser
- */
 + (CatalyzeUser *)user;
 
-#pragma mark - LogIn
-
-/** @name LogIn */
-
-/**
- For logging into the catalyze.io API, you must launch a browser and follow the steps outlined
- in the catalyze.io API documentation.  This method is used for log in and sign up.  A browser is
- launched and after successful authentication, brought back to the application.  For this to work
- properly, ensure that your iOS callback URL Scheme was set in your 
- application:didFinishLaunchingWithOptions: method.
- */
 + (void)logInWithUsernameInBackground:(NSString *)username password:(NSString *)password block:(CatalyzeHTTPResponseBlock)block;
 
-/** @name SignUp */
++ (void)signUpWithUsernameInBackground:(NSString *)username email:(Email *)email name:(Name *)name  password:(NSString *)password block:(CatalyzeHTTPResponseBlock)block;
 
-+ (void)signUpWithUsernameInBackground:(NSString *)username password:(NSString *)password firstName:(NSString *)firstName lastName:(NSString *)lastName block:(CatalyzeHTTPResponseBlock)block;
+//TODO validate user routes
 
-/** @name Extras */
-
-/**
- On the catalyze.io API every User has a set of Extras specific to an application. These extras are
- any other values stored with the User that are not validated by the API but simply stored and 
- returned when needed.
- 
- @param key the key to look for an extra stored on this CatalyzeUser
- @return an extra value stored on this CatalyzeUser
- */
 - (id)extraForKey:(NSString *)key;
-
-/**
- @param extra the value to store as an Extra on this CatalyzeUser
- @param key the key to save the given extra value under for this CatalyzeUser
- */
 - (void)setExtra:(id)extra forKey:(NSString *)key;
-
-/**
- @param key the key to look for an extra under that should be removed when found
- */
 - (void)removeExtraForKey:(NSString *)key;
-
-/** @name Username */
-
-/**
- @return the username of the CatalyzeUser
- */
-- (NSString *)username;
-
-/**
- This method should never be called by a developer, it is simply for constructing a User from
- a saved archive or network call. The username is set through successful authentication.
- 
- @param username the valid username to be set.
- @exception NSInvalidArgumentException will be thrown if the username is not in a valid email format
- */
-- (void)setUsername:(NSString *)username;
-
-/** @name First Name */
-
-/**
- @return the firstName of the CatalyzeUser
- */
-- (NSString *)firstName;
-
-/**
- @param firstName the new first name to be set on the CatalyzeUser
- */
-- (void)setFirstName:(NSString *)firstName;
-
-/** @name Last Name */
-
-/**
- @return the lastName of the CatalyzeUser
- */
-- (NSString *)lastName;
-
-/**
- @param lastName the new last name to be set on the CatalyzeUser
- */
-- (void)setLastName:(NSString *)lastName;
-
-/** @name Street */
-
-/**
- @return the street of the CatalyzeUser with the format 1234 5th Street
- */
-- (NSString *)street;
-
-/**
- @param street the new street to be set on the CatalyzeUser.
- */
-- (void)setStreet:(NSString *)street;
-
-/** @name City */
-
-/**
- @return the city of the CatalyzeUser, such as "Milwaukee"
- */
-- (NSString *)city;
-
-/**
- @param city the name of the city to set
- */
-- (void)setCity:(NSString *)city;
-
-/** @name State */
-
-/**
- @return the two letter abbreviation of the state of the CatalyzeUser, such as WI
- */
-- (NSString *)state;
-
-/**
- @param state the two letter abbreviation of the name of the state to set
- */
-- (void)setState:(NSString *)state;
-
-/** @name Zip Code */
-
-/**
- @return the zipCode of the CatalyzeUser
- */
-- (NSString *)zipCode;
-
-/**
- @param zipCode the new zipCode to be set on the CatalyzeUser.
- */
-- (void)setZipCode:(NSString *)zipCode;
-
-/** @name Country */
-
-/**
- @return the country of the CatalyzeUser
- */
-- (NSString *)country;
-
-/**
- @param country the new country to be set on the CatalyzeUser.
- */
-- (void)setCountry:(NSString *)country;
-
-/** @name Address */
-
-/**
- @return the complete address of the CatalyzeUser of the form 1234 5th Street, Milwaukee, WI, 53202, US
- */
-- (NSString *)address;
-
-/** @name Birth Date */
-
-/**
- @return the birthDate of the CatalyzeUser
- */
-- (NSDate *)birthDate;
-
-/**
- @param birthDate the new birth date to be set on the CatalyzeUser.  
- */
-- (void)setBirthDate:(NSDate *)birthDate;
-
-/** @name Age */
-
-/**
- @return the age of the CatalyzeUser
- */
-- (NSNumber *)age;
-
-/**
- @param age the age to be set on the CatalyzeUser
- */
-- (void)setAge:(NSNumber *)age;
-
-/** @name Gender */
-
-/**
- @return the gender of the CatalyzeUser, one of CatalyzeUserGender enums
- */
-- (CatalyzeUserGender)gender;
-
-/**
- @param gender the CatalyzeUserGender enum to be set on the CatalyzeUser
- */
-- (void)setGender:(CatalyzeUserGender)gender;
-
-/** @name Phone Number */
-
-/**
- @return the phone number of the CatalyzeUser
- */
-- (NSString *)phoneNumber;
-
-/**
- @param phoneNumber the new phone number to be set on the CatalyzeUser
- */
-- (void)setPhoneNumber:(NSString *)phoneNumber;
 
 @end

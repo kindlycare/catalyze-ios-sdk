@@ -34,10 +34,11 @@
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
     if (_completionDelegate) {
-        [[[CatalyzeHTTPManager alloc] init] doGet:[NSString stringWithFormat:@"%@/vocab/phrase/%@/%@",kCatalyzeBaseURL,[self vocabulary],[self encodeToPercentEscapeString:[textField.text stringByReplacingCharactersInRange:range withString:string] ]] block:^(int status, NSDictionary *response, NSError *error) {
+        [CatalyzeHTTPManager doGet:[NSString stringWithFormat:@"/vocab/phrase/%@/%@",[self vocabulary],[self encodeToPercentEscapeString:[textField.text stringByReplacingCharactersInRange:range withString:string] ]] block:^(int status, NSString *response, NSError *error) {
+            NSArray *responseArray = [NSJSONSerialization JSONObjectWithData:[response dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil];
             if (status == 200) {
                 NSMutableArray *suggestions = [NSMutableArray array];
-                for (NSDictionary *d in response) {
+                for (NSDictionary *d in responseArray) {
                     [suggestions addObject:[d objectForKey:@"description"]];
                 }
                 [_completionDelegate showSuggestions:suggestions];

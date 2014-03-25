@@ -29,7 +29,7 @@
 }
 
 - (id)initWithParentClass:(NSString *)parentClass parentId:(NSString *)parentId referenceName:(NSString *)referenceName referenceId:(NSString *)referenceId {
-    self = [super initWithClassName:kCatalyzeReference];
+    self = [super initWithClassName:@"reference"];
     if (self) {
         [self setObject:parentClass forKey:@"__reference_parent_class"];
         [self setObject:parentId forKey:@"__reference_parent_id"];

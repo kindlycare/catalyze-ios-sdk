@@ -41,8 +41,18 @@
 #import "CatalyzeHTTPManager.h"
 #import "HealthLookaheadUITextFieldDelegate.h"
 #import "CatalyzeQuery.h"
+#import "Email.h"
+#import "Name.h"
+#import "PhoneNumber.h"
+#import "Address.h"
+#import "Geocode.h"
+#import "Guardian.h"
+#import "Language.h"
+#import "SocialId.h"
+#import "Mrn.h"
+#import "HealthPlan.h"
 
-static const BOOL CATALYZE_DEBUG = NO;
+static const BOOL CATALYZE_DEBUG = YES;
 
 @interface Catalyze : NSObject
 

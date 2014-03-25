@@ -31,7 +31,6 @@
 
 #import <Foundation/Foundation.h>
 #import "CatalyzeConstants.h"
-#import "CatalyzeHTTPManager.h"
 
 @interface CatalyzeObject : NSObject {
     
@@ -50,8 +49,6 @@
      */
     NSMutableArray *dirtyFields;
 }
-
-@property (nonatomic, retain) CatalyzeHTTPManager *httpManager;
 
 - (void)resetDirty;
 
@@ -253,60 +250,6 @@
 - (void)saveInBackgroundWithTarget:(id)target selector:(SEL)selector;
 
 #pragma mark -
-#pragma mark Save All
-
-/** @name Save All */
-
-/**
- Executes saveInBackground on each of the objects passed in with no indication
- of whether the request completed, succeeded or failed.  If this is necessary see
- saveAllInBackground:block:. These requests are executed in sequence and **not** in
- separate background tasks.
- 
- **NOTE:**
- If your array has 3 objects, and the first request fails, then the other 2 request 
- will **not** be sent.
- 
- @param objects the array of objects to be saved to the catalyze.io API
- */
-+ (void)saveAllInBackground:(NSArray *)objects;
-
-/**
- Executes saveInBackgroundWithBlock: on each of the objects passed in.  These requests are 
- executed in sequence and **not** in separate background tasks. The CatalyzeBooleanResultBlock 
- is executed upon completion of the request whether it succeeded or failed, or failed 
- on any of the intermediary objects in the array.
- 
- **NOTE:**
- If your array has 3 objects, and the first request fails, then the other 2 request
- will **not** be sent.
- 
- @param objects the array of objects to be saved to the catalyze.io API
- @param block the completion block to be executed upon the request's completion
- */
-+ (void)saveAllInBackground:(NSArray *)objects block:(CatalyzeBooleanResultBlock)block;
-
-/**
- Executes saveInBackgroundWithBlock: on each of the objects passed in.  These requests are
- executed in sequence and **not** in separate background tasks. The given selector
- is performed on the given target upon the request's completion whether is succeeded, 
- failed, or failed on any of the intermediary objects in the array.
- 
- **NOTE:**
- If your array has 3 objects, and the first request fails, then the other 2 request
- will **not** be sent.
- Also, the selector is performed on the target on the **Main Thread** see 
- [[NSThread mainThread]](http://bit.ly/11Z9D47)
- 
- @param objects the array of objects to be saved to the catalyze.io API
- @param target the target to perform the given selector on the **Main Thread** 
- upon the request's completion
- @param selector the selector to be performed on the given target on the **Main Thread** 
- upon the request's completion
- */
-+ (void)saveAllInBackground:(NSArray *)objects target:(id)target selector:(SEL)selector;
-
-#pragma mark -
 #pragma mark Retrieve
 
 /** @name Retrieve */
@@ -349,55 +292,6 @@
  upon the request's completion
  */
 - (void)retrieveInBackgroundWithTarget:(id)target selector:(SEL)selector;
-
-/**
- Executes retrieveInBackground on each of the objects passed in with no indication
- of whether the request completed, succeeded or failed.  If this is necessary see
- retrieveAllInBackground:block:. These requests are executed in sequence and **not** in
- separate background tasks.
- 
- **NOTE:**
- If your array has 3 objects, and the first request fails, then the other 2 request
- will **not** be sent.
- 
- @param objects the array of objects to be retrieved from the catalyze.io API
- */
-+ (void)retrieveAllInBackground:(NSArray *)objects;
-
-/**
- Executes retrieveInBackgroundWithBlock: on each of the objects passed in.  These requests are
- executed in sequence and **not** in separate background tasks. The CatalyzeBooleanResultBlock
- is executed upon completion of the request whether it succeeded or failed, or failed
- on any of the intermediary objects in the array.
- 
- **NOTE:**
- If your array has 3 objects, and the first request fails, then the other 2 request
- will **not** be sent.
- 
- @param objects the array of objects to be retrieved from the catalyze.io API
- @param block the completion block to be executed upon the request's completion
- */
-+ (void)retrieveAllInBackground:(NSArray *)objects block:(CatalyzeBooleanResultBlock)block;
-
-/**
- Executes retrieveInBackgroundWithBlock: on each of the objects passed in.  These requests are
- executed in sequence and **not** in separate background tasks. The given selector
- is performed on the given target upon the request's completion whether is succeeded,
- failed, or failed on any of the intermediary objects in the array.
- 
- **NOTE:**
- If your array has 3 objects, and the first request fails, then the other 2 request
- will **not** be sent.
- Also, the selector is performed on the target on the **Main Thread** see
- [[NSThread mainThread]](http://bit.ly/11Z9D47)
- 
- @param objects the array of objects to be retrieved from the catalyze.io API
- @param target the target to perform the given selector on the **Main Thread**
- upon the request's completion
- @param selector the selector to be performed on the given target on the **Main Thread**
- upon the request's completion
- */
-+ (void)retrieveAllInBackground:(NSArray *)objects target:(id)target selector:(SEL)selector;
 
 #pragma mark -
 #pragma mark Delete

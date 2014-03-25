@@ -1,4 +1,0 @@
-Documentation set was installed to Xcode!
-
-Path: /Users/ault/Library/Developer/Shared/Documentation/DocSets/io.catalyze.iOS-SDK.docset
-Time: 2013-08-26 19:45:02 +0000

@@ -45,14 +45,10 @@
 #pragma mark Retrieve
 
 - (void)retrieveInBackgroundWithBlock:(CatalyzeArrayResultBlock)block {
-    NSMutableDictionary *params = [NSMutableDictionary dictionary];
-    [params setObject:_queryField forKey:@"field"];
-    [params setObject:_queryValue forKey:@"searchBy"];
-    [params setObject:[NSNumber numberWithInt:_pageSize] forKey:@"pageSize"];
-    [params setObject:[NSNumber numberWithInt:_pageNumber] forKey:@"pageNumber"];
-    [self.httpManager doQueryPost:[NSString stringWithFormat:@"%@/classes/%@/query",kCatalyzeBaseURL,[self catalyzeClassName]] withParams:params block:^(int status, NSArray *response, NSError *error) {
+    [CatalyzeHTTPManager doGet:[NSString stringWithFormat:@"/classes/%@/query?pageSize=%i&pageNumber=%i",[self catalyzeClassName], _pageSize, _pageNumber] block:^(int status, NSString *response, NSError *error) {
         if (block) {
-            block(response, error);
+            NSLog(@"response: %@", response);
+            block([NSJSONSerialization JSONObjectWithData:[response dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil], error);
         }
     }];
 }

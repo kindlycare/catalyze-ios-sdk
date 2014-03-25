@@ -31,138 +31,128 @@
 @synthesize errorHolder = _errorHolder;
 @synthesize returned401 = _returned401;
 
-- (void)doGet:(NSString *)urlString block:(CatalyzeHTTPResponseBlock)block {
++ (void)doGet:(NSString *)urlString block:(CatalyzeHTTPResponseBlock)block {
     if (CATALYZE_DEBUG) {
         NSLog(@"GET - %@ - %@",urlString, [[NSUserDefaults standardUserDefaults] valueForKey:@"Authorization"]);
     }
-    NSURL *url = [NSURL URLWithString:@""];
-    AFHTTPClient *httpClient = [[AFHTTPClient alloc] initWithBaseURL:url];
-    [httpClient setDefaultHeader:@"Authorization" value:[NSString stringWithFormat:@"Bearer %@",[[NSUserDefaults standardUserDefaults] valueForKey:@"Authorization"]]];
-    [httpClient setDefaultHeader:@"X-Api-Key" value:[NSString stringWithFormat:@"ios %@ %@",[[NSBundle mainBundle] bundleIdentifier], [Catalyze apiKey]]];
-    [httpClient setParameterEncoding:AFJSONParameterEncoding];
-    [httpClient getPath:urlString parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    NSURL *url = [NSURL URLWithString:kCatalyzeBaseURL];
+    AFHTTPRequestOperationManager *httpClient = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:url];
+    httpClient.requestSerializer = [AFJSONRequestSerializer serializer];
+    [httpClient.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    [httpClient.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",[[NSUserDefaults standardUserDefaults] valueForKey:@"Authorization"]] forHTTPHeaderField:@"Authorization"];
+    [httpClient.requestSerializer setValue:[NSString stringWithFormat:@"ios %@ %@",[[NSBundle mainBundle] bundleIdentifier], [Catalyze apiKey]] forHTTPHeaderField:@"X-Api-Key"];
+    httpClient.responseSerializer = [AFHTTPResponseSerializer serializer];
+    
+    [httpClient GET:[NSString stringWithFormat:@"/v2%@",urlString] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if (!responseObject) {
-            responseObject = [[NSData alloc] init];
+            responseObject = @"";
         }
-        block([[operation response] statusCode], [NSJSONSerialization JSONObjectWithData:responseObject options:kNilOptions error:nil], nil);
+        block((int)[[operation response] statusCode], [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding], nil);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         if (CATALYZE_DEBUG) {
             NSLog(@"error - %@ - %@", error, [error localizedDescription]);
         }
-        if ([[operation response] statusCode] == 401 && !_returned401) {
-            block([[operation response] statusCode], nil, error);
-        } else {
-            _returned401 = NO;
-            block([[operation response] statusCode], nil, error);
-        }
+        block((int)[[operation response] statusCode], nil, error);
     }];
 }
 
-- (void)doPost:(NSString *)urlString withParams:(NSDictionary *)params block:(CatalyzeHTTPResponseBlock)block {
++ (void)doPost:(NSString *)urlString withParams:(NSDictionary *)params block:(CatalyzeHTTPResponseBlock)block {
     if (CATALYZE_DEBUG) {
         NSLog(@"POST - %@ - %@ - %@",urlString,params, [[NSUserDefaults standardUserDefaults] valueForKey:@"Authorization"]);
     }
-    NSURL *url = [NSURL URLWithString:@""];
-    AFHTTPClient *httpClient = [[AFHTTPClient alloc] initWithBaseURL:url];
-    [httpClient setDefaultHeader:@"Authorization" value:[NSString stringWithFormat:@"Bearer %@",[[NSUserDefaults standardUserDefaults] valueForKey:@"Authorization"]]];
-    [httpClient setDefaultHeader:@"X-Api-Key" value:[NSString stringWithFormat:@"ios %@ %@",[[NSBundle mainBundle] bundleIdentifier], [Catalyze apiKey]]];
-    [httpClient setParameterEncoding:AFJSONParameterEncoding];
-    [httpClient postPath:urlString parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    NSURL *url = [NSURL URLWithString:kCatalyzeBaseURL];
+    AFHTTPRequestOperationManager *httpClient = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:url];
+    httpClient.requestSerializer = [AFJSONRequestSerializer serializer];
+    [httpClient.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    [httpClient.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",[[NSUserDefaults standardUserDefaults] valueForKey:@"Authorization"]] forHTTPHeaderField:@"Authorization"];
+    [httpClient.requestSerializer setValue:[NSString stringWithFormat:@"ios %@ %@",[[NSBundle mainBundle] bundleIdentifier], [Catalyze apiKey]] forHTTPHeaderField:@"X-Api-Key"];
+    httpClient.responseSerializer = [AFHTTPResponseSerializer serializer];
+    
+    [httpClient POST:[NSString stringWithFormat:@"/v2%@",urlString] parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if (!responseObject) {
-            responseObject = [[NSData alloc] init];
+            responseObject = @"";
         }
-        block([[operation response] statusCode], [NSJSONSerialization JSONObjectWithData:responseObject options:kNilOptions error:nil], nil);
+        block((int)[[operation response] statusCode], [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding], nil);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         if (CATALYZE_DEBUG) {
             NSLog(@"error - %@ - %@", error, [error localizedDescription]);
         }
-        if ([[operation response] statusCode] == 401 && !_returned401) {
-            block([[operation response] statusCode], nil, error);
-        } else {
-            _returned401 = NO;
-            block([[operation response] statusCode], nil, error);
-        }
+        block((int)[[operation response] statusCode], nil, error);
     }];
 }
 
-- (void)doQueryPost:(NSString *)urlString withParams:(NSDictionary *)params block:(CatalyzeHTTPArrayResponseBlock)block {
++ (void)doQueryPost:(NSString *)urlString withParams:(NSDictionary *)params block:(CatalyzeHTTPArrayResponseBlock)block {
     if (CATALYZE_DEBUG) {
         NSLog(@"array POST - %@ - %@ - %@",urlString,params, [[NSUserDefaults standardUserDefaults] valueForKey:@"Authorization"]);
     }
-    NSURL *url = [NSURL URLWithString:@""];
-    AFHTTPClient *httpClient = [[AFHTTPClient alloc] initWithBaseURL:url];
-    [httpClient setDefaultHeader:@"Authorization" value:[NSString stringWithFormat:@"Bearer %@",[[NSUserDefaults standardUserDefaults] valueForKey:@"Authorization"]]];
-    [httpClient setDefaultHeader:@"X-Api-Key" value:[NSString stringWithFormat:@"ios %@ %@",[[NSBundle mainBundle] bundleIdentifier], [Catalyze apiKey]]];
-    [httpClient setParameterEncoding:AFJSONParameterEncoding];
-    [httpClient postPath:urlString parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    NSURL *url = [NSURL URLWithString:kCatalyzeBaseURL];
+    AFHTTPRequestOperationManager *httpClient = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:url];
+    httpClient.requestSerializer = [AFJSONRequestSerializer serializer];
+    [httpClient.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    [httpClient.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",[[NSUserDefaults standardUserDefaults] valueForKey:@"Authorization"]] forHTTPHeaderField:@"Authorization"];
+    [httpClient.requestSerializer setValue:[NSString stringWithFormat:@"ios %@ %@",[[NSBundle mainBundle] bundleIdentifier], [Catalyze apiKey]] forHTTPHeaderField:@"X-Api-Key"];
+    httpClient.responseSerializer = [AFHTTPResponseSerializer serializer];
+    
+    [httpClient POST:[NSString stringWithFormat:@"/v2%@",urlString] parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if (!responseObject) {
-            responseObject = [[NSData alloc] init];
+            responseObject = @[];
         }
-        block([[operation response] statusCode], [NSJSONSerialization JSONObjectWithData:responseObject options:kNilOptions error:nil], nil);
+        block((int)[[operation response] statusCode], [NSJSONSerialization JSONObjectWithData:responseObject options:0 error:nil], nil);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         if (CATALYZE_DEBUG) {
             NSLog(@"error - %@ - %@", error, [error localizedDescription]);
         }
-        if ([[operation response] statusCode] == 401 && !_returned401) {
-            block([[operation response] statusCode], nil, error);
-        } else {
-            _returned401 = NO;
-            block([[operation response] statusCode], nil, error);
-        }
+        block((int)[[operation response] statusCode], nil, error);
     }];
 }
 
-- (void)doPut:(NSString *)urlString withParams:(NSDictionary *)params block:(CatalyzeHTTPResponseBlock)block {
++ (void)doPut:(NSString *)urlString withParams:(NSDictionary *)params block:(CatalyzeHTTPResponseBlock)block {
     if (CATALYZE_DEBUG) {
         NSLog(@"PUT - %@ - %@ - %@",urlString, params, [[NSUserDefaults standardUserDefaults] valueForKey:@"Authorization"]);
     }
-    NSURL *url = [NSURL URLWithString:@""];
-    AFHTTPClient *httpClient = [[AFHTTPClient alloc] initWithBaseURL:url];
-    [httpClient setDefaultHeader:@"Authorization" value:[NSString stringWithFormat:@"Bearer %@",[[NSUserDefaults standardUserDefaults] valueForKey:@"Authorization"]]];
-    [httpClient setDefaultHeader:@"X-Api-Key" value:[NSString stringWithFormat:@"ios %@ %@",[[NSBundle mainBundle] bundleIdentifier], [Catalyze apiKey]]];
-    [httpClient setParameterEncoding:AFJSONParameterEncoding];
-    [httpClient putPath:urlString parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    NSURL *url = [NSURL URLWithString:kCatalyzeBaseURL];
+    AFHTTPRequestOperationManager *httpClient = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:url];
+    httpClient.requestSerializer = [AFJSONRequestSerializer serializer];
+    [httpClient.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    [httpClient.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",[[NSUserDefaults standardUserDefaults] valueForKey:@"Authorization"]] forHTTPHeaderField:@"Authorization"];
+    [httpClient.requestSerializer setValue:[NSString stringWithFormat:@"ios %@ %@",[[NSBundle mainBundle] bundleIdentifier], [Catalyze apiKey]] forHTTPHeaderField:@"X-Api-Key"];
+    httpClient.responseSerializer = [AFHTTPResponseSerializer serializer];
+    
+    [httpClient PUT:[NSString stringWithFormat:@"/v2%@",urlString] parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if (!responseObject) {
-            responseObject = [[NSData alloc] init];
+            responseObject = @"";
         }
-        block([[operation response] statusCode], [NSJSONSerialization JSONObjectWithData:responseObject options:kNilOptions error:nil], nil);
+        block((int)[[operation response] statusCode], [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding], nil);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         if (CATALYZE_DEBUG) {
             NSLog(@"error - %@ - %@", error, [error localizedDescription]);
         }
-        if ([[operation response] statusCode] == 401 && !_returned401) {
-            block([[operation response] statusCode], nil, error);
-        } else {
-            _returned401 = NO;
-            block([[operation response] statusCode], nil, error);
-        }
+        block((int)[[operation response] statusCode], nil, error);
     }];
 }
 
-- (void)doDelete:(NSString *)urlString block:(CatalyzeHTTPResponseBlock)block {
++ (void)doDelete:(NSString *)urlString block:(CatalyzeHTTPResponseBlock)block {
     if (CATALYZE_DEBUG) {
         NSLog(@"DELETE - %@ - %@",urlString, [[NSUserDefaults standardUserDefaults] valueForKey:@"Authorization"]);
     }
-    NSURL *url = [NSURL URLWithString:@""];
-    AFHTTPClient *httpClient = [[AFHTTPClient alloc] initWithBaseURL:url];
-    [httpClient setDefaultHeader:@"Authorization" value:[NSString stringWithFormat:@"Bearer %@",[[NSUserDefaults standardUserDefaults] valueForKey:@"Authorization"]]];
-    [httpClient setDefaultHeader:@"X-Api-Key" value:[NSString stringWithFormat:@"ios %@ %@",[[NSBundle mainBundle] bundleIdentifier], [Catalyze apiKey]]];
-    [httpClient setParameterEncoding:AFJSONParameterEncoding];
-    [httpClient deletePath:urlString parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    NSURL *url = [NSURL URLWithString:kCatalyzeBaseURL];
+    AFHTTPRequestOperationManager *httpClient = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:url];
+    httpClient.requestSerializer = [AFJSONRequestSerializer serializer];
+    [httpClient.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    [httpClient.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",[[NSUserDefaults standardUserDefaults] valueForKey:@"Authorization"]] forHTTPHeaderField:@"Authorization"];
+    [httpClient.requestSerializer setValue:[NSString stringWithFormat:@"ios %@ %@",[[NSBundle mainBundle] bundleIdentifier], [Catalyze apiKey]] forHTTPHeaderField:@"X-Api-Key"];
+    httpClient.responseSerializer = [AFHTTPResponseSerializer serializer];
+    
+    [httpClient DELETE:[NSString stringWithFormat:@"/v2%@",urlString] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if (!responseObject) {
-            responseObject = [[NSData alloc] init];
+            responseObject = @"";
         }
-        block([[operation response] statusCode], [NSJSONSerialization JSONObjectWithData:responseObject options:kNilOptions error:nil], nil);
+        block((int)[[operation response] statusCode], [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding], nil);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         if (CATALYZE_DEBUG) {
             NSLog(@"error - %@ - %@", error, [error localizedDescription]);
         }
-        if ([[operation response] statusCode] == 401 && !_returned401) {
-            block([[operation response] statusCode], nil, error);
-        } else {
-            _returned401 = NO;
-            block([[operation response] statusCode], nil, error);
-        }
+        block((int)[[operation response] statusCode], nil, error);
     }];
 }
 
