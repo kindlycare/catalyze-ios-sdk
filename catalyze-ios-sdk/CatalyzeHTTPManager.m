@@ -31,19 +31,28 @@
 @synthesize errorHolder = _errorHolder;
 @synthesize returned401 = _returned401;
 
++ (AFHTTPRequestOperationManager *)httpClient {
+    static AFHTTPRequestOperationManager *httpClient = nil;
+    static dispatch_once_t oncePredicate;
+    dispatch_once(&oncePredicate, ^{
+        httpClient = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:kCatalyzeBaseURL]];
+        httpClient.requestSerializer = [AFJSONRequestSerializer serializer];
+        [httpClient.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+        httpClient.responseSerializer = [AFHTTPResponseSerializer serializer];
+        [httpClient.operationQueue setMaxConcurrentOperationCount:1];
+    });
+    return httpClient;
+}
+
 + (void)doGet:(NSString *)urlString block:(CatalyzeHTTPResponseBlock)block {
     if (CATALYZE_DEBUG) {
         NSLog(@"GET - %@ - %@",urlString, [[NSUserDefaults standardUserDefaults] valueForKey:@"Authorization"]);
     }
-    NSURL *url = [NSURL URLWithString:kCatalyzeBaseURL];
-    AFHTTPRequestOperationManager *httpClient = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:url];
-    httpClient.requestSerializer = [AFJSONRequestSerializer serializer];
-    [httpClient.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-    [httpClient.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",[[NSUserDefaults standardUserDefaults] valueForKey:@"Authorization"]] forHTTPHeaderField:@"Authorization"];
-    [httpClient.requestSerializer setValue:[NSString stringWithFormat:@"ios %@ %@",[[NSBundle mainBundle] bundleIdentifier], [Catalyze apiKey]] forHTTPHeaderField:@"X-Api-Key"];
-    httpClient.responseSerializer = [AFHTTPResponseSerializer serializer];
     
-    [httpClient GET:[NSString stringWithFormat:@"/v2%@",urlString] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [[CatalyzeHTTPManager httpClient].requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",[[NSUserDefaults standardUserDefaults] valueForKey:@"Authorization"]] forHTTPHeaderField:@"Authorization"];
+    [[CatalyzeHTTPManager httpClient].requestSerializer setValue:[NSString stringWithFormat:@"ios %@ %@",[[NSBundle mainBundle] bundleIdentifier], [Catalyze apiKey]] forHTTPHeaderField:@"X-Api-Key"];
+    
+    [[CatalyzeHTTPManager httpClient] GET:[NSString stringWithFormat:@"/v2%@",urlString] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if (!responseObject) {
             responseObject = @"";
         }
@@ -60,15 +69,10 @@
     if (CATALYZE_DEBUG) {
         NSLog(@"POST - %@ - %@ - %@",urlString,params, [[NSUserDefaults standardUserDefaults] valueForKey:@"Authorization"]);
     }
-    NSURL *url = [NSURL URLWithString:kCatalyzeBaseURL];
-    AFHTTPRequestOperationManager *httpClient = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:url];
-    httpClient.requestSerializer = [AFJSONRequestSerializer serializer];
-    [httpClient.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-    [httpClient.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",[[NSUserDefaults standardUserDefaults] valueForKey:@"Authorization"]] forHTTPHeaderField:@"Authorization"];
-    [httpClient.requestSerializer setValue:[NSString stringWithFormat:@"ios %@ %@",[[NSBundle mainBundle] bundleIdentifier], [Catalyze apiKey]] forHTTPHeaderField:@"X-Api-Key"];
-    httpClient.responseSerializer = [AFHTTPResponseSerializer serializer];
+    [[CatalyzeHTTPManager httpClient].requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",[[NSUserDefaults standardUserDefaults] valueForKey:@"Authorization"]] forHTTPHeaderField:@"Authorization"];
+    [[CatalyzeHTTPManager httpClient].requestSerializer setValue:[NSString stringWithFormat:@"ios %@ %@",[[NSBundle mainBundle] bundleIdentifier], [Catalyze apiKey]] forHTTPHeaderField:@"X-Api-Key"];
     
-    [httpClient POST:[NSString stringWithFormat:@"/v2%@",urlString] parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [[CatalyzeHTTPManager httpClient] POST:[NSString stringWithFormat:@"/v2%@",urlString] parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if (!responseObject) {
             responseObject = @"";
         }
@@ -85,15 +89,10 @@
     if (CATALYZE_DEBUG) {
         NSLog(@"array POST - %@ - %@ - %@",urlString,params, [[NSUserDefaults standardUserDefaults] valueForKey:@"Authorization"]);
     }
-    NSURL *url = [NSURL URLWithString:kCatalyzeBaseURL];
-    AFHTTPRequestOperationManager *httpClient = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:url];
-    httpClient.requestSerializer = [AFJSONRequestSerializer serializer];
-    [httpClient.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-    [httpClient.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",[[NSUserDefaults standardUserDefaults] valueForKey:@"Authorization"]] forHTTPHeaderField:@"Authorization"];
-    [httpClient.requestSerializer setValue:[NSString stringWithFormat:@"ios %@ %@",[[NSBundle mainBundle] bundleIdentifier], [Catalyze apiKey]] forHTTPHeaderField:@"X-Api-Key"];
-    httpClient.responseSerializer = [AFHTTPResponseSerializer serializer];
+    [[CatalyzeHTTPManager httpClient].requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",[[NSUserDefaults standardUserDefaults] valueForKey:@"Authorization"]] forHTTPHeaderField:@"Authorization"];
+    [[CatalyzeHTTPManager httpClient].requestSerializer setValue:[NSString stringWithFormat:@"ios %@ %@",[[NSBundle mainBundle] bundleIdentifier], [Catalyze apiKey]] forHTTPHeaderField:@"X-Api-Key"];
     
-    [httpClient POST:[NSString stringWithFormat:@"/v2%@",urlString] parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [[CatalyzeHTTPManager httpClient] POST:[NSString stringWithFormat:@"/v2%@",urlString] parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if (!responseObject) {
             responseObject = @[];
         }
@@ -110,15 +109,10 @@
     if (CATALYZE_DEBUG) {
         NSLog(@"PUT - %@ - %@ - %@",urlString, params, [[NSUserDefaults standardUserDefaults] valueForKey:@"Authorization"]);
     }
-    NSURL *url = [NSURL URLWithString:kCatalyzeBaseURL];
-    AFHTTPRequestOperationManager *httpClient = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:url];
-    httpClient.requestSerializer = [AFJSONRequestSerializer serializer];
-    [httpClient.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-    [httpClient.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",[[NSUserDefaults standardUserDefaults] valueForKey:@"Authorization"]] forHTTPHeaderField:@"Authorization"];
-    [httpClient.requestSerializer setValue:[NSString stringWithFormat:@"ios %@ %@",[[NSBundle mainBundle] bundleIdentifier], [Catalyze apiKey]] forHTTPHeaderField:@"X-Api-Key"];
-    httpClient.responseSerializer = [AFHTTPResponseSerializer serializer];
+    [[CatalyzeHTTPManager httpClient].requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",[[NSUserDefaults standardUserDefaults] valueForKey:@"Authorization"]] forHTTPHeaderField:@"Authorization"];
+    [[CatalyzeHTTPManager httpClient].requestSerializer setValue:[NSString stringWithFormat:@"ios %@ %@",[[NSBundle mainBundle] bundleIdentifier], [Catalyze apiKey]] forHTTPHeaderField:@"X-Api-Key"];
     
-    [httpClient PUT:[NSString stringWithFormat:@"/v2%@",urlString] parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [[CatalyzeHTTPManager httpClient] PUT:[NSString stringWithFormat:@"/v2%@",urlString] parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if (!responseObject) {
             responseObject = @"";
         }
@@ -135,15 +129,10 @@
     if (CATALYZE_DEBUG) {
         NSLog(@"DELETE - %@ - %@",urlString, [[NSUserDefaults standardUserDefaults] valueForKey:@"Authorization"]);
     }
-    NSURL *url = [NSURL URLWithString:kCatalyzeBaseURL];
-    AFHTTPRequestOperationManager *httpClient = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:url];
-    httpClient.requestSerializer = [AFJSONRequestSerializer serializer];
-    [httpClient.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-    [httpClient.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",[[NSUserDefaults standardUserDefaults] valueForKey:@"Authorization"]] forHTTPHeaderField:@"Authorization"];
-    [httpClient.requestSerializer setValue:[NSString stringWithFormat:@"ios %@ %@",[[NSBundle mainBundle] bundleIdentifier], [Catalyze apiKey]] forHTTPHeaderField:@"X-Api-Key"];
-    httpClient.responseSerializer = [AFHTTPResponseSerializer serializer];
+    [[CatalyzeHTTPManager httpClient].requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",[[NSUserDefaults standardUserDefaults] valueForKey:@"Authorization"]] forHTTPHeaderField:@"Authorization"];
+    [[CatalyzeHTTPManager httpClient].requestSerializer setValue:[NSString stringWithFormat:@"ios %@ %@",[[NSBundle mainBundle] bundleIdentifier], [Catalyze apiKey]] forHTTPHeaderField:@"X-Api-Key"];
     
-    [httpClient DELETE:[NSString stringWithFormat:@"/v2%@",urlString] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [[CatalyzeHTTPManager httpClient] DELETE:[NSString stringWithFormat:@"/v2%@",urlString] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if (!responseObject) {
             responseObject = @"";
         }
