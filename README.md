@@ -3,7 +3,7 @@ Getting Started
 
 Installation
 ------------
-The preferred method of installation is through [cocoapods][2]. Simply add ```pod 'CatalyzeSDK', '~> 2.0'``` to your Podfile, run ```pod install``` and you will be ready to start developing. Optionally if you do not use cocoapods or have an existing project that has not integrated cocoapods, you can clone this repository to your computer. Simply copy the iOS SDK folder anywhere into your project directory by clicking on the File menu and then "Add Files to 'yourProjectName'...". Navigate to the directory of the iOS SDK and click Add. You're now ready to use the iOS SDK in your application.
+The preferred method of installation is through [cocoapods][2]. Simply add ```pod 'catalyze-ios-sdk', '~> 2.3'``` to your Podfile, run ```pod install``` and you will be ready to start developing. Optionally if you do not use cocoapods or have an existing project that has not integrated cocoapods, you can clone this repository to your computer. Simply copy the iOS SDK folder anywhere into your project directory by clicking on the File menu and then "Add Files to 'yourProjectName'...". Navigate to the directory of the iOS SDK and click Add. You're now ready to use the iOS SDK in your application.
 
 License
 --------
@@ -25,20 +25,20 @@ License
 Using the catalyze.io iOS SDK
 =============================
 
-The first thing you must do is set-up an Application on the [developer console][1].  You will need the following information about your Application: api key and application id. Please be aware that there are three components to an api key: the type, identifier, and id. A complete api key looks like ```ios io.catalyze.sdk 426881c0-f39b-4d52-82de-be509d5450f6``` or more generally ```<type> <identifier> <id>```. For the iOS SDK you only need the <id>.  After you have this information, you MUST call 
+The first thing you must do is set-up an Application on the [dashboard][1].  You will need the following information about your Application: api key and application id. Please be aware that there are three components to an api key: the type, identifier, and id. A complete api key looks like ```ios io.catalyze.sdk 426881c0-f39b-4d52-82de-be509d5450f6``` or more generally ```<type> <identifier> <id>```.  After you have this information, you MUST call 
 
-    [Catalyze setApiKey:@"{apiKey}" applicationId:@"{appId}"];
+    [Catalyze setApiKey:@"{fullApiKey}" applicationId:@"{appId}"];
 
 in `application:didFinishLaunchingWithOptions:`.  Note: all methods that require a network request are run asynchronously. 
 Don't forget to `#import "Catalyze.h"` whenever you need to use the iOS SDK.
 
 Objects
 -------
-A CatalyzeObject represents an Object that can be stored on the catalyze.io API in a pre defined custom class.  These custom classes must be created in the developer console before being used or referenced within an app or the API will return a 4XX status code. 
+A CatalyzeObject represents an Object that can be stored on the catalyze.io API in a pre defined custom class.  These custom classes must be created in the dashboard before being used or referenced within an app or the API will return a 4XX status code. 
 
 Creating Objects
 ----------------
-To use a CatalyzeObject you must initialize it with the name of the custom class you created on the developer console:
+To use a CatalyzeObject you must initialize it with the name of the custom class you created on the dashboard:
 
     CatalyzeObject *myObject = [CatalyzeObject objectWithClassName:@"{customClassName}"];
 
@@ -76,7 +76,7 @@ Asynchronous and perform a selector on the main thread:
     
 Referenced Objects
 ------------------
-On the catalyze.io API you can also have references to a custom class inside another custom class.  Let's say you have a custom class called "MovieStar" and another called "Address".  When you create "MovieStar" in the developer console, you can specify a column as being a reference.  References are of type CatalyzeReference in the iOS SDK.
+On the catalyze.io API you can also have references to a custom class inside another custom class.  Let's say you have a custom class called "MovieStar" and another called "Address".  When you create "MovieStar" in the dashboard, you can specify a column as being a reference.  References are of type CatalyzeReference in the iOS SDK.
 
 CatalyzeUser
 ------------
@@ -95,6 +95,7 @@ You will use these for extras on a CatalyzeUser
     extraForKey:
 
 The full list of supported fields on a CatalyzeUser are
+
 * usersId
 * active
 * createdAt
@@ -220,5 +221,5 @@ If you want to query your own Entries, you simply set the "queryField" to be "pa
             }
     }];
 
-[1]: https://devportal.catalyze.io
+[1]: https://dashboard.catalyze.io
 [2]: http://cocoapods.org/

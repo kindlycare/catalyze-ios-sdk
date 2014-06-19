@@ -1,7 +1,7 @@
 Pod::Spec.new do |spec|
 
     spec.name              = 'catalyze-ios-sdk'
-    spec.version           = '2.2'
+    spec.version           = '2.3'
     spec.summary           = 'SDK for interacting with the Catalyze API'
     spec.homepage          = 'https://github.com/catalyzeio/catalyze-ios-sdk'
     spec.license           = {
@@ -18,6 +18,8 @@ Pod::Spec.new do |spec|
     spec.source_files      = 'catalyze-ios-sdk/*.{m,h}'
     spec.requires_arc      = true
     spec.platform = :ios, '7.0'
-    spec.dependency 'AFNetworking', '~> 2.2.1'
-
+    spec.dependency 'AFNetworking', '~> 2.2'
+    spec.subspec 'logging' do |ss|
+        ss.dependency 'AFNetworkActivityLogger', '~> 2.0'
+    end
 end

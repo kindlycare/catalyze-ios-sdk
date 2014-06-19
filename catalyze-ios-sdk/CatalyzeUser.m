@@ -491,67 +491,79 @@ static CatalyzeUser *currentUser;
     NSMutableArray *mrns = [NSMutableArray array];
     NSMutableArray *healthPlans = [NSMutableArray array];
     
-    if ([dict objectForKey:@"email"]) {
+    if ([dict objectForKey:@"email"] && [dict objectForKey:@"email"] != [NSNull null]) {
         [email setValuesForKeysWithDictionary:[dict objectForKey:@"email"]];
     }
     [dict setObject:email forKey:@"email"];
     
-    if ([dict objectForKey:@"name"]) {
+    if ([dict objectForKey:@"name"] && [dict objectForKey:@"name"] != [NSNull null]) {
         [name setValuesForKeysWithDictionary:[dict objectForKey:@"name"]];
     }
     [dict setObject:name forKey:@"name"];
     
-    if ([dict objectForKey:@"phoneNumber"]) {
+    if ([dict objectForKey:@"phoneNumber"] && [dict objectForKey:@"phoneNumber"] != [NSNull null]) {
         [phoneNumber setValuesForKeysWithDictionary:[dict objectForKey:@"phoneNumber"]];
     }
     [dict setObject:phoneNumber forKey:@"phoneNumber"];
     
-    for (NSDictionary *ad in [dict objectForKey:@"addresses"]) {
-        Address *a = [[Address alloc] init];
-        [a setValuesForKeysWithDictionary:ad];
-        Geocode *geo = [[Geocode alloc] init];
-        [geo setValuesForKeysWithDictionary:[ad objectForKey:@"geocode"]];
-        [a setGeocode:geo];
-        [addresses addObject:a];
+    if ([dict objectForKey:@"addresses"] && [dict objectForKey:@"addresses"] != [NSNull null]) {
+        for (NSDictionary *ad in [dict objectForKey:@"addresses"]) {
+            Address *a = [[Address alloc] init];
+            [a setValuesForKeysWithDictionary:ad];
+            Geocode *geo = [[Geocode alloc] init];
+            [geo setValuesForKeysWithDictionary:[ad objectForKey:@"geocode"]];
+            [a setGeocode:geo];
+            [addresses addObject:a];
+        }
     }
     [dict setObject:addresses forKey:@"addresses"];
     
-    for (NSDictionary *gd in [dict objectForKey:@"guardians"]) {
-        Guardian *g = [[Guardian alloc] init];
-        [g setValuesForKeysWithDictionary:gd];
-        [guardians addObject:g];
+    if ([dict objectForKey:@"guardians"] && [dict objectForKey:@"guardians"] != [NSNull null]) {
+        for (NSDictionary *gd in [dict objectForKey:@"guardians"]) {
+            Guardian *g = [[Guardian alloc] init];
+            [g setValuesForKeysWithDictionary:gd];
+            [guardians addObject:g];
+        }
     }
     [dict setObject:guardians forKey:@"guardians"];
     
-    for (NSDictionary *ld in [dict objectForKey:@"languages"]) {
-        Language *l = [[Language alloc] init];
-        [l setValuesForKeysWithDictionary:ld];
-        [languages addObject:l];
+    if ([dict objectForKey:@"languages"] && [dict objectForKey:@"languages"] != [NSNull null]) {
+        for (NSDictionary *ld in [dict objectForKey:@"languages"]) {
+            Language *l = [[Language alloc] init];
+            [l setValuesForKeysWithDictionary:ld];
+            [languages addObject:l];
+        }
     }
     [dict setObject:languages forKey:@"languages"];
     
-    for (NSDictionary *sd in [dict objectForKey:@"socialIds"]) {
-        SocialId *s = [[SocialId alloc] init];
-        [s setValuesForKeysWithDictionary:sd];
-        [socialIds addObject:s];
+    if ([dict objectForKey:@"socialIds"] && [dict objectForKey:@"socialIds"] != [NSNull null]) {
+        for (NSDictionary *sd in [dict objectForKey:@"socialIds"]) {
+            SocialId *s = [[SocialId alloc] init];
+            [s setValuesForKeysWithDictionary:sd];
+            [socialIds addObject:s];
+        }
     }
     [dict setObject:socialIds forKey:@"socialIds"];
     
-    for (NSDictionary *mrnd in [dict objectForKey:@"mrns"]) {
-        Mrn *mrn = [[Mrn alloc] init];
-        [mrn setValuesForKeysWithDictionary:mrnd];
-        [mrns addObject:mrn];
+    if ([dict objectForKey:@"mrns"] && [dict objectForKey:@"mrns"] != [NSNull null]) {
+        for (NSDictionary *mrnd in [dict objectForKey:@"mrns"]) {
+            Mrn *mrn = [[Mrn alloc] init];
+            [mrn setValuesForKeysWithDictionary:mrnd];
+            [mrns addObject:mrn];
+        }
     }
     [dict setObject:mrns forKey:@"mrns"];
     
-    for (NSDictionary *hpd in [dict objectForKey:@"healthPlans"]) {
-        HealthPlan *hp = [[HealthPlan alloc] init];
-        [hp setValuesForKeysWithDictionary:hpd];
-        [healthPlans addObject:hp];
+    if ([dict objectForKey:@"healthPlans"] && [dict objectForKey:@"healthPlans"] != [NSNull null]) {
+        for (NSDictionary *hpd in [dict objectForKey:@"healthPlans"]) {
+            HealthPlan *hp = [[HealthPlan alloc] init];
+            [hp setValuesForKeysWithDictionary:hpd];
+            [healthPlans addObject:hp];
+        }
     }
     [dict setObject:healthPlans forKey:@"healthPlans"];
     
-    if ([dict objectForKey:@"extras"]) {
+    if ([dict objectForKey:@"extras"] && [dict objectForKey:@"extras"] != [NSNull null]) {
         [dict setObject:[NSMutableDictionary dictionaryWithDictionary:[dict objectForKey:@"extras"]] forKey:@"extras"];
     }
     return dict;

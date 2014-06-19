@@ -50,7 +50,7 @@
     }
     
     [[CatalyzeHTTPManager httpClient].requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",[[NSUserDefaults standardUserDefaults] valueForKey:@"Authorization"]] forHTTPHeaderField:@"Authorization"];
-    [[CatalyzeHTTPManager httpClient].requestSerializer setValue:[NSString stringWithFormat:@"ios %@ %@",[[NSBundle mainBundle] bundleIdentifier], [Catalyze apiKey]] forHTTPHeaderField:@"X-Api-Key"];
+    [[CatalyzeHTTPManager httpClient].requestSerializer setValue:[NSString stringWithFormat:@"%@", [Catalyze apiKey]] forHTTPHeaderField:@"X-Api-Key"];
     
     [[CatalyzeHTTPManager httpClient] GET:[NSString stringWithFormat:@"/v2%@",urlString] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if (!responseObject) {
@@ -70,7 +70,7 @@
         NSLog(@"POST - %@ - %@ - %@",urlString,params, [[NSUserDefaults standardUserDefaults] valueForKey:@"Authorization"]);
     }
     [[CatalyzeHTTPManager httpClient].requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",[[NSUserDefaults standardUserDefaults] valueForKey:@"Authorization"]] forHTTPHeaderField:@"Authorization"];
-    [[CatalyzeHTTPManager httpClient].requestSerializer setValue:[NSString stringWithFormat:@"ios %@ %@",[[NSBundle mainBundle] bundleIdentifier], [Catalyze apiKey]] forHTTPHeaderField:@"X-Api-Key"];
+    [[CatalyzeHTTPManager httpClient].requestSerializer setValue:[NSString stringWithFormat:@"%@", [Catalyze apiKey]] forHTTPHeaderField:@"X-Api-Key"];
     
     [[CatalyzeHTTPManager httpClient] POST:[NSString stringWithFormat:@"/v2%@",urlString] parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if (!responseObject) {
@@ -90,7 +90,7 @@
         NSLog(@"array POST - %@ - %@ - %@",urlString,params, [[NSUserDefaults standardUserDefaults] valueForKey:@"Authorization"]);
     }
     [[CatalyzeHTTPManager httpClient].requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",[[NSUserDefaults standardUserDefaults] valueForKey:@"Authorization"]] forHTTPHeaderField:@"Authorization"];
-    [[CatalyzeHTTPManager httpClient].requestSerializer setValue:[NSString stringWithFormat:@"ios %@ %@",[[NSBundle mainBundle] bundleIdentifier], [Catalyze apiKey]] forHTTPHeaderField:@"X-Api-Key"];
+    [[CatalyzeHTTPManager httpClient].requestSerializer setValue:[NSString stringWithFormat:@"%@", [Catalyze apiKey]] forHTTPHeaderField:@"X-Api-Key"];
     
     [[CatalyzeHTTPManager httpClient] POST:[NSString stringWithFormat:@"/v2%@",urlString] parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if (!responseObject) {
@@ -110,7 +110,7 @@
         NSLog(@"PUT - %@ - %@ - %@",urlString, params, [[NSUserDefaults standardUserDefaults] valueForKey:@"Authorization"]);
     }
     [[CatalyzeHTTPManager httpClient].requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",[[NSUserDefaults standardUserDefaults] valueForKey:@"Authorization"]] forHTTPHeaderField:@"Authorization"];
-    [[CatalyzeHTTPManager httpClient].requestSerializer setValue:[NSString stringWithFormat:@"ios %@ %@",[[NSBundle mainBundle] bundleIdentifier], [Catalyze apiKey]] forHTTPHeaderField:@"X-Api-Key"];
+    [[CatalyzeHTTPManager httpClient].requestSerializer setValue:[NSString stringWithFormat:@"%@", [Catalyze apiKey]] forHTTPHeaderField:@"X-Api-Key"];
     
     [[CatalyzeHTTPManager httpClient] PUT:[NSString stringWithFormat:@"/v2%@",urlString] parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if (!responseObject) {
@@ -130,7 +130,7 @@
         NSLog(@"DELETE - %@ - %@",urlString, [[NSUserDefaults standardUserDefaults] valueForKey:@"Authorization"]);
     }
     [[CatalyzeHTTPManager httpClient].requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",[[NSUserDefaults standardUserDefaults] valueForKey:@"Authorization"]] forHTTPHeaderField:@"Authorization"];
-    [[CatalyzeHTTPManager httpClient].requestSerializer setValue:[NSString stringWithFormat:@"ios %@ %@",[[NSBundle mainBundle] bundleIdentifier], [Catalyze apiKey]] forHTTPHeaderField:@"X-Api-Key"];
+    [[CatalyzeHTTPManager httpClient].requestSerializer setValue:[NSString stringWithFormat:@"%@", [Catalyze apiKey]] forHTTPHeaderField:@"X-Api-Key"];
     
     [[CatalyzeHTTPManager httpClient] DELETE:[NSString stringWithFormat:@"/v2%@",urlString] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if (!responseObject) {
