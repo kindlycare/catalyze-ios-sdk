@@ -15,6 +15,7 @@
  */
 
 #import "Catalyze.h"
+#import "AFNetworkActivityLogger.h"
 
 @implementation Catalyze
 
@@ -36,6 +37,27 @@
         NSLog(@"Warning! Application id not set! Please call [Catalyze setApiKey:URLScheme:applicationId:] in your AppDelegate's applicationDidFinishLaunchingWithOptions: method");
     }
     return [[NSUserDefaults standardUserDefaults] valueForKey:@"app_id"];
+}
+
++ (void)setLoggingLevel:(LoggingLevel)level {
+    if (level == kLoggingLevelOff) {
+        [[AFNetworkActivityLogger sharedLogger] stopLogging];
+    } else {
+        switch (level) {
+            case kLoggingLevelDebug:
+                [[AFNetworkActivityLogger sharedLogger] setLevel:AFLoggerLevelDebug];
+                break;
+            case kLoggingLevelInfo:
+                [[AFNetworkActivityLogger sharedLogger] setLevel:AFLoggerLevelInfo];
+                break;
+            case kLoggingLevelWarn:
+                [[AFNetworkActivityLogger sharedLogger] setLevel:AFLoggerLevelWarn];
+                break;
+            default:
+                break;
+        }
+        [[AFNetworkActivityLogger sharedLogger] startLogging];
+    }
 }
 
 @end

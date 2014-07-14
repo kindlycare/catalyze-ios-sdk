@@ -88,3 +88,33 @@ typedef void (^CatalyzeHandleOpenURLBlock)(BOOL authenticated, BOOL newUser);
  The base URL for the catalyze.io API.  All URLs begin with this URL.
  */
 #define kCatalyzeBaseURL @"https://apiv2.catalyze.io"
+
+typedef enum {
+    kLoggingLevelDebug,
+    kLoggingLevelInfo,
+    kLoggingLevelOff,
+    kLoggingLevelWarn
+} LoggingLevel;
+
+/**
+ Logging Levels (from AFNetworkingActivityLogger.h)
+ 
+ The following constants specify the available logging levels:
+ 
+ kLoggingLevelDebug,
+ kLoggingLevelInfo,
+ kLoggingLevelOff,
+ kLoggingLevelWarn
+ 
+ `kLoggingLevelDebug`
+ Logs HTTP method, URL, header fields, & request body for requests, and status code, URL, header fields, response string, & elapsed time for responses.
+ 
+ `kLoggingLevelInfo`
+ Logs HTTP method & URL for requests, and status code, URL, & elapsed time for responses.
+ 
+ `kLoggingLevelOff`
+ Do not log requests or responses.
+ 
+ `kLoggingLevelWarn`
+ Logs HTTP method & URL for requests, and status code, URL, & elapsed time for responses, but only for failed requests.
+ */

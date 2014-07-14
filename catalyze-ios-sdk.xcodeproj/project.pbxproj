@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		279602F519743323009BAD41 /* AFNetworkActivityLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 279602F419743323009BAD41 /* AFNetworkActivityLogger.m */; };
 		27B9C24C17CBB9B500B8FA02 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27B9C24B17CBB9B500B8FA02 /* Foundation.framework */; };
 		27B9C25E17CBB9B500B8FA02 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27B9C24B17CBB9B500B8FA02 /* Foundation.framework */; };
 		27B9C28017CBBAC600B8FA02 /* Catalyze.m in Sources */ = {isa = PBXBuildFile; fileRef = 27B9C27417CBBAC600B8FA02 /* Catalyze.m */; };
@@ -59,6 +60,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		279602F319743323009BAD41 /* AFNetworkActivityLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFNetworkActivityLogger.h; sourceTree = "<group>"; };
+		279602F419743323009BAD41 /* AFNetworkActivityLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFNetworkActivityLogger.m; sourceTree = "<group>"; };
 		27B9C24817CBB9B500B8FA02 /* libcatalyze-ios-sdk.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libcatalyze-ios-sdk.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		27B9C24B17CBB9B500B8FA02 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		27B9C24F17CBB9B500B8FA02 /* catalyze-ios-sdk-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "catalyze-ios-sdk-Prefix.pch"; sourceTree = "<group>"; };
@@ -146,6 +149,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		279602F219743323009BAD41 /* AFNetworkActivityLogger */ = {
+			isa = PBXGroup;
+			children = (
+				279602F319743323009BAD41 /* AFNetworkActivityLogger.h */,
+				279602F419743323009BAD41 /* AFNetworkActivityLogger.m */,
+			);
+			path = AFNetworkActivityLogger;
+			sourceTree = "<group>";
+		};
 		27B9C23F17CBB9B500B8FA02 = {
 			isa = PBXGroup;
 			children = (
@@ -233,6 +245,7 @@
 		27B9C28617CBBAD300B8FA02 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				279602F219743323009BAD41 /* AFNetworkActivityLogger */,
 				27EC347618E225FF00FEA2F4 /* AFNetworking */,
 			);
 			path = Libraries;
@@ -383,6 +396,7 @@
 				27B9C28117CBBAC600B8FA02 /* CatalyzeHTTPManager.m in Sources */,
 				27EC348C18E225FF00FEA2F4 /* AFHTTPSessionManager.m in Sources */,
 				27EC346B18E225F500FEA2F4 /* Email.m in Sources */,
+				279602F519743323009BAD41 /* AFNetworkActivityLogger.m in Sources */,
 				27EC346918E225F500FEA2F4 /* Address.m in Sources */,
 				27EC346D18E225F500FEA2F4 /* Guardian.m in Sources */,
 				27B9C28217CBBAC600B8FA02 /* CatalyzeObject.m in Sources */,

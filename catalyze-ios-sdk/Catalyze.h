@@ -75,4 +75,10 @@ static const BOOL CATALYZE_DEBUG = YES;
  */
 + (NSString *)applicationId;
 
+/**
+ Set the default logging level for all network requests. If set to kLoggingLevelOff, all logging will stop. If set to any other
+ value, logging will be automatically turned on.
+ */
++ (void)setLoggingLevel:(LoggingLevel)level;
+
 @end
