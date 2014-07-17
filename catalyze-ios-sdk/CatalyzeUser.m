@@ -141,7 +141,7 @@ static CatalyzeUser *currentUser;
 }
 
 - (BOOL)isAuthenticated {
-    return !([[NSUserDefaults standardUserDefaults] valueForKey:@"Authorization"] || [[[NSUserDefaults standardUserDefaults] valueForKey:@"Authorization"] isEqualToString:@""]);
+    return ([[NSUserDefaults standardUserDefaults] valueForKey:@"Authorization"] && ![[[NSUserDefaults standardUserDefaults] valueForKey:@"Authorization"] isEqualToString:@""]);
 }
 
 + (CatalyzeUser *)user {
