@@ -210,6 +210,12 @@
  */
 - (void)createInBackgroundWithTarget:(id)target selector:(SEL)selector;
 
+- (void)createInBackgroundForUserWithUsersId:(NSString *)usersId;
+
+- (void)createInBackgroundForUserWithUsersId:(NSString *)usersId block:(CatalyzeBooleanResultBlock)block;
+
+- (void)createInBackgroundForUserWithUsersId:(NSString *)usersId target:(id)target selector:(SEL)selector;
+
 #pragma mark -
 #pragma mark Save
 

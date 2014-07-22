@@ -45,10 +45,6 @@
 }
 
 + (void)doGet:(NSString *)urlString block:(CatalyzeHTTPResponseBlock)block {
-    if (CATALYZE_DEBUG) {
-        NSLog(@"GET - %@ - %@",urlString, [[NSUserDefaults standardUserDefaults] valueForKey:@"Authorization"]);
-    }
-    
     [[CatalyzeHTTPManager httpClient].requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",[[NSUserDefaults standardUserDefaults] valueForKey:@"Authorization"]] forHTTPHeaderField:@"Authorization"];
     [[CatalyzeHTTPManager httpClient].requestSerializer setValue:[NSString stringWithFormat:@"%@", [Catalyze apiKey]] forHTTPHeaderField:@"X-Api-Key"];
     
@@ -58,17 +54,11 @@
         }
         block((int)[[operation response] statusCode], [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding], nil);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        if (CATALYZE_DEBUG) {
-            NSLog(@"error - %@ - %@", error, [error localizedDescription]);
-        }
         block((int)[[operation response] statusCode], nil, error);
     }];
 }
 
 + (void)doPost:(NSString *)urlString withParams:(NSDictionary *)params block:(CatalyzeHTTPResponseBlock)block {
-    if (CATALYZE_DEBUG) {
-        NSLog(@"POST - %@ - %@ - %@",urlString,params, [[NSUserDefaults standardUserDefaults] valueForKey:@"Authorization"]);
-    }
     [[CatalyzeHTTPManager httpClient].requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",[[NSUserDefaults standardUserDefaults] valueForKey:@"Authorization"]] forHTTPHeaderField:@"Authorization"];
     [[CatalyzeHTTPManager httpClient].requestSerializer setValue:[NSString stringWithFormat:@"%@", [Catalyze apiKey]] forHTTPHeaderField:@"X-Api-Key"];
     
@@ -78,37 +68,11 @@
         }
         block((int)[[operation response] statusCode], [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding], nil);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        if (CATALYZE_DEBUG) {
-            NSLog(@"error - %@ - %@", error, [error localizedDescription]);
-        }
-        block((int)[[operation response] statusCode], nil, error);
-    }];
-}
-
-+ (void)doQueryPost:(NSString *)urlString withParams:(NSDictionary *)params block:(CatalyzeHTTPArrayResponseBlock)block {
-    if (CATALYZE_DEBUG) {
-        NSLog(@"array POST - %@ - %@ - %@",urlString,params, [[NSUserDefaults standardUserDefaults] valueForKey:@"Authorization"]);
-    }
-    [[CatalyzeHTTPManager httpClient].requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",[[NSUserDefaults standardUserDefaults] valueForKey:@"Authorization"]] forHTTPHeaderField:@"Authorization"];
-    [[CatalyzeHTTPManager httpClient].requestSerializer setValue:[NSString stringWithFormat:@"%@", [Catalyze apiKey]] forHTTPHeaderField:@"X-Api-Key"];
-    
-    [[CatalyzeHTTPManager httpClient] POST:[NSString stringWithFormat:@"/v2%@",urlString] parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        if (!responseObject) {
-            responseObject = @[];
-        }
-        block((int)[[operation response] statusCode], [NSJSONSerialization JSONObjectWithData:responseObject options:0 error:nil], nil);
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        if (CATALYZE_DEBUG) {
-            NSLog(@"error - %@ - %@", error, [error localizedDescription]);
-        }
         block((int)[[operation response] statusCode], nil, error);
     }];
 }
 
 + (void)doPut:(NSString *)urlString withParams:(NSDictionary *)params block:(CatalyzeHTTPResponseBlock)block {
-    if (CATALYZE_DEBUG) {
-        NSLog(@"PUT - %@ - %@ - %@",urlString, params, [[NSUserDefaults standardUserDefaults] valueForKey:@"Authorization"]);
-    }
     [[CatalyzeHTTPManager httpClient].requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",[[NSUserDefaults standardUserDefaults] valueForKey:@"Authorization"]] forHTTPHeaderField:@"Authorization"];
     [[CatalyzeHTTPManager httpClient].requestSerializer setValue:[NSString stringWithFormat:@"%@", [Catalyze apiKey]] forHTTPHeaderField:@"X-Api-Key"];
     
@@ -118,17 +82,11 @@
         }
         block((int)[[operation response] statusCode], [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding], nil);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        if (CATALYZE_DEBUG) {
-            NSLog(@"error - %@ - %@", error, [error localizedDescription]);
-        }
         block((int)[[operation response] statusCode], nil, error);
     }];
 }
 
 + (void)doDelete:(NSString *)urlString block:(CatalyzeHTTPResponseBlock)block {
-    if (CATALYZE_DEBUG) {
-        NSLog(@"DELETE - %@ - %@",urlString, [[NSUserDefaults standardUserDefaults] valueForKey:@"Authorization"]);
-    }
     [[CatalyzeHTTPManager httpClient].requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",[[NSUserDefaults standardUserDefaults] valueForKey:@"Authorization"]] forHTTPHeaderField:@"Authorization"];
     [[CatalyzeHTTPManager httpClient].requestSerializer setValue:[NSString stringWithFormat:@"%@", [Catalyze apiKey]] forHTTPHeaderField:@"X-Api-Key"];
     
@@ -138,9 +96,6 @@
         }
         block((int)[[operation response] statusCode], [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding], nil);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        if (CATALYZE_DEBUG) {
-            NSLog(@"error - %@ - %@", error, [error localizedDescription]);
-        }
         block((int)[[operation response] statusCode], nil, error);
     }];
 }

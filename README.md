@@ -3,7 +3,7 @@ Getting Started
 
 Installation
 ------------
-The preferred method of installation is through [cocoapods][2]. Simply add ```pod 'catalyze-ios-sdk', '~> 2.3'``` to your Podfile, run ```pod install``` and you will be ready to start developing. Optionally if you do not use cocoapods or have an existing project that has not integrated cocoapods, you can clone this repository to your computer. Simply copy the iOS SDK folder anywhere into your project directory by clicking on the File menu and then "Add Files to 'yourProjectName'...". Navigate to the directory of the iOS SDK and click Add. You're now ready to use the iOS SDK in your application.
+The preferred method of installation is through [cocoapods][2]. Simply add ```pod 'catalyze-ios-sdk', '~> 2.5'``` to your Podfile, run ```pod install``` and you will be ready to start developing. Optionally if you do not use cocoapods or have an existing project that has not integrated cocoapods, you can clone this repository to your computer. Simply copy the iOS SDK folder anywhere into your project directory by clicking on the File menu and then "Add Files to 'yourProjectName'...". Navigate to the directory of the iOS SDK and click Add. You're now ready to use the iOS SDK in your application.
 
 License
 --------
@@ -31,6 +31,10 @@ The first thing you must do is set-up an Application on the [dashboard][1].  You
 
 in `application:didFinishLaunchingWithOptions:`.  Note: all methods that require a network request are run asynchronously. 
 Don't forget to `#import "Catalyze.h"` whenever you need to use the iOS SDK.
+
+Logging
+-------
+For debugging purposes, you can enable logging of all requests made through the Catalyze SDK. Call `[Catalyze setLoggingLevel:kLoggingLevelDebug];` in your `application:didFinishLaunchingWithOptions:` method. For different levels of logging and their descriptions please see `CatalyzeConstants.h`.
 
 Objects
 -------
@@ -121,6 +125,7 @@ The full list of supported fields on a CatalyzeUser are
 * avatar
 * ssn
 * profilePhoto
+* type
 * extras
 
 All of these fields have getters and setters on a CatalyzeUser object.  All other data must be stored as an Extra.

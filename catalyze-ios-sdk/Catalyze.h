@@ -15,8 +15,6 @@
  */
 
 /**
- catalyze.io iOS SDK BETA version 0.2.0
- 
  The catalyze.io iOS SDK is the preferred way of interacting with the catalyze.io 
  API when developing for iOS.  Functionalities include user, session, custom classes and data, 
  as well as querying management.  You can also find a guide for developing with the catalyze.io
@@ -37,6 +35,7 @@
 #import <Foundation/Foundation.h>
 #import "CatalyzeConstants.h"
 #import "CatalyzeObject.h"
+#import "CatalyzeReference.h"
 #import "CatalyzeUser.h"
 #import "CatalyzeHTTPManager.h"
 #import "HealthLookaheadUITextFieldDelegate.h"
@@ -51,8 +50,6 @@
 #import "SocialId.h"
 #import "Mrn.h"
 #import "HealthPlan.h"
-
-static const BOOL CATALYZE_DEBUG = YES;
 
 @interface Catalyze : NSObject
 

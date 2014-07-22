@@ -43,6 +43,7 @@
 #define kEncodeKeyAvatar @"avatar"
 #define kEncodeKeySsn @"ssn"
 #define kEncodeKeyProfilePhoto @"profile_photo"
+#define kEncodeKeyType @"type"
 #define kEncodeKeyExtras @"extras"
 
 @interface CatalyzeUser() {
@@ -78,6 +79,7 @@
 @synthesize avatar = _avatar;
 @synthesize ssn = _ssn;
 @synthesize profilePhoto = _profilePhoto;
+@synthesize type = _type;
 @synthesize extras = _extras;
 
 static CatalyzeUser *currentUser;
@@ -125,6 +127,7 @@ static CatalyzeUser *currentUser;
     [aCoder encodeObject:_avatar forKey:kEncodeKeyAvatar];
     [aCoder encodeObject:_ssn forKey:kEncodeKeySsn];
     [aCoder encodeObject:_profilePhoto forKey:kEncodeKeyProfilePhoto];
+    [aCoder encodeObject:_type forKey:kEncodeKeyType];
     [aCoder encodeObject:_extras forKey:kEncodeKeyExtras];
 }
 
@@ -156,6 +159,7 @@ static CatalyzeUser *currentUser;
         [self setAvatar:[aDecoder decodeObjectForKey:kEncodeKeyAvatar]];
         [self setSsn:[aDecoder decodeObjectForKey:kEncodeKeySsn]];
         [self setProfilePhoto:[aDecoder decodeObjectForKey:kEncodeKeyProfilePhoto]];
+        [self setType:[aDecoder decodeObjectForKey:kEncodeKeyType]];
         [self setExtras:[aDecoder decodeObjectForKey:kEncodeKeyExtras]];
     }
     return self;
@@ -167,9 +171,6 @@ static CatalyzeUser *currentUser;
 
 - (void)logoutWithBlock:(CatalyzeHTTPResponseBlock)block {
     [CatalyzeHTTPManager doGet:@"/auth/signout" block:^(int status, NSString *response, NSError *error) {
-        if (CATALYZE_DEBUG) {
-            NSLog(@"%i - %@ - %@", status, response, error.description);
-        }
         if (!error) {
             currentUser = nil;
             
@@ -215,21 +216,23 @@ static CatalyzeUser *currentUser;
             
             [currentUser setValuesForKeysWithDictionary:dict];
             
-            //currentUser = [[response dataUsingEncoding:NSUTF8StringEncoding] objectFromJSONOfType:[CatalyzeUser class]];
-            
             if (sessionToken) {
                 [[NSUserDefaults standardUserDefaults] setValue:sessionToken forKey:@"Authorization"];
             }
             [[NSUserDefaults standardUserDefaults] synchronize];
         }
-        block(status, nil, error);
+        block(status, response, error);
     }];
 }
 
 #pragma mark - Signup
 
 + (void)signUpWithUsernameInBackground:(NSString *)username email:(Email *)email name:(Name *)name  password:(NSString *)password block:(CatalyzeHTTPResponseBlock)block {
-    NSDictionary *body = @{@"username" : username, @"email" : [email JSON:[Email class]], @"name" : [name JSON:[Name class]], @"password": password};
+    [CatalyzeUser signUpWithUsernameInBackground:username email:email name:name password:password inviteCode:@"" block:block];
+}
+
++ (void)signUpWithUsernameInBackground:(NSString *)username email:(Email *)email name:(Name *)name  password:(NSString *)password inviteCode:(NSString *)inviteCode block:(CatalyzeHTTPResponseBlock)block {
+    NSDictionary *body = @{@"username" : username, @"email" : [email JSON:[Email class]], @"name" : [name JSON:[Name class]], @"password": password, @"inviteCode" : inviteCode};
     [CatalyzeHTTPManager doPost:@"/users" withParams:body block:^(int status, NSString *response, NSError *error) {
         if (!error) {
             currentUser = [CatalyzeUser user];
@@ -240,14 +243,13 @@ static CatalyzeUser *currentUser;
             dict = [CatalyzeUser modifyDict:dict];
             
             [currentUser setValuesForKeysWithDictionary:dict];
-            //currentUser = [[response dataUsingEncoding:NSUTF8StringEncoding] objectFromJSONOfType:[CatalyzeUser class]];
             
             if (sessionToken) {
                 [[NSUserDefaults standardUserDefaults] setValue:sessionToken forKey:@"Authorization"];
             }
             [[NSUserDefaults standardUserDefaults] synchronize];
         }
-        block(status, nil, error);
+        block(status, response, error);
     }];
 }
 
@@ -281,36 +283,6 @@ static CatalyzeUser *currentUser;
     dirtyFields = [[NSMutableArray alloc] init];
 }
 
-- (void)createInBackground {
-    [self createInBackgroundWithBlock:nil];
-}
-
-- (void)createInBackgroundWithBlock:(CatalyzeBooleanResultBlock)block {
-    [CatalyzeHTTPManager doPost:@"/users" withParams:[self JSON:[CatalyzeUser class]] block:^(int status, NSString *response, NSError *error) {
-        if (!error) {
-            dirty = NO;
-            [dirtyFields removeAllObjects];
-            
-            NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithDictionary:[NSJSONSerialization JSONObjectWithData:[response dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil]];
-            //CatalyzeUser *temp = [[response dataUsingEncoding:NSUTF8StringEncoding] objectFromJSONOfType:[CatalyzeUser class]];
-            //[self setValuesForKeysWithDictionary:[temp dictionaryOfProperties]];
-            
-            dict = [CatalyzeUser modifyDict:dict];
-            
-            [self setValuesForKeysWithDictionary:dict];
-        }
-        if (block) {
-            block(error == nil, status, error);
-        }
-    }];
-}
-
-- (void)createInBackgroundWithTarget:(id)target selector:(SEL)selector {
-    [self createInBackgroundWithBlock:^(BOOL succeeded, int status, NSError *error) {
-        [target performSelector:selector onThread:[NSThread mainThread] withObject:error waitUntilDone:NO];
-    }];
-}
-
 - (void)saveInBackground {
     [self saveInBackgroundWithBlock:nil];
 }
@@ -322,8 +294,6 @@ static CatalyzeUser *currentUser;
             [dirtyFields removeAllObjects];
             
             NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithDictionary:[NSJSONSerialization JSONObjectWithData:[response dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil]];
-            //CatalyzeUser *temp = [[response dataUsingEncoding:NSUTF8StringEncoding] objectFromJSONOfType:[CatalyzeUser class]];
-            //[self setValuesForKeysWithDictionary:[temp dictionaryOfProperties]];
             
             dict = [CatalyzeUser modifyDict:dict];
             
@@ -351,8 +321,6 @@ static CatalyzeUser *currentUser;
             dirty = NO;
             [dirtyFields removeAllObjects];
             
-            //CatalyzeUser *temp = [[response dataUsingEncoding:NSUTF8StringEncoding] objectFromJSONOfType:[CatalyzeUser class]];
-            //[self setValuesForKeysWithDictionary:[temp dictionaryOfProperties]];
             NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithDictionary:[NSJSONSerialization JSONObjectWithData:[response dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil]];
             
             dict = [CatalyzeUser modifyDict:dict];

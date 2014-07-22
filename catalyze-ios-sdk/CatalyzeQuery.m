@@ -45,7 +45,15 @@
 #pragma mark Retrieve
 
 - (void)retrieveInBackgroundWithBlock:(CatalyzeArrayResultBlock)block {
-    [CatalyzeHTTPManager doGet:[NSString stringWithFormat:@"/classes/%@/query?pageSize=%i&pageNumber=%i",[self catalyzeClassName], _pageSize, _pageNumber] block:^(int status, NSString *response, NSError *error) {
+    NSString *queryFieldParam = @"";
+    if (_queryField && ![_queryField isEqualToString:@""]) {
+        queryFieldParam = [NSString stringWithFormat:@"&field=%@", _queryField];
+    }
+    NSString *queryValueParam = @"";
+    if (_queryValue && ![_queryValue isEqualToString:@""]) {
+        queryValueParam = [NSString stringWithFormat:@"&searchBy=%@", _queryValue];
+    }
+    [CatalyzeHTTPManager doGet:[NSString stringWithFormat:@"/classes/%@/query?pageSize=%i&pageNumber=%i%@%@",[self catalyzeClassName], _pageSize, _pageNumber, queryFieldParam, queryValueParam] block:^(int status, NSString *response, NSError *error) {
         if (block) {
             NSLog(@"response: %@", response);
             block([NSJSONSerialization JSONObjectWithData:[response dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil], error);

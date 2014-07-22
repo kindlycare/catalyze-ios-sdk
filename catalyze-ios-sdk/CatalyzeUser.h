@@ -22,7 +22,7 @@
 #import "PhoneNumber.h"
 #import "JSONObject.h"
 
-@interface CatalyzeUser : JSONObject<NSCoding, CatalyzeObjectProtocol>
+@interface CatalyzeUser : JSONObject<NSCoding>
 
 @property (strong, nonatomic) NSString *usersId;
 @property (strong, nonatomic) NSNumber *active;
@@ -49,6 +49,7 @@
 @property (strong, nonatomic) NSString *avatar;
 @property (strong, nonatomic) NSString *ssn;
 @property (strong, nonatomic) NSString *profilePhoto;
+@property (strong, nonatomic) NSString *type;
 @property (strong, nonatomic) NSMutableDictionary *extras;
 
 + (CatalyzeUser *)currentUser;
@@ -65,10 +66,20 @@
 
 + (void)signUpWithUsernameInBackground:(NSString *)username email:(Email *)email name:(Name *)name  password:(NSString *)password block:(CatalyzeHTTPResponseBlock)block;
 
-//TODO validate user routes
++ (void)signUpWithUsernameInBackground:(NSString *)username email:(Email *)email name:(Name *)name  password:(NSString *)password inviteCode:(NSString *)inviteCode block:(CatalyzeHTTPResponseBlock)block;
 
 - (id)extraForKey:(NSString *)key;
 - (void)setExtra:(id)extra forKey:(NSString *)key;
 - (void)removeExtraForKey:(NSString *)key;
+
+- (void)saveInBackground;
+- (void)saveInBackgroundWithBlock:(CatalyzeBooleanResultBlock)block;
+- (void)saveInBackgroundWithTarget:(id)target selector:(SEL)selector;
+- (void)retrieveInBackground;
+- (void)retrieveInBackgroundWithBlock:(CatalyzeBooleanResultBlock)block;
+- (void)retrieveInBackgroundWithTarget:(id)target selector:(SEL)selector;
+- (void)deleteInBackground;
+- (void)deleteInBackgroundWithBlock:(CatalyzeBooleanResultBlock)block;
+- (void)deleteInBackgroundWithTarget:(id)target selector:(SEL)selector;
 
 @end

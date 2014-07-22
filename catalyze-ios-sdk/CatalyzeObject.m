@@ -139,11 +139,9 @@
 }
 
 - (void)createInBackgroundWithBlock:(CatalyzeBooleanResultBlock)block {
-    NSLog(@"calling POST for creation");
     NSDictionary *sendDict = [self prepSendDict];
     if (sendDict.count > 0) {
         [CatalyzeHTTPManager doPost:[self lookupURL:YES] withParams:sendDict block:^(int status, NSString *response, NSError *error) {
-            NSLog(@"created");
             if (!error) {
                 NSDictionary *responseDict = [NSJSONSerialization JSONObjectWithData:[response dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil];
                 dirty = NO;
@@ -168,6 +166,42 @@
 
 - (void)createInBackgroundWithTarget:(id)target selector:(SEL)selector {
     [self createInBackgroundWithBlock:^(BOOL succeeded, int status, NSError *error) {
+        [target performSelector:selector onThread:[NSThread mainThread] withObject:error waitUntilDone:NO];
+    }];
+}
+
+- (void)createInBackgroundForUserWithUsersId:(NSString *)usersId {
+    [self createInBackgroundForUserWithUsersId:usersId block:nil];
+}
+
+- (void)createInBackgroundForUserWithUsersId:(NSString *)usersId block:(CatalyzeBooleanResultBlock)block {
+    NSDictionary *sendDict = [self prepSendDict];
+    if (sendDict.count > 0) {
+        [CatalyzeHTTPManager doPost:[NSString stringWithFormat:@"/classes/%@/entry/%@",[self catalyzeClassName],usersId] withParams:sendDict block:^(int status, NSString *response, NSError *error) {
+            if (!error) {
+                NSDictionary *responseDict = [NSJSONSerialization JSONObjectWithData:[response dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil];
+                dirty = NO;
+                for (NSString *s in [self allKeys]) {
+                    [self removeObjectForKey:s];
+                }
+                for (NSString *s in [responseDict allKeys]) {
+                    [self setObject:[responseDict objectForKey:s] forKey:s];
+                }
+                [dirtyFields removeAllObjects];
+            }
+            if (block) {
+                block(error == nil, status, error);
+            }
+        }];
+    } else {
+        if (block) {
+            block(YES, 200, nil);
+        }
+    }
+}
+
+- (void)createInBackgroundForUserWithUsersId:(NSString *)usersId target:(id)target selector:(SEL)selector {
+    [self createInBackgroundForUserWithUsersId:usersId block:^(BOOL succeeded, int status, NSError *error) {
         [target performSelector:selector onThread:[NSThread mainThread] withObject:error waitUntilDone:NO];
     }];
 }

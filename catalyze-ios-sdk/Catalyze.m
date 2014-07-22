@@ -27,14 +27,14 @@
 
 + (NSString *)apiKey {
     if (![[NSUserDefaults standardUserDefaults] valueForKey:@"api_key"]) {
-        NSLog(@"Warning! Application key not set! Please call [Catalyze setApiKey:URLScheme:applicationId:] in your AppDelegate's applicationDidFinishLaunchingWithOptions: method");
+        NSLog(@"Warning! Application key not set! Please call [Catalyze setApiKey:applicationId:] in your AppDelegate's applicationDidFinishLaunchingWithOptions: method");
     }
     return [[NSUserDefaults standardUserDefaults] valueForKey:@"api_key"];
 }
 
 + (NSString *)applicationId {
     if (![[NSUserDefaults standardUserDefaults] valueForKey:@"app_id"]) {
-        NSLog(@"Warning! Application id not set! Please call [Catalyze setApiKey:URLScheme:applicationId:] in your AppDelegate's applicationDidFinishLaunchingWithOptions: method");
+        NSLog(@"Warning! Application id not set! Please call [Catalyze setApiKey:applicationId:] in your AppDelegate's applicationDidFinishLaunchingWithOptions: method");
     }
     return [[NSUserDefaults standardUserDefaults] valueForKey:@"app_id"];
 }
