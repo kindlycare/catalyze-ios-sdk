@@ -41,6 +41,12 @@
     return self;
 }
 
+- (void)setValue:(id)value forKey:(NSString *)key {
+    @try {
+        [super setValue:value forKey:key];
+    } @catch (NSException *e) {}
+}
+
 #pragma mark -
 #pragma mark Retrieve
 

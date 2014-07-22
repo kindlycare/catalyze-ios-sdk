@@ -23,4 +23,10 @@
 	return dict;
 }
 
+- (void)setValue:(id)value forKey:(NSString *)key {
+    @try {
+        [super setValue:value forKey:key];
+    } @catch (NSException *e) {}
+}
+
 @end
