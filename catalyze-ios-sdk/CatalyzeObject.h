@@ -32,25 +32,7 @@
 #import <Foundation/Foundation.h>
 #import "CatalyzeConstants.h"
 
-@interface CatalyzeObject : NSObject {
-    
-    /*
-     This BOOL provides a quick way for this CatalyzeObject to determine 
-     if any of its fields have been changed since the last network call.  If 
-     NO, the network call will return immediately.  If YES, only the fields 
-     specified in dirtyFields will be sent to the catalyze.io API. 
-     */
-    BOOL dirty;
-    
-    /*
-     The list of fields that have been changed since the last network request 
-     and the fields in this array are the ones that will be sent to the 
-     catalyze.io API only.  This array is updated on every network request.
-     */
-    NSMutableArray *dirtyFields;
-}
-
-- (void)resetDirty;
+@interface CatalyzeObject : NSObject
 
 #pragma mark Constructors
 
@@ -93,82 +75,13 @@
 
 /** @name Properties */
 
-/**
- A string representation of the type of CatalyzeObject being created.  Valid
- class names are documented in CatalyzeConstants.  This is for **internal
- use only**. Developers should not change this class name or set this class
- name directly.  This will result in thrown exceptions upon the next network request.
- 
- To set the catalyzeClassName, see [CatalyzeObject objectWithClassName:]
- */
-@property (readonly) NSString *catalyzeClassName;
-
-/**
- The unique identifier of this CatalyzeObject. 
- 
- Often this objectId is nil or an empty string. May be useful for a developer to
- set these as custom unique ids to keep track of their objects.  This key is **NEVER** sent
- to the catalyze.io API.
- */
-@property (nonatomic, retain) NSString *objectId;
-
-#pragma mark -
-#pragma mark Get and set
-
-/** @name Get and Set */
-
-/**
- This method returns an array of all of the keys set in this CatalyzeObject.  For example
- if the child class of this CatalyzeObject is a CatalyzeUser it may return an array
- containing the keys @[@"firstName",@"lastName", and @"userId"]. Useful
- for iterating through all the elements on this CatalyzeObject and displaying their
- values to the user.
- 
- @return the array of keys stored in the objectDict
- */
-- (NSArray *)allKeys;
-
-/** 
- @param key the key to look for in objectDict
- @return the object in the objectDict stored with the given key
- */
-- (id)objectForKey:(NSString *)key;
-
-/**
- If an object is previously stored with this key, the old object **will** be overwritten
- 
- @param object the object to save in objectDict such as @"John"
- @param key the key to store the given object under in the objectDict such as @"firstName"
- */
-- (void)setObject:(id)object forKey:(NSString *)key;
-
-/**
- @param key the location of the object to be removed from the objectDict
- */
-- (void)removeObjectForKey:(NSString *)key;
-
-/**
- This method functions exactly the same as objectForKey:
- 
- @param key the location to look for an object to return in objectDict
- @return the object stored in objectDict with the specified key, or nil if one does not exist
- */
-- (id)valueForKey:(NSString *)key;
-
-/**
- This method functions exactly the same as setObject:forKey:
- 
- @param value the value to save in objectDict such as @"John"
- @param key the key to store the given value under in the objectDict such as @"firstName"
- */
-- (void)setValue:(id)value forKey:(NSString *)key;
-
-/**
- This method functions exactly the same as removeObjectForKey:
- 
- @param key the location of the object to be removed from the objectDict
- */
-- (void)removeValueForKey:(NSString *)key;
+@property (strong, nonatomic) NSString *className;
+@property (strong, nonatomic) NSString *authorId;
+@property (strong, nonatomic) NSString *parentId;
+@property (strong, nonatomic) NSString *entryId;
+@property (strong, nonatomic) NSMutableDictionary *content;
+@property (strong, nonatomic) NSDate *createdAt;
+@property (strong, nonatomic) NSDate *updatedAt;
 
 #pragma mark -
 #pragma mark Create

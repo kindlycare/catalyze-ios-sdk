@@ -36,6 +36,8 @@
     static dispatch_once_t oncePredicate;
     dispatch_once(&oncePredicate, ^{
         httpClient = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:kCatalyzeBaseURL]];
+        httpClient.securityPolicy = [[AFSecurityPolicy alloc] init];
+        httpClient.securityPolicy.allowInvalidCertificates = true;
         httpClient.requestSerializer = [AFJSONRequestSerializer serializer];
         [httpClient.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
         httpClient.responseSerializer = [AFHTTPResponseSerializer serializer];

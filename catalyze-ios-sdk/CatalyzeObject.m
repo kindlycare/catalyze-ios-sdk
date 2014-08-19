@@ -20,19 +20,9 @@
 
 @interface CatalyzeObject()
 
-@property (strong, nonatomic) NSArray *protected;
-@property (strong, nonatomic) NSMutableDictionary *objectDict;
-
 @end
 
 @implementation CatalyzeObject
-@synthesize protected = _protected;
-@synthesize objectDict = _objectDict;
-
-- (void)resetDirty {
-    dirty = NO;
-    dirtyFields = [[NSMutableArray alloc] init];
-}
 
 #pragma mark Constructors
 
@@ -43,7 +33,7 @@
 + (CatalyzeObject *)objectWithClassName:(NSString *)className dictionary:(NSDictionary *)dictionary {
     CatalyzeObject *obj = [[CatalyzeObject alloc] initWithClassName:className];
     for (NSString *s in [dictionary allKeys]) {
-        [obj setObject:[dictionary objectForKey:s] forKey:s];
+        [[obj content] setObject:[dictionary objectForKey:s] forKey:s];
     }
     return obj;
 }
@@ -51,10 +41,8 @@
 - (id)initWithClassName:(NSString *)newClassName {
     self = [super init];
     if (self) {
-        _protected = [NSArray arrayWithObjects:@"__class_name",@"id",@"username", nil];
-        _objectDict = [[NSMutableDictionary alloc] init];
-        [self setCatalyzeClassName:newClassName];
-        dirtyFields = [[NSMutableArray alloc] init];
+        _content = [[NSMutableDictionary alloc] init];
+        self.className = newClassName;
     }
     return self;
 }
@@ -64,71 +52,10 @@
     return self;
 }
 
-#pragma mark -
-#pragma mark Properties
-
-- (NSString *)catalyzeClassName {
-    return [self objectForKey:@"__class_name"];
-}
-
-- (void)setCatalyzeClassName:(NSString *)catalyzeClassName {
-    [self setObject:catalyzeClassName forKey:@"__class_name"];;
-}
-
-- (NSString *)objectId {
-    return [self objectForKey:@"id"];
-}
-
-- (void)setObjectId:(NSString *)objectId {
-    [self setObject:objectId forKey:@"id"];
-}
-
-- (NSArray *)allKeys {
-    return [_objectDict allKeys];
-}
-
-#pragma mark -
-#pragma mark Get and set
-
-- (id)objectForKey:(NSString *)key {
-    if (!_objectDict) {
-        _objectDict = [[NSMutableDictionary alloc] init];
-    }
-    if ([_objectDict objectForKey:key] == [NSNull null]) {
-        //if we are keeping it as NSNull for the next network call, make the user believe
-        //the object was actually removed from the dictionary
-        return nil;
-    }
-    return [_objectDict objectForKey:key];
-}
-
-- (void)setObject:(id)object forKey:(NSString *)key {
-    if (!_objectDict) {
-        _objectDict = [[NSMutableDictionary alloc] init];
-    }
-    if (object) {
-        [dirtyFields addObject:key];
-        dirty = YES;
-        [_objectDict setObject:object forKey:key];
-    }
-}
-
-- (void)removeObjectForKey:(NSString *)key {
-    [self setObject:[NSNull null] forKey:key];
-}
-
-- (id)valueForKey:(NSString *)key {
-    return [self objectForKey:key];
-}
-
 - (void)setValue:(id)value forKey:(NSString *)key {
-    if (value) {
-        [self setObject:value forKey:key];
-    }
-}
-
-- (void)removeValueForKey:(NSString *)key {
-    [self removeObjectForKey:key];
+    @try {
+        [super setValue:value forKey:key];
+    } @catch (NSException *e) {}
 }
 
 #pragma mark -
@@ -139,29 +66,15 @@
 }
 
 - (void)createInBackgroundWithBlock:(CatalyzeBooleanResultBlock)block {
-    NSDictionary *sendDict = [self prepSendDict];
-    if (sendDict.count > 0) {
-        [CatalyzeHTTPManager doPost:[self lookupURL:YES] withParams:sendDict block:^(int status, NSString *response, NSError *error) {
-            if (!error) {
-                NSDictionary *responseDict = [NSJSONSerialization JSONObjectWithData:[response dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil];
-                dirty = NO;
-                for (NSString *s in [self allKeys]) {
-                    [self removeObjectForKey:s];
-                }
-                for (NSString *s in [responseDict allKeys]) {
-                    [self setObject:[responseDict objectForKey:s] forKey:s];
-                }
-                [dirtyFields removeAllObjects];
-            }
-            if (block) {
-                block(error == nil, status, error);
-            }
-        }];
-    } else {
-        if (block) {
-            block(YES, 200, nil);
+    [CatalyzeHTTPManager doPost:[self lookupURL:YES] withParams:[self prepSendDict] block:^(int status, NSString *response, NSError *error) {
+        if (!error) {
+            NSDictionary *responseDict = [NSJSONSerialization JSONObjectWithData:[response dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil];
+            [self setValuesForKeysWithDictionary:responseDict];
         }
-    }
+        if (block) {
+            block(error == nil, status, error);
+        }
+    }];
 }
 
 - (void)createInBackgroundWithTarget:(id)target selector:(SEL)selector {
@@ -175,29 +88,15 @@
 }
 
 - (void)createInBackgroundForUserWithUsersId:(NSString *)usersId block:(CatalyzeBooleanResultBlock)block {
-    NSDictionary *sendDict = [self prepSendDict];
-    if (sendDict.count > 0) {
-        [CatalyzeHTTPManager doPost:[NSString stringWithFormat:@"/classes/%@/entry/%@",[self catalyzeClassName],usersId] withParams:sendDict block:^(int status, NSString *response, NSError *error) {
-            if (!error) {
-                NSDictionary *responseDict = [NSJSONSerialization JSONObjectWithData:[response dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil];
-                dirty = NO;
-                for (NSString *s in [self allKeys]) {
-                    [self removeObjectForKey:s];
-                }
-                for (NSString *s in [responseDict allKeys]) {
-                    [self setObject:[responseDict objectForKey:s] forKey:s];
-                }
-                [dirtyFields removeAllObjects];
-            }
-            if (block) {
-                block(error == nil, status, error);
-            }
-        }];
-    } else {
-        if (block) {
-            block(YES, 200, nil);
+    [CatalyzeHTTPManager doPost:[NSString stringWithFormat:@"/classes/%@/entry/%@",[self className],usersId] withParams:[self prepSendDict] block:^(int status, NSString *response, NSError *error) {
+        if (!error) {
+            NSDictionary *responseDict = [NSJSONSerialization JSONObjectWithData:[response dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil];
+            [self setValuesForKeysWithDictionary:responseDict];
         }
-    }
+        if (block) {
+            block(error == nil, status, error);
+        }
+    }];
 }
 
 - (void)createInBackgroundForUserWithUsersId:(NSString *)usersId target:(id)target selector:(SEL)selector {
@@ -214,26 +113,15 @@
 }
 
 - (void)saveInBackgroundWithBlock:(CatalyzeBooleanResultBlock)block {
-    NSDictionary *sendDict = [self prepSendDict];
-    if (sendDict.count > 0) {
-        [CatalyzeHTTPManager doPut:[self lookupURL:NO] withParams:sendDict block:^(int status, NSString *response, NSError *error) {
-            if (!error) {
-                NSDictionary *responseDict = [NSJSONSerialization JSONObjectWithData:[response dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil];
-                dirty = NO;
-                for (NSString *s in [responseDict allKeys]) {
-                    [self setObject:[responseDict objectForKey:s] forKey:s];
-                }
-                [dirtyFields removeAllObjects];
-            }
-            if (block) {
-                block(error == nil, status, error);
-            }
-        }];
-    } else {
-        if (block) {
-            block(YES, 200, nil);
+    [CatalyzeHTTPManager doPut:[self lookupURL:NO] withParams:[self content] block:^(int status, NSString *response, NSError *error) {
+        if (!error) {
+            NSDictionary *responseDict = [NSJSONSerialization JSONObjectWithData:[response dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil];
+            [self setValuesForKeysWithDictionary:responseDict];
         }
-    }
+        if (block) {
+            block(error == nil, status, error);
+        }
+    }];
 }
 
 - (void)saveInBackgroundWithTarget:(id)target selector:(SEL)selector {
@@ -254,16 +142,7 @@
     [CatalyzeHTTPManager doGet:url block:^(int status, NSString *response, NSError *error) {
         if (!error) {
             NSDictionary *responseDict = [NSJSONSerialization JSONObjectWithData:[response dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil];
-            NSString *cname = [self catalyzeClassName];
-            for (NSString *s in [self allKeys]) {
-                [self removeObjectForKey:s];
-            }
-            [self setCatalyzeClassName:cname];
-            for (NSString *s in [responseDict allKeys]) {
-                [self setObject:[responseDict objectForKey:s] forKey:s];
-            }
-            dirty = NO;
-            [dirtyFields removeAllObjects];
+            [self setValuesForKeysWithDictionary:responseDict];
         }
         if (block) {
             block(self, error);
@@ -287,12 +166,13 @@
 - (void)deleteInBackgroundWithBlock:(CatalyzeBooleanResultBlock)block {
     [CatalyzeHTTPManager doDelete:[self lookupURL:NO] block:^(int status, NSString *response, NSError *error) {
         if (!error) {
-            dirty = NO;
-            for (NSString *s in [self allKeys]) {
-                [self removeObjectForKey:s];
-            }
-            
-            [dirtyFields removeAllObjects];
+            _className = nil;
+            _entryId = nil;
+            _authorId = nil;
+            _parentId = nil;
+            _content = nil;
+            _updatedAt = nil;
+            _createdAt = nil;
         }
         if (block) {
             block(error == nil, status, error);
@@ -311,30 +191,21 @@
 
 - (NSString *)lookupURL:(BOOL)post {
     NSString *retval;
-    if ([self.catalyzeClassName isEqualToString:@"reference"]) {
+    if ([_className isEqualToString:@"reference"]) {
         retval = [NSString stringWithFormat:@"/classes/%@/%@/ref/%@",[self valueForKey:@"__reference_parent_class"],[self valueForKey:@"__reference_parent_id"],[self valueForKey:@"__reference_name"]];
     } else {
-        retval = [NSString stringWithFormat:@"/classes/%@/entry",[self catalyzeClassName]];
+        retval = [NSString stringWithFormat:@"/classes/%@/entry",_className];
         if (!post) {
-            retval = [NSString stringWithFormat:@"%@/%@",retval,[self objectForKey:@"id"]];
+            retval = [NSString stringWithFormat:@"%@/%@",retval,_entryId];
         }
     }
     return retval;
 }
 
 - (NSDictionary *)prepSendDict {
-    NSMutableDictionary *sendDict = [NSMutableDictionary dictionaryWithDictionary:_objectDict];
-    for (NSString *s in [sendDict allKeys]) {
-        if ([_protected containsObject:s]) {
-            [sendDict removeObjectForKey:s];
-        }
-        if (![dirtyFields containsObject:s]) {
-            [sendDict removeObjectForKey:s];
-        }
-    }
-    NSMutableDictionary *outerSendDict = [NSMutableDictionary dictionary];
-    [outerSendDict setObject:sendDict forKey:@"content"];
-    return outerSendDict;
+    NSMutableDictionary *sendDict = [NSMutableDictionary dictionary];
+    [sendDict setObject:_content forKey:@"content"];
+    return sendDict;
 }
 
 @end

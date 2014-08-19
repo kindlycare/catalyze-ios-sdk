@@ -62,7 +62,23 @@
     [CatalyzeHTTPManager doGet:[NSString stringWithFormat:@"/classes/%@/query?pageSize=%i&pageNumber=%i%@%@",[self catalyzeClassName], _pageSize, _pageNumber, queryFieldParam, queryValueParam] block:^(int status, NSString *response, NSError *error) {
         if (block) {
             NSLog(@"response: %@", response);
-            block([NSJSONSerialization JSONObjectWithData:[response dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil], error);
+            NSArray *array = [NSJSONSerialization JSONObjectWithData:[response dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil];
+            NSLog(@"ARRAY: %@", array);
+            NSMutableArray *objects = [NSMutableArray array];
+            for (id dict in array) {
+                NSLog(@"DICT: %@", dict);
+                CatalyzeObject *object = [CatalyzeObject objectWithClassName:_catalyzeClassName];
+                [object setValuesForKeysWithDictionary:dict];
+                NSLog(@"!!entryId: %@", object.entryId);
+                NSLog(@"!!authorId: %@", object.authorId);
+                NSLog(@"!!parentId: %@", object.parentId);
+                NSLog(@"!!content: %@", object.content);
+                NSLog(@"!!updatedAt: %@", object.updatedAt);
+                NSLog(@"!!createdAt: %@", object.createdAt);
+                NSLog(@"!!className: %@", object.className);
+                [objects addObject:object];
+            }
+            block(objects, error);
         }
     }];
 }
