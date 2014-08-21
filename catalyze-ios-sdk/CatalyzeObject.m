@@ -70,6 +70,7 @@
         if (!error) {
             NSDictionary *responseDict = [NSJSONSerialization JSONObjectWithData:[response dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil];
             [self setValuesForKeysWithDictionary:responseDict];
+            self.content = [NSMutableDictionary dictionaryWithDictionary:self.content]; // to keep mutability
         }
         if (block) {
             block(error == nil, status, error);
@@ -92,6 +93,7 @@
         if (!error) {
             NSDictionary *responseDict = [NSJSONSerialization JSONObjectWithData:[response dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil];
             [self setValuesForKeysWithDictionary:responseDict];
+            self.content = [NSMutableDictionary dictionaryWithDictionary:self.content]; // to keep mutability
         }
         if (block) {
             block(error == nil, status, error);
@@ -117,6 +119,7 @@
         if (!error) {
             NSDictionary *responseDict = [NSJSONSerialization JSONObjectWithData:[response dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil];
             [self setValuesForKeysWithDictionary:responseDict];
+            self.content = [NSMutableDictionary dictionaryWithDictionary:self.content]; // to keep mutability
         }
         if (block) {
             block(error == nil, status, error);
@@ -143,6 +146,7 @@
         if (!error) {
             NSDictionary *responseDict = [NSJSONSerialization JSONObjectWithData:[response dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil];
             [self setValuesForKeysWithDictionary:responseDict];
+            self.content = [NSMutableDictionary dictionaryWithDictionary:self.content]; // to keep mutability
         }
         if (block) {
             block(self, error);
