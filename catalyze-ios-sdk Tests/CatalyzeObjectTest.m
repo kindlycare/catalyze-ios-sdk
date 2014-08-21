@@ -16,7 +16,12 @@
 
 @implementation CatalyzeObjectTest
 
+//the following values are generated for test environments and inserted manually for now
 static const NSString *className = @"medications";
+static const NSString *username = @"test@catalyze.io";
+static const NSString *password = @"password";
+static const NSString *apiKey = @"ios io.catalyze.Mobile-Mom b48139f0-0446-45fa-a719-0cc2206e68fa";
+static const NSString *appId = @"a8d199d4-5601-4f07-bd5a-f9d7890969e0";
 
 //class level
 + (void)setUp {
@@ -24,9 +29,9 @@ static const NSString *className = @"medications";
     
     __block BOOL finished = NO;
     
-    [Catalyze setApiKey:@"ios io.catalyze.Mobile-Mom b48139f0-0446-45fa-a719-0cc2206e68fa" applicationId:@"a8d199d4-5601-4f07-bd5a-f9d7890969e0"];
+    [Catalyze setApiKey:apiKey.copy applicationId:appId.copy];
     
-    [CatalyzeUser logInWithUsernameInBackground:@"josh@catalyze.io" password:@"test123" block:^(int status, NSString *response, NSError *error) {
+    [CatalyzeUser logInWithUsernameInBackground:username.copy password:password.copy block:^(int status, NSString *response, NSError *error) {
         if (error) {
             [NSException raise:@"AuthenticationException" format:@"Could not login"];
         }
