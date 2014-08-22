@@ -34,6 +34,7 @@
 
 #import <Foundation/Foundation.h>
 #import "CatalyzeConstants.h"
+#import "CatalyzeObject.h"
 #import "CatalyzeEntry.h"
 #import "CatalyzeReference.h"
 #import "CatalyzeUser.h"
