@@ -17,13 +17,31 @@
 /**
  The CatalyzeConstants is where all of the completion blocks are defined for 
  asynchronous methods as well as the values used for catalyzeClassName in 
- CatalyzeObject.  These catalyzeClassNames are then used to lookup the url that 
+ CatalyzeEntry.  These catalyzeClassNames are then used to lookup the url that 
  any network request should be directed to.  The base url for all objects is listed
  below.
  */
 
-@class CatalyzeObject;
+@class CatalyzeEntry;
 @class CatalyzeUser;
+
+/**
+ The completion block for downloading files.
+ 
+ @param data contains the file data or nil if unsuccessful
+ @param status the HTTP status code received from the network request
+ @param error any error that went wrong during the request, nil if successful
+ */
+typedef void (^CatalyzeDataResultBlock)(NSData *data, int status, NSError *error);
+
+/**
+ The completion block for expecting json responses.
+ 
+ @param json contains the resulting json
+ @param status the HTTP status code received from the network request
+ @param error any error that went wrong during the request, nil if successful
+ */
+typedef void (^CatalyzeJsonResultBlock)(NSDictionary *json, int status, NSError *error);
 
 /**
  The completion block indicating whether or not any given request was a success or not.
@@ -52,7 +70,7 @@ typedef void (^CatalyzeArrayResultBlock)(NSArray *objects, NSError *error);
  if the request failed
  @param error any error that went wrong during the request, nil if successful
  */
-typedef void (^CatalyzeObjectResultBlock)(CatalyzeObject *object, NSError *error);
+typedef void (^CatalyzeEntryResultBlock)(CatalyzeEntry *entry, NSError *error);
 
 /**
  The completion block used when a network request is finished.  This is primarily
@@ -87,7 +105,8 @@ typedef void (^CatalyzeHandleOpenURLBlock)(BOOL authenticated, BOOL newUser);
 /**
  The base URL for the catalyze.io API.  All URLs begin with this URL.
  */
-#define kCatalyzeBaseURL @"https://192.168.1.248:8443"
+//#define LOCAL_ENV
+#define kCatalyzeBaseURL @"https://apiv2.catalyze.io"
 
 typedef enum {
     kLoggingLevelDebug,

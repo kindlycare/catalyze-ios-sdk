@@ -61,24 +61,15 @@
     }
     [CatalyzeHTTPManager doGet:[NSString stringWithFormat:@"/classes/%@/query?pageSize=%i&pageNumber=%i%@%@",[self catalyzeClassName], _pageSize, _pageNumber, queryFieldParam, queryValueParam] block:^(int status, NSString *response, NSError *error) {
         if (block) {
-            NSLog(@"response: %@", response);
             NSArray *array = [NSJSONSerialization JSONObjectWithData:[response dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil];
-            NSLog(@"ARRAY: %@", array);
-            NSMutableArray *objects = [NSMutableArray array];
+            NSMutableArray *entries = [NSMutableArray array];
             for (id dict in array) {
-                NSLog(@"DICT: %@", dict);
-                CatalyzeObject *object = [CatalyzeObject objectWithClassName:_catalyzeClassName];
-                [object setValuesForKeysWithDictionary:dict];
-                NSLog(@"!!entryId: %@", object.entryId);
-                NSLog(@"!!authorId: %@", object.authorId);
-                NSLog(@"!!parentId: %@", object.parentId);
-                NSLog(@"!!content: %@", object.content);
-                NSLog(@"!!updatedAt: %@", object.updatedAt);
-                NSLog(@"!!createdAt: %@", object.createdAt);
-                NSLog(@"!!className: %@", object.className);
-                [objects addObject:object];
+                CatalyzeEntry *entry = [CatalyzeEntry entryWithClassName:_catalyzeClassName];
+                [entry setValuesForKeysWithDictionary:dict];
+                entry.content = [NSMutableDictionary dictionaryWithDictionary:entry.content]; // to keep mutability
+                [entries addObject:entry];
             }
-            block(objects, error);
+            block(entries, error);
         }
     }];
 }

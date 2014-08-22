@@ -14,24 +14,24 @@
  *    limitations under the License.
  */
 
-#import "CatalyzeObject.h"
+#import "CatalyzeEntry.h"
 #import "AFNetworking.h"
 #import "CatalyzeHTTPManager.h"
 
-@interface CatalyzeObject()
+@interface CatalyzeEntry()
 
 @end
 
-@implementation CatalyzeObject
+@implementation CatalyzeEntry
 
 #pragma mark Constructors
 
-+ (CatalyzeObject *)objectWithClassName:(NSString *)className {
-    return [[CatalyzeObject alloc] initWithClassName:className];
++ (CatalyzeEntry *)entryWithClassName:(NSString *)className {
+    return [[CatalyzeEntry alloc] initWithClassName:className];
 }
 
-+ (CatalyzeObject *)objectWithClassName:(NSString *)className dictionary:(NSDictionary *)dictionary {
-    CatalyzeObject *obj = [[CatalyzeObject alloc] initWithClassName:className];
++ (CatalyzeEntry *)entryWithClassName:(NSString *)className dictionary:(NSDictionary *)dictionary {
+    CatalyzeEntry *obj = [[CatalyzeEntry alloc] initWithClassName:className];
     for (NSString *s in [dictionary allKeys]) {
         [[obj content] setObject:[dictionary objectForKey:s] forKey:s];
     }
@@ -140,7 +140,7 @@
     [self retrieveInBackgroundWithBlock:nil];
 }
 
-- (void)retrieveInBackgroundWithBlock:(CatalyzeObjectResultBlock)block {
+- (void)retrieveInBackgroundWithBlock:(CatalyzeEntryResultBlock)block {
     NSString *url = [self lookupURL:NO];
     [CatalyzeHTTPManager doGet:url block:^(int status, NSString *response, NSError *error) {
         if (!error) {
@@ -155,7 +155,7 @@
 }
 
 - (void)retrieveInBackgroundWithTarget:(id)target selector:(SEL)selector {
-    [self retrieveInBackgroundWithBlock:^(CatalyzeObject *object, NSError *error) {
+    [self retrieveInBackgroundWithBlock:^(CatalyzeEntry *object, NSError *error) {
         [target performSelector:selector onThread:[NSThread mainThread] withObject:error waitUntilDone:NO];
     }];
 }

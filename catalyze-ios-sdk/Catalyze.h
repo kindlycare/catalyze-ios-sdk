@@ -34,10 +34,11 @@
 
 #import <Foundation/Foundation.h>
 #import "CatalyzeConstants.h"
-#import "CatalyzeObject.h"
+#import "CatalyzeEntry.h"
 #import "CatalyzeReference.h"
 #import "CatalyzeUser.h"
 #import "CatalyzeHTTPManager.h"
+#import "CatalyzeFileManager.h"
 #import "HealthLookaheadUITextFieldDelegate.h"
 #import "CatalyzeQuery.h"
 #import "Email.h"
