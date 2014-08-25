@@ -23,7 +23,6 @@
     [[NSUserDefaults standardUserDefaults] setValue:apiKey forKey:@"api_key"];
     [[NSUserDefaults standardUserDefaults] setValue:appId forKey:@"app_id"];
     [[NSUserDefaults standardUserDefaults] synchronize];
-    CatalyzeObject *c = [CatalyzeObject entryWithClassName:@""];
 }
 
 + (NSString *)apiKey {

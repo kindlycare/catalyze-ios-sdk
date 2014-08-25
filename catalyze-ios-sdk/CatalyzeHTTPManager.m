@@ -48,60 +48,49 @@
     return httpClient;
 }
 
-+ (void)doGet:(NSString *)urlString block:(CatalyzeHTTPResponseBlock)block {
-    [[CatalyzeHTTPManager httpClient].requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",[[NSUserDefaults standardUserDefaults] valueForKey:@"Authorization"]] forHTTPHeaderField:@"Authorization"];
-    [[CatalyzeHTTPManager httpClient].requestSerializer setValue:[NSString stringWithFormat:@"%@", [Catalyze apiKey]] forHTTPHeaderField:@"X-Api-Key"];
++ (void)doGet:(NSString *)urlString success:(CatalyzeSuccessBlock)success failure:(CatalyzeFailureBlock)failure {
+    [CatalyzeHTTPManager updateHeaders];
     
-    [[CatalyzeHTTPManager httpClient] GET:[NSString stringWithFormat:@"/v2%@",urlString] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        if (!responseObject) {
-            responseObject = @"";
-        }
-        block((int)[[operation response] statusCode], [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding], nil);
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        block((int)[[operation response] statusCode], nil, error);
-    }];
+    [[CatalyzeHTTPManager httpClient] GET:[NSString stringWithFormat:@"/v2%@",urlString] parameters:nil success:[CatalyzeHTTPManager successBlock:success] failure:[CatalyzeHTTPManager failureBlock:failure]];
 }
 
-+ (void)doPost:(NSString *)urlString withParams:(NSDictionary *)params block:(CatalyzeHTTPResponseBlock)block {
-    [[CatalyzeHTTPManager httpClient].requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",[[NSUserDefaults standardUserDefaults] valueForKey:@"Authorization"]] forHTTPHeaderField:@"Authorization"];
-    [[CatalyzeHTTPManager httpClient].requestSerializer setValue:[NSString stringWithFormat:@"%@", [Catalyze apiKey]] forHTTPHeaderField:@"X-Api-Key"];
++ (void)doPost:(NSString *)urlString withParams:(NSDictionary *)params success:(CatalyzeSuccessBlock)success failure:(CatalyzeFailureBlock)failure {
+    [CatalyzeHTTPManager updateHeaders];
     
-    [[CatalyzeHTTPManager httpClient] POST:[NSString stringWithFormat:@"/v2%@",urlString] parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        if (!responseObject) {
-            responseObject = @"";
-        }
-        block((int)[[operation response] statusCode], [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding], nil);
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        block((int)[[operation response] statusCode], nil, error);
-    }];
+    [[CatalyzeHTTPManager httpClient] POST:[NSString stringWithFormat:@"/v2%@",urlString] parameters:params success:[CatalyzeHTTPManager successBlock:success] failure:[CatalyzeHTTPManager failureBlock:failure]];
 }
 
-+ (void)doPut:(NSString *)urlString withParams:(NSDictionary *)params block:(CatalyzeHTTPResponseBlock)block {
-    [[CatalyzeHTTPManager httpClient].requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",[[NSUserDefaults standardUserDefaults] valueForKey:@"Authorization"]] forHTTPHeaderField:@"Authorization"];
-    [[CatalyzeHTTPManager httpClient].requestSerializer setValue:[NSString stringWithFormat:@"%@", [Catalyze apiKey]] forHTTPHeaderField:@"X-Api-Key"];
++ (void)doPut:(NSString *)urlString withParams:(NSDictionary *)params success:(CatalyzeSuccessBlock)success failure:(CatalyzeFailureBlock)failure {
+    [CatalyzeHTTPManager updateHeaders];
     
-    [[CatalyzeHTTPManager httpClient] PUT:[NSString stringWithFormat:@"/v2%@",urlString] parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        if (!responseObject) {
-            responseObject = @"";
-        }
-        block((int)[[operation response] statusCode], [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding], nil);
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        block((int)[[operation response] statusCode], nil, error);
-    }];
+    [[CatalyzeHTTPManager httpClient] PUT:[NSString stringWithFormat:@"/v2%@",urlString] parameters:params success:[CatalyzeHTTPManager successBlock:success] failure:[CatalyzeHTTPManager failureBlock:failure]];
 }
 
-+ (void)doDelete:(NSString *)urlString block:(CatalyzeHTTPResponseBlock)block {
++ (void)doDelete:(NSString *)urlString success:(CatalyzeSuccessBlock)success failure:(CatalyzeFailureBlock)failure {
+    [CatalyzeHTTPManager updateHeaders];
+    
+    [[CatalyzeHTTPManager httpClient] DELETE:[NSString stringWithFormat:@"/v2%@",urlString] parameters:nil success:[CatalyzeHTTPManager successBlock:success] failure:[CatalyzeHTTPManager failureBlock:failure]];
+}
+
++ (void (^)(AFHTTPRequestOperation *operation, id responseObject))successBlock:(CatalyzeSuccessBlock)success {
+    return ^(AFHTTPRequestOperation *operation, id responseObject) {
+        if (success) {
+            success([NSJSONSerialization JSONObjectWithData:responseObject options:0 error:nil]);
+        }
+    };
+}
+
++ (void (^)(AFHTTPRequestOperation *operation, id responseObject))failureBlock:(CatalyzeFailureBlock)failure {
+    return ^(AFHTTPRequestOperation *operation, NSError *error) {
+        if (failure) {
+            failure([NSJSONSerialization JSONObjectWithData:[operation responseObject] options:0 error:nil], (int)[[operation response] statusCode], error);
+        }
+    };
+}
+
++ (void)updateHeaders {
     [[CatalyzeHTTPManager httpClient].requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",[[NSUserDefaults standardUserDefaults] valueForKey:@"Authorization"]] forHTTPHeaderField:@"Authorization"];
     [[CatalyzeHTTPManager httpClient].requestSerializer setValue:[NSString stringWithFormat:@"%@", [Catalyze apiKey]] forHTTPHeaderField:@"X-Api-Key"];
-    
-    [[CatalyzeHTTPManager httpClient] DELETE:[NSString stringWithFormat:@"/v2%@",urlString] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        if (!responseObject) {
-            responseObject = @"";
-        }
-        block((int)[[operation response] statusCode], [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding], nil);
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        block((int)[[operation response] statusCode], nil, error);
-    }];
 }
 
 @end

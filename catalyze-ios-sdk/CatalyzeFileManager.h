@@ -35,20 +35,20 @@
 
 @interface CatalyzeFileManager : NSObject
 
-+ (void)uploadFileToUser:(NSData *)file phi:(BOOL)phi mimeType:(NSString *)mimeType block:(CatalyzeJsonResultBlock)block;
++ (void)uploadFileToUser:(NSData *)file phi:(BOOL)phi mimeType:(NSString *)mimeType success:(CatalyzeJsonSuccessBlock)success failure:(CatalyzeFailureBlock)failure;
 
-+ (void)listFiles:(CatalyzeHTTPArrayResponseBlock)block;
++ (void)listFiles:(CatalyzeArraySuccessBlock)success failure:(CatalyzeFailureBlock)failure;
 
-+ (void)retrieveFile:(NSString *)filesId block:(CatalyzeDataResultBlock)block;
++ (void)retrieveFile:(NSString *)filesId success:(CatalyzeDataSuccessBlock)success failure:(CatalyzeFailureBlock)failure;
 
-+ (void)deleteFile:(NSString *)filesId block:(CatalyzeBooleanResultBlock)block;
++ (void)deleteFile:(NSString *)filesId success:(CatalyzeSuccessBlock)success failure:(CatalyzeFailureBlock)failure;
 
-+ (void)uploadFileToOtherUser:(NSData *)file usersId:(NSString *)usersId phi:(BOOL)phi mimeType:(NSString *)mimeType block:(CatalyzeJsonResultBlock)block;
++ (void)uploadFileToOtherUser:(NSData *)file usersId:(NSString *)usersId phi:(BOOL)phi mimeType:(NSString *)mimeType success:(CatalyzeJsonSuccessBlock)success failure:(CatalyzeFailureBlock)failure;
 
-+ (void)listFilesForUser:(NSString *)usersId block:(CatalyzeHTTPArrayResponseBlock)block;
++ (void)listFilesForUser:(NSString *)usersId success:(CatalyzeArraySuccessBlock)success failure:(CatalyzeFailureBlock)failure;
 
-+ (void)retrieveFileFromUser:(NSString *)filesId usersId:(NSString *)usersId block:(CatalyzeDataResultBlock)block;
++ (void)retrieveFileFromUser:(NSString *)filesId usersId:(NSString *)usersId success:(CatalyzeDataSuccessBlock)success failure:(CatalyzeFailureBlock)failure;
 
-+ (void)deleteFileFromUser:(NSString *)filesId usersId:(NSString *)usersId block:(CatalyzeBooleanResultBlock)block;
++ (void)deleteFileFromUser:(NSString *)filesId usersId:(NSString *)usersId success:(CatalyzeSuccessBlock)success failure:(CatalyzeFailureBlock)failure;
 
 @end

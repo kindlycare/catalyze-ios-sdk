@@ -22,7 +22,7 @@
 #import "PhoneNumber.h"
 #import "JSONObject.h"
 
-@interface CatalyzeUser : JSONObject<NSCoding>
+@interface CatalyzeUser : JSONObject<NSCoding, CatalyzeObjectProtocol>
 
 @property (strong, nonatomic) NSString *usersId;
 @property (strong, nonatomic) NSNumber *active;
@@ -56,30 +56,24 @@
 
 - (void)logout;
 
-- (void)logoutWithBlock:(CatalyzeHTTPResponseBlock)block;
+- (void)logoutWithSuccess:(CatalyzeSuccessBlock)success failure:(CatalyzeFailureBlock)failure;
 
 - (BOOL)isAuthenticated;
 
 + (CatalyzeUser *)user;
 
-+ (void)logInWithUsernameInBackground:(NSString *)username password:(NSString *)password block:(CatalyzeHTTPResponseBlock)block;
++ (void)logInWithUsernameInBackground:(NSString *)username password:(NSString *)password success:(CatalyzeUserSuccessBlock)success failure:(CatalyzeFailureBlock)failure;
 
-+ (void)signUpWithUsernameInBackground:(NSString *)username email:(Email *)email name:(Name *)name  password:(NSString *)password block:(CatalyzeHTTPResponseBlock)block;
++ (void)signUpWithUsernameInBackground:(NSString *)username email:(Email *)email name:(Name *)name  password:(NSString *)password success:(CatalyzeUserSuccessBlock)success failure:(CatalyzeFailureBlock)failure;
 
-+ (void)signUpWithUsernameInBackground:(NSString *)username email:(Email *)email name:(Name *)name  password:(NSString *)password inviteCode:(NSString *)inviteCode block:(CatalyzeHTTPResponseBlock)block;
++ (void)signUpWithUsernameInBackground:(NSString *)username email:(Email *)email name:(Name *)name  password:(NSString *)password inviteCode:(NSString *)inviteCode success:(CatalyzeUserSuccessBlock)success failure:(CatalyzeFailureBlock)failure;
 
 - (id)extraForKey:(NSString *)key;
 - (void)setExtra:(id)extra forKey:(NSString *)key;
 - (void)removeExtraForKey:(NSString *)key;
 
-- (void)saveInBackground;
-- (void)saveInBackgroundWithBlock:(CatalyzeBooleanResultBlock)block;
-- (void)saveInBackgroundWithTarget:(id)target selector:(SEL)selector;
-- (void)retrieveInBackground;
-- (void)retrieveInBackgroundWithBlock:(CatalyzeBooleanResultBlock)block;
-- (void)retrieveInBackgroundWithTarget:(id)target selector:(SEL)selector;
-- (void)deleteInBackground;
-- (void)deleteInBackgroundWithBlock:(CatalyzeBooleanResultBlock)block;
-- (void)deleteInBackgroundWithTarget:(id)target selector:(SEL)selector;
+- (void)createInBackground __attribute__((unavailable("Please use [CatalyzeUser signUpWithUsernameInBackground:email:name:password:success:failure:] instead")));
+- (void)createInBackgroundWithSuccess:(CatalyzeSuccessBlock)success failure:(CatalyzeFailureBlock)failure __attribute__((unavailable("Please use [CatalyzeUser signUpWithUsernameInBackground:email:name:password:success:failure:] instead")));
+- (void)createInBackgroundWithTarget:(id)target selector:(SEL)selector __attribute__((unavailable("Please use [CatalyzeUser signUpWithUsernameInBackground:email:name:password:success:failure:] instead")));
 
 @end

@@ -40,7 +40,6 @@
 #import "CatalyzeUser.h"
 #import "CatalyzeHTTPManager.h"
 #import "CatalyzeFileManager.h"
-#import "HealthLookaheadUITextFieldDelegate.h"
 #import "CatalyzeQuery.h"
 #import "Email.h"
 #import "Name.h"

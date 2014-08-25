@@ -1,10 +1,18 @@
-//
-//  CatalyzeReferenceTest.m
-//  catalyze-ios-sdk Tests
-//
-//  Created by Josh Ault on 8/19/14.
-//  Copyright (c) 2014 Catalyze, Inc. All rights reserved.
-//
+/*
+ * Copyright (C) 2013 catalyze.io, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
 
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
@@ -16,7 +24,7 @@
 @end
 
 @implementation CatalyzeReferenceTest
-static const NSString *className = @"medications";
+static const NSString * const className = @"medications";
 
 //class level
 + (void)setUp {
@@ -25,11 +33,10 @@ static const NSString *className = @"medications";
     __block BOOL finished = NO;
     
     NSDictionary *customClass = @{@"name":className, @"schema":@{@"medication":@"string", @"frequency":@"integer"}};
-    [CatalyzeHTTPManager doPost:@"/classes" withParams:customClass block:^(int status, NSString *response, NSError *error) {
-        if (error) {
-            [NSException raise:@"CustomClassException" format:@"Could not create the custom class"];
-        }
+    [CatalyzeHTTPManager doPost:@"/classes" withParams:customClass success:^(id result) {
         finished = YES;
+    } failure:^(NSDictionary *result, int status, NSError *error) {
+        [NSException raise:@"CustomClassException" format:@"Could not create the custom class"];
     }];
     NSDate *loopUntil = [NSDate dateWithTimeIntervalSinceNow:10];
     while (finished == NO && [loopUntil timeIntervalSinceNow] > 0) {
@@ -40,10 +47,10 @@ static const NSString *className = @"medications";
 + (void)tearDown {
     __block BOOL finished = NO;
     
-    [CatalyzeHTTPManager doDelete:[NSString stringWithFormat:@"/classes/%@", className] block:^(int status, NSString *response, NSError *error) {
-        if (error) {
-            [NSException raise:@"CustomClassException" format:@"Could not delete the custom class"];
-        }
+    [CatalyzeHTTPManager doDelete:[NSString stringWithFormat:@"/classes/%@", className] success:^(id result) {
+        finished = YES;
+    } failure:^(NSDictionary *result, int status, NSError *error) {
+        [NSException raise:@"CustomClassException" format:@"Could not delete the custom class"];
     }];
     
     NSDate *loopUntil = [NSDate dateWithTimeIntervalSinceNow:10];

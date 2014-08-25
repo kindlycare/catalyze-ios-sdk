@@ -16,94 +16,22 @@
 
 /**
  The CatalyzeConstants is where all of the completion blocks are defined for 
- asynchronous methods as well as the values used for catalyzeClassName in 
- CatalyzeEntry.  These catalyzeClassNames are then used to lookup the url that 
- any network request should be directed to.  The base url for all objects is listed
- below.
+ asynchronous methods. The base url for all objects is listed below.
  */
 
 @class CatalyzeEntry;
 @class CatalyzeUser;
 
-/**
- The completion block for downloading files.
- 
- @param data contains the file data or nil if unsuccessful
- @param status the HTTP status code received from the network request
- @param error any error that went wrong during the request, nil if successful
- */
-typedef void (^CatalyzeDataResultBlock)(NSData *data, int status, NSError *error);
+typedef void (^CatalyzeSuccessBlock)(id result);
+typedef void (^CatalyzeUserSuccessBlock)(CatalyzeUser *result);
+typedef void (^CatalyzeEntrySuccessBlock)(CatalyzeEntry *result);
+typedef void (^CatalyzeJsonSuccessBlock)(NSDictionary *result);
+typedef void (^CatalyzeArraySuccessBlock)(NSArray *result);
+typedef void (^CatalyzeDataSuccessBlock)(NSData *result);
+typedef void (^CatalyzeFailureBlock)(NSDictionary *result, int status, NSError *error);
 
 /**
- The completion block for expecting json responses.
- 
- @param json contains the resulting json
- @param status the HTTP status code received from the network request
- @param error any error that went wrong during the request, nil if successful
- */
-typedef void (^CatalyzeJsonResultBlock)(NSDictionary *json, int status, NSError *error);
-
-/**
- The completion block indicating whether or not any given request was a success or not.
- 
- @param succeeded indicates if the request was a success
- @param status the HTTP status code received from the network request.
- @param error any error that went wrong during the request, nil if successful
- */
-typedef void (^CatalyzeBooleanResultBlock)(BOOL succeeded, int status, NSError *error);
-
-/**
- The completion block used in a saveAll or retrieveAll method that passes back 
- all of the objects that were acted upon
- 
- @param objects the array of objects that resulted in the success of the request.  
- nil if the request failed
- @param error any error that went wrong during the request, nil if successful
- */
-typedef void (^CatalyzeArrayResultBlock)(NSArray *objects, NSError *error);
-
-/**
- The completion block used when an object should be returned after a successful 
- network request
- 
- @param object the object that was successful retrieved, updated, or created, nil 
- if the request failed
- @param error any error that went wrong during the request, nil if successful
- */
-typedef void (^CatalyzeEntryResultBlock)(CatalyzeEntry *entry, NSError *error);
-
-/**
- The completion block used when a network request is finished.  This is primarily
- used in CatalyzeHTTPManager.
- 
- @param status the HTTP status code received from the network request.
- @param response the raw string that the catalyze.io server responded with
- @param error any error that went wrong during the request, nil if successful
- */
-typedef void (^CatalyzeHTTPResponseBlock)(int status, NSString *response, NSError *error);
-
-/**
- The completion block used when a network request is finished and an array of objects
- is expected as the result.
- 
- @param status the HTTP status code received from the network request.
- @param response the raw array of objects that the catalyze.io server
- responded with
- @param error any error that went wrong during the request, nil if successful
- */
-typedef void (^CatalyzeHTTPArrayResponseBlock)(int status, NSArray *response, NSError *error);
-
-/**
- The completion block used when a User authenticates and the SDK takes care of the rest.  After
- saving any data needed, the completion block is performed.
- 
- @param authenticated boolean flag indicating if the User successfully signed in
- @param newUser boolean flag indicating if this is the first time this user has signed in
- */
-typedef void (^CatalyzeHandleOpenURLBlock)(BOOL authenticated, BOOL newUser);
-
-/**
- The base URL for the catalyze.io API.  All URLs begin with this URL.
+ The base URL for the catalyze.io API.
  */
 //#define LOCAL_ENV
 #define kCatalyzeBaseURL @"https://apiv2.catalyze.io"

@@ -62,48 +62,48 @@
 #pragma mark Create
 
 - (void)createInBackground {
-    [self createInBackgroundWithBlock:nil];
+    [self createInBackgroundWithSuccess:nil failure:nil];
 }
 
-- (void)createInBackgroundWithBlock:(CatalyzeBooleanResultBlock)block {
-    [CatalyzeHTTPManager doPost:[self lookupURL:YES] withParams:[self prepSendDict] block:^(int status, NSString *response, NSError *error) {
-        if (!error) {
-            NSDictionary *responseDict = [NSJSONSerialization JSONObjectWithData:[response dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil];
-            [self setValuesForKeysWithDictionary:responseDict];
-            self.content = [NSMutableDictionary dictionaryWithDictionary:self.content]; // to keep mutability
+- (void)createInBackgroundWithSuccess:(CatalyzeSuccessBlock)success failure:(CatalyzeFailureBlock)failure {
+    [CatalyzeHTTPManager doPost:[self lookupURL:YES] withParams:[self prepSendDict] success:^(id result) {
+        NSDictionary *responseDict = (NSDictionary *)result;
+        [self setValuesForKeysWithDictionary:responseDict];
+        self.content = [NSMutableDictionary dictionaryWithDictionary:self.content]; // to keep mutability
+        if (success) {
+            success(self);
         }
-        if (block) {
-            block(error == nil, status, error);
-        }
-    }];
+    } failure:failure];
 }
 
 - (void)createInBackgroundWithTarget:(id)target selector:(SEL)selector {
-    [self createInBackgroundWithBlock:^(BOOL succeeded, int status, NSError *error) {
-        [target performSelector:selector onThread:[NSThread mainThread] withObject:error waitUntilDone:NO];
+    [self createInBackgroundWithSuccess:^(id result) {
+        [target performSelector:selector onThread:[NSThread mainThread] withObject:self waitUntilDone:NO];
+    } failure:^(NSDictionary *result, int status, NSError *error) {
+        [target performSelector:selector onThread:[NSThread mainThread] withObject:result waitUntilDone:NO];
     }];
 }
 
 - (void)createInBackgroundForUserWithUsersId:(NSString *)usersId {
-    [self createInBackgroundForUserWithUsersId:usersId block:nil];
+    [self createInBackgroundForUserWithUsersId:usersId success:nil failure:nil];
 }
 
-- (void)createInBackgroundForUserWithUsersId:(NSString *)usersId block:(CatalyzeBooleanResultBlock)block {
-    [CatalyzeHTTPManager doPost:[NSString stringWithFormat:@"/classes/%@/entry/%@",[self className],usersId] withParams:[self prepSendDict] block:^(int status, NSString *response, NSError *error) {
-        if (!error) {
-            NSDictionary *responseDict = [NSJSONSerialization JSONObjectWithData:[response dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil];
-            [self setValuesForKeysWithDictionary:responseDict];
-            self.content = [NSMutableDictionary dictionaryWithDictionary:self.content]; // to keep mutability
+- (void)createInBackgroundForUserWithUsersId:(NSString *)usersId success:(CatalyzeSuccessBlock)success failure:(CatalyzeFailureBlock)failure {
+    [CatalyzeHTTPManager doPost:[NSString stringWithFormat:@"/classes/%@/entry/%@",[self className],usersId] withParams:[self prepSendDict] success:^(id result) {
+        NSDictionary *responseDict = (NSDictionary *)result;
+        [self setValuesForKeysWithDictionary:responseDict];
+        self.content = [NSMutableDictionary dictionaryWithDictionary:self.content]; // to keep mutability
+        if (success) {
+            success(self);
         }
-        if (block) {
-            block(error == nil, status, error);
-        }
-    }];
+    } failure:failure];
 }
 
 - (void)createInBackgroundForUserWithUsersId:(NSString *)usersId target:(id)target selector:(SEL)selector {
-    [self createInBackgroundForUserWithUsersId:usersId block:^(BOOL succeeded, int status, NSError *error) {
-        [target performSelector:selector onThread:[NSThread mainThread] withObject:error waitUntilDone:NO];
+    [self createInBackgroundForUserWithUsersId:usersId success:^(id result) {
+        [target performSelector:selector onThread:[NSThread mainThread] withObject:self waitUntilDone:NO];
+    } failure:^(NSDictionary *result, int status, NSError *error) {
+        [target performSelector:selector onThread:[NSThread mainThread] withObject:result waitUntilDone:NO];
     }];
 }
 
@@ -111,25 +111,25 @@
 #pragma mark Save
 
 - (void)saveInBackground {
-    [self saveInBackgroundWithBlock:nil];
+    [self saveInBackgroundWithSuccess:nil failure:nil];
 }
 
-- (void)saveInBackgroundWithBlock:(CatalyzeBooleanResultBlock)block {
-    [CatalyzeHTTPManager doPut:[self lookupURL:NO] withParams:[self content] block:^(int status, NSString *response, NSError *error) {
-        if (!error) {
-            NSDictionary *responseDict = [NSJSONSerialization JSONObjectWithData:[response dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil];
-            [self setValuesForKeysWithDictionary:responseDict];
-            self.content = [NSMutableDictionary dictionaryWithDictionary:self.content]; // to keep mutability
+- (void)saveInBackgroundWithSuccess:(CatalyzeSuccessBlock)success failure:(CatalyzeFailureBlock)failure; {
+    [CatalyzeHTTPManager doPut:[self lookupURL:NO] withParams:[self content] success:^(id result) {
+        NSDictionary *responseDict = (NSDictionary *)result;
+        [self setValuesForKeysWithDictionary:responseDict];
+        self.content = [NSMutableDictionary dictionaryWithDictionary:self.content]; // to keep mutability
+        if (success) {
+            success(self);
         }
-        if (block) {
-            block(error == nil, status, error);
-        }
-    }];
+    } failure:failure];
 }
 
 - (void)saveInBackgroundWithTarget:(id)target selector:(SEL)selector {
-    [self saveInBackgroundWithBlock:^(BOOL succeeded, int status, NSError *error) {
-        [target performSelector:selector onThread:[NSThread mainThread] withObject:error waitUntilDone:NO];
+    [self saveInBackgroundWithSuccess:^(id result) {
+        [target performSelector:selector onThread:[NSThread mainThread] withObject:self waitUntilDone:NO];
+    } failure:^(NSDictionary *result, int status, NSError *error) {
+        [target performSelector:selector onThread:[NSThread mainThread] withObject:result waitUntilDone:NO];
     }];
 }
 
@@ -137,26 +137,26 @@
 #pragma mark Retrieve
 
 - (void)retrieveInBackground {
-    [self retrieveInBackgroundWithBlock:nil];
+    [self retrieveInBackgroundWithSuccess:nil failure:nil];
 }
 
-- (void)retrieveInBackgroundWithBlock:(CatalyzeEntryResultBlock)block {
+- (void)retrieveInBackgroundWithSuccess:(CatalyzeSuccessBlock)success failure:(CatalyzeFailureBlock)failure; {
     NSString *url = [self lookupURL:NO];
-    [CatalyzeHTTPManager doGet:url block:^(int status, NSString *response, NSError *error) {
-        if (!error) {
-            NSDictionary *responseDict = [NSJSONSerialization JSONObjectWithData:[response dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil];
-            [self setValuesForKeysWithDictionary:responseDict];
-            self.content = [NSMutableDictionary dictionaryWithDictionary:self.content]; // to keep mutability
+    [CatalyzeHTTPManager doGet:url success:^(id result) {
+        NSDictionary *responseDict = (NSDictionary *)result;
+        [self setValuesForKeysWithDictionary:responseDict];
+        self.content = [NSMutableDictionary dictionaryWithDictionary:self.content]; // to keep mutability
+        if (success) {
+            success(self);
         }
-        if (block) {
-            block(self, error);
-        }
-    }];
+    } failure:failure];
 }
 
 - (void)retrieveInBackgroundWithTarget:(id)target selector:(SEL)selector {
-    [self retrieveInBackgroundWithBlock:^(CatalyzeEntry *object, NSError *error) {
-        [target performSelector:selector onThread:[NSThread mainThread] withObject:error waitUntilDone:NO];
+    [self retrieveInBackgroundWithSuccess:^(id result) {
+        [target performSelector:selector onThread:[NSThread mainThread] withObject:self waitUntilDone:NO];
+    } failure:^(NSDictionary *result, int status, NSError *error) {
+        [target performSelector:selector onThread:[NSThread mainThread] withObject:result waitUntilDone:NO];
     }];
 }
 
@@ -164,29 +164,29 @@
 #pragma mark Delete
 
 - (void)deleteInBackground  {
-    [self deleteInBackgroundWithBlock:nil];
+    [self deleteInBackgroundWithSuccess:nil failure:nil];
 }
 
-- (void)deleteInBackgroundWithBlock:(CatalyzeBooleanResultBlock)block {
-    [CatalyzeHTTPManager doDelete:[self lookupURL:NO] block:^(int status, NSString *response, NSError *error) {
-        if (!error) {
-            _className = nil;
-            _entryId = nil;
-            _authorId = nil;
-            _parentId = nil;
-            _content = nil;
-            _updatedAt = nil;
-            _createdAt = nil;
+- (void)deleteInBackgroundWithSuccess:(CatalyzeSuccessBlock)success failure:(CatalyzeFailureBlock)failure; {
+    [CatalyzeHTTPManager doDelete:[self lookupURL:NO] success:^(id result) {
+        _className = nil;
+        _entryId = nil;
+        _authorId = nil;
+        _parentId = nil;
+        _content = nil;
+        _updatedAt = nil;
+        _createdAt = nil;
+        if (success) {
+            success(self);
         }
-        if (block) {
-            block(error == nil, status, error);
-        }
-    }];
+    } failure:failure];
 }
 
 - (void)deleteInBackgroundWithTarget:(id)target selector:(SEL)selector {
-    [self deleteInBackgroundWithBlock:^(BOOL succeeded, int status, NSError *error) {
-        [target performSelector:selector onThread:[NSThread mainThread] withObject:error waitUntilDone:NO];
+    [self deleteInBackgroundWithSuccess:^(id result) {
+        [target performSelector:selector onThread:[NSThread mainThread] withObject:self waitUntilDone:NO];
+    } failure:^(NSDictionary *result, int status, NSError *error) {
+        [target performSelector:selector onThread:[NSThread mainThread] withObject:result waitUntilDone:NO];
     }];
 }
 

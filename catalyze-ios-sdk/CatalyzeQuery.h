@@ -92,7 +92,7 @@
  
  @param block the completion block to be executed upon the request's completion
  */
-- (void)retrieveAllEntriesInBackgroundWithBlock:(CatalyzeArrayResultBlock)block;
+- (void)retrieveAllEntriesInBackgroundWithSuccess:(CatalyzeArraySuccessBlock)success failure:(CatalyzeFailureBlock)failure;
 
 /**
  Performs the query asynchronously.  This should only be called after setting at minimum, the
@@ -119,7 +119,7 @@
  
  @param block the completion block to be executed upon the request's completion
  */
-- (void)retrieveInBackgroundWithBlock:(CatalyzeArrayResultBlock)block;
+- (void)retrieveInBackgroundWithSuccess:(CatalyzeArraySuccessBlock)success failure:(CatalyzeFailureBlock)failure;
 
 /**
  Performs the query asynchronously.  This should only be called after setting at minimum, the
@@ -149,7 +149,7 @@
  @param usersId the ID of the user whose entries are to be queried for
  @param block the completion block to be executed upon the request's completion
  */
-- (void)retrieveInBackgroundForUsersId:(NSString *)usersId block:(CatalyzeArrayResultBlock)block;
+- (void)retrieveInBackgroundForUsersId:(NSString *)usersId success:(CatalyzeArraySuccessBlock)success failure:(CatalyzeFailureBlock)failure;
 
 /**
  Performs the query asynchronously.  This should only be called after setting at minimum, the

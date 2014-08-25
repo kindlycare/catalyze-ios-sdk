@@ -31,8 +31,9 @@
 
 #import <Foundation/Foundation.h>
 #import "CatalyzeConstants.h"
+#import "CatalyzeObjectProtocol.h"
 
-@interface CatalyzeEntry : NSObject
+@interface CatalyzeEntry : NSObject<CatalyzeObjectProtocol>
 
 #pragma mark Constructors
 
@@ -94,7 +95,7 @@
  on the catalyze.io API. This method offers no indication as to when the request is completed.  
  If this is necessary, see createInBackgroundWithBlock:
  */
-- (void)createInBackground;
+//- (void)createInBackground;
 
 /**
  Creates a new custom class entry on the catalyze.io API.  Upon the request's 
@@ -105,7 +106,7 @@
  @param block the completion block to be executed upon the request's completion. 
  See CatalyzeBooleanResultBlock to tell whether or not the request was successful.
  */
-- (void)createInBackgroundWithBlock:(CatalyzeBooleanResultBlock)block;
+//- (void)createInBackgroundWithBlock:(CatalyzeBooleanResultBlock)block;
 
 /**
  Creates a new custom class entry on the catalyze.io API.  Upon the request's
@@ -121,11 +122,11 @@
  @param selector the selector to be performed on the given target on the **Main Thread** 
  upon the request's completion
  */
-- (void)createInBackgroundWithTarget:(id)target selector:(SEL)selector;
+//- (void)createInBackgroundWithTarget:(id)target selector:(SEL)selector;
 
 - (void)createInBackgroundForUserWithUsersId:(NSString *)usersId;
 
-- (void)createInBackgroundForUserWithUsersId:(NSString *)usersId block:(CatalyzeBooleanResultBlock)block;
+- (void)createInBackgroundForUserWithUsersId:(NSString *)usersId success:(CatalyzeSuccessBlock)success failure:(CatalyzeFailureBlock)failure;
 
 - (void)createInBackgroundForUserWithUsersId:(NSString *)usersId target:(id)target selector:(SEL)selector;
 
@@ -140,7 +141,7 @@
  the request completed, succeeded, or failed.  If this is neccessary, see 
  saveInBackgroundWithBlock:.
  */
-- (void)saveInBackground;
+//- (void)saveInBackground;
 
 /**
  Saves this CatalyzeEntry in the background.  Only dirty fields are sent to the
@@ -150,7 +151,7 @@
  
  @param block the completion block to be executed upon the request's completion
  */
-- (void)saveInBackgroundWithBlock:(CatalyzeBooleanResultBlock)block;
+//- (void)saveInBackgroundWithBlock:(CatalyzeBooleanResultBlock)block;
 
 /**
  Saves this CatalyzeEntry in the background.  Only dirty fields are sent to the
@@ -166,7 +167,7 @@
  @param selector the selector to be performed on the given target on the **Main Thread** 
  upon the request's completion
  */
-- (void)saveInBackgroundWithTarget:(id)target selector:(SEL)selector;
+//- (void)saveInBackgroundWithTarget:(id)target selector:(SEL)selector;
 
 #pragma mark -
 #pragma mark Retrieve
@@ -180,7 +181,7 @@
  Upon completion, this CatalyzeEntry will have its objectDict updated with all of the 
  keys received from the catalyze.io API.
  */
-- (void)retrieveInBackground;
+//- (void)retrieveInBackground;
 
 /**
  Retrieves this CatalyzeEntry in the background.  Mostly used for objects that have
@@ -191,7 +192,7 @@
  
  @param block the completion block to be executed upon the request's completion
  */
-- (void)retrieveInBackgroundWithBlock:(CatalyzeEntryResultBlock)block;
+//- (void)retrieveInBackgroundWithBlock:(CatalyzeEntryResultBlock)block;
 
 /**
  Retrieves this CatalyzeEntry in the background.  Mostly used for objects that have
@@ -210,7 +211,7 @@
  @param selector the selector to be performed on the given target on the **Main Thread** 
  upon the request's completion
  */
-- (void)retrieveInBackgroundWithTarget:(id)target selector:(SEL)selector;
+//- (void)retrieveInBackgroundWithTarget:(id)target selector:(SEL)selector;
 
 #pragma mark -
 #pragma mark Delete
@@ -224,7 +225,7 @@
  Upon completion, this CatalyzeEntry will have nothing stored in its objectDict
  and should be discarded and set to nil.
  */
-- (void)deleteInBackground;
+//- (void)deleteInBackground;
 
 /**
  Deletes this CatalyzeEntry in the background.  Upon completion of the request
@@ -234,7 +235,7 @@
  
  @param block the completion block to be executed upon the request's completion
  */
-- (void)deleteInBackgroundWithBlock:(CatalyzeBooleanResultBlock)block;
+//- (void)deleteInBackgroundWithBlock:(CatalyzeBooleanResultBlock)block;
 
 /**
  Deletes this CatalyzeEntry in the background.  Upon completion of the request
@@ -251,6 +252,6 @@
  @param selector the selector to be performed on the given target on the **Main Thread**
  upon the request's completion
  */
-- (void)deleteInBackgroundWithTarget:(id)target selector:(SEL)selector;
+//- (void)deleteInBackgroundWithTarget:(id)target selector:(SEL)selector;
 
 @end
