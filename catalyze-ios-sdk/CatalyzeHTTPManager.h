@@ -42,9 +42,10 @@
  upon completion of the request whether it succeeded or failed.  
  
  @param urlString the url to direct the request to
- @param block the completion block to be executed upon the request's completion
+ @param success the completion block to be executed upon the request's successful completion
+ @param failure the completion block to be executed if the request fails
  */
-+ (void)doGet:(NSString *)urlString block:(CatalyzeHTTPResponseBlock)block;
++ (void)doGet:(NSString *)urlString success:(CatalyzeSuccessBlock)success failure:(CatalyzeFailureBlock)failure;
 
 /** @name POST */
 
@@ -55,9 +56,10 @@
  
  @param urlString the url to direct the request to
  @param params the key value pairs to be sent to the specified url
- @param block the completion block to be executed upon the request's completion
+ @param success the completion block to be executed upon the request's successful completion
+ @param failure the completion block to be executed if the request fails
  */
-+ (void)doPost:(NSString *)urlString withParams:(NSDictionary *)params block:(CatalyzeHTTPResponseBlock)block;
++ (void)doPost:(NSString *)urlString withParams:(NSDictionary *)params success:(CatalyzeSuccessBlock)success failure:(CatalyzeFailureBlock)failure;
 
 /** @name PUT */
 
@@ -68,9 +70,10 @@
  
  @param urlString the url to direct the request to
  @param params the key value pairs to be sent to the specified url
- @param block the completion block to be executed upon the request's completion
+ @param success the completion block to be executed upon the request's successful completion
+ @param failure the completion block to be executed if the request fails
  */
-+ (void)doPut:(NSString *)urlString withParams:(NSDictionary *)params block:(CatalyzeHTTPResponseBlock)block;
++ (void)doPut:(NSString *)urlString withParams:(NSDictionary *)params success:(CatalyzeSuccessBlock)success failure:(CatalyzeFailureBlock)failure;
 
 /** @name DELETE */
 
@@ -79,8 +82,9 @@
  upon completion of the request whether it succeeded or failed.
  
  @param urlString the url to direct the request to
- @param block the completion block to be executed upon the request's completion
+ @param success the completion block to be executed upon the request's successful completion
+ @param failure the completion block to be executed if the request fails
  */
-+ (void)doDelete:(NSString *)urlString block:(CatalyzeHTTPResponseBlock)block;
++ (void)doDelete:(NSString *)urlString success:(CatalyzeSuccessBlock)success failure:(CatalyzeFailureBlock)failure;
 
 @end

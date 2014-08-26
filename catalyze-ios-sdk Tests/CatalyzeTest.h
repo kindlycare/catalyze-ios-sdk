@@ -14,10 +14,13 @@
  *    limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
+#import <XCTest/XCTest.h>
 
-@interface JSONObject : NSObject
+@interface CatalyzeTest : XCTestCase
 
-- (id)JSON:(Class)aClass;
+extern const NSString * const secondaryUsername;
+extern const NSString * const secondaryPassword;
+extern const NSString * const secondaryUsersId;
 
 @end
