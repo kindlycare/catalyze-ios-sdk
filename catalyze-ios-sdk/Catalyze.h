@@ -64,6 +64,14 @@
 + (void)setApiKey:(NSString *)apiKey applicationId:(NSString *)appId;
 
 /**
+ @param applicationKey the app key given to developers for this specific app on http://developer.catalyze.io
+ @param scheme the url scheme used for login callbacks that redirects a user back to their application on successful authentication
+ @param appId the id of the application on the catalyze.io API
+ @param baseUrl the base URL of the BaaS deployment you are using
+ */
++ (void)setApiKey:(NSString *)apiKey applicationId:(NSString *)appId baseUrl:(NSString *)baseUrl;
+
+/**
  @return the app key set by the developer in application:didFinishLaunchingWithOptions:
  */
 + (NSString *)apiKey;

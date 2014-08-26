@@ -54,6 +54,7 @@
 		274A9FC419ABF27A00DB7039 /* NSObject+Properties.m in Sources */ = {isa = PBXBuildFile; fileRef = 274A9FC319ABF27A00DB7039 /* NSObject+Properties.m */; };
 		274A9FC519ABF2B600DB7039 /* NSObject+Properties.h in Headers */ = {isa = PBXBuildFile; fileRef = 274A9FC219ABF27A00DB7039 /* NSObject+Properties.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		274A9FC619ABF2BA00DB7039 /* NSObject+Properties.m in Sources */ = {isa = PBXBuildFile; fileRef = 274A9FC319ABF27A00DB7039 /* NSObject+Properties.m */; };
+		274A9FC719AC162800DB7039 /* CatalyzeFileManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 278FBAE719A6BE4900FC41C4 /* CatalyzeFileManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		275658D918DFC45500C3D5D1 /* JSONObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 275658D818DFC45500C3D5D1 /* JSONObject.m */; };
 		2756596018DFF2FB00C3D5D1 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2756595F18DFF2FB00C3D5D1 /* Cocoa.framework */; };
 		2756597018DFF46000C3D5D1 /* Catalyze.h in Headers */ = {isa = PBXBuildFile; fileRef = 27B9C27317CBBAC600B8FA02 /* Catalyze.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -427,6 +428,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2756597018DFF46000C3D5D1 /* Catalyze.h in Headers */,
+				274A9FC719AC162800DB7039 /* CatalyzeFileManager.h in Headers */,
 				2756597118DFF46A00C3D5D1 /* CatalyzeConstants.h in Headers */,
 				2756597218DFF47100C3D5D1 /* CatalyzeObjectProtocol.h in Headers */,
 				2756597718DFF48F00C3D5D1 /* CatalyzeHTTPManager.h in Headers */,

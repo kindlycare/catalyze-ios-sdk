@@ -112,6 +112,20 @@
     }
 }
 
+- (void)testRetrieveInvalidFile {
+    __block BOOL finished = NO;
+    [CatalyzeFileManager retrieveFile:@"fake_id" success:^(NSData *result) {
+        XCTFail(@"Retrieved invalid file");
+    } failure:^(NSDictionary *result, int status, NSError *error) {
+        XCTAssertEqual(status, 404);
+        finished = YES;
+    }];
+    NSDate *loopUntil = [NSDate dateWithTimeIntervalSinceNow:30];
+    while (finished == NO && [loopUntil timeIntervalSinceNow] > 0) {
+        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:loopUntil];
+    }
+}
+
 - (void)testDeleteFile {
     NSBundle *bundle = [NSBundle bundleForClass:[self class]];
     NSString *path = [bundle pathForResource:@"testFile" ofType:@"txt"];

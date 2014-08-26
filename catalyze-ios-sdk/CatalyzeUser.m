@@ -173,7 +173,7 @@ static CatalyzeUser *currentUser;
     [CatalyzeHTTPManager doGet:@"/auth/signout" success:^(id result) {
         currentUser = nil;
         
-        [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"Authorization"];
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:kCatalyzeAuthorizationKey];
         [[NSUserDefaults standardUserDefaults] synchronize];
         
         NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
@@ -189,7 +189,7 @@ static CatalyzeUser *currentUser;
 }
 
 - (BOOL)isAuthenticated {
-    return ([[NSUserDefaults standardUserDefaults] valueForKey:@"Authorization"] && ![[[NSUserDefaults standardUserDefaults] valueForKey:@"Authorization"] isEqualToString:@""]);
+    return ([[NSUserDefaults standardUserDefaults] valueForKey:kCatalyzeAuthorizationKey] && ![[[NSUserDefaults standardUserDefaults] valueForKey:kCatalyzeAuthorizationKey] isEqualToString:@""]);
 }
 
 + (CatalyzeUser *)user {
@@ -217,7 +217,7 @@ static CatalyzeUser *currentUser;
         [currentUser setValuesForKeysWithDictionary:dict];
         
         if (sessionToken) {
-            [[NSUserDefaults standardUserDefaults] setValue:sessionToken forKey:@"Authorization"];
+            [[NSUserDefaults standardUserDefaults] setValue:sessionToken forKey:kCatalyzeAuthorizationKey];
         }
         [[NSUserDefaults standardUserDefaults] synchronize];
         if (success) {
@@ -245,7 +245,7 @@ static CatalyzeUser *currentUser;
         [currentUser setValuesForKeysWithDictionary:dict];
         
         if (sessionToken) {
-            [[NSUserDefaults standardUserDefaults] setValue:sessionToken forKey:@"Authorization"];
+            [[NSUserDefaults standardUserDefaults] setValue:sessionToken forKey:kCatalyzeAuthorizationKey];
         }
         [[NSUserDefaults standardUserDefaults] synchronize];
         if (success) {
@@ -387,7 +387,7 @@ static CatalyzeUser *currentUser;
         self.type= nil;
         self.extras = nil;
         
-        [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"Authorization"];
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:kCatalyzeAuthorizationKey];
         [[NSUserDefaults standardUserDefaults] synchronize];
         
         NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);

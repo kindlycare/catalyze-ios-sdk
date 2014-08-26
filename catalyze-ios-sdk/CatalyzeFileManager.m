@@ -28,7 +28,7 @@
     static AFHTTPRequestOperationManager *fileClient = nil;
     static dispatch_once_t onceFilePredicate;
     dispatch_once(&onceFilePredicate, ^{
-        fileClient = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:kCatalyzeBaseURL]];
+        fileClient = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:[[NSUserDefaults standardUserDefaults] valueForKey:kCatalyzeBaseUrlKey]]];
 #ifdef LOCAL_ENV
         fileClient.securityPolicy = [AFSecurityPolicy policyWithPinningMode:AFSSLPinningModeNone];
         fileClient.securityPolicy.allowInvalidCertificates = YES;
@@ -42,7 +42,7 @@
 + (void)uploadFileToUser:(NSData *)file phi:(BOOL)phi mimeType:(NSString *)mimeType success:(CatalyzeJsonSuccessBlock)success failure:(CatalyzeFailureBlock)failure {
     [CatalyzeFileManager updateHeaders];
     
-    [[CatalyzeFileManager fileClient] POST:@"/v2/users/files" parameters:@{@"phi":[NSNumber numberWithBool:phi]} constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+    [[CatalyzeFileManager fileClient] POST:[NSString stringWithFormat:@"%@/users/files",kCatalyzeAPIVersionPath] parameters:@{@"phi":[NSNumber numberWithBool:phi]} constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
         [formData appendPartWithFileData:file name:@"file" fileName:@"filename" mimeType:mimeType];
     } success:[CatalyzeFileManager successBlock:success] failure:[CatalyzeFileManager failureBlock:failure]];
 }
@@ -50,13 +50,13 @@
 + (void)listFiles:(CatalyzeArraySuccessBlock)success failure:(CatalyzeFailureBlock)failure {
     [CatalyzeFileManager updateHeaders];
     
-    [[CatalyzeFileManager fileClient] GET:@"/v2/users/files" parameters:nil success:[CatalyzeFileManager successBlock:success] failure:[CatalyzeFileManager failureBlock:failure]];
+    [[CatalyzeFileManager fileClient] GET:[NSString stringWithFormat:@"%@/users/files",kCatalyzeAPIVersionPath] parameters:nil success:[CatalyzeFileManager successBlock:success] failure:[CatalyzeFileManager failureBlock:failure]];
 }
 
 + (void)retrieveFile:(NSString *)filesId success:(CatalyzeDataSuccessBlock)success failure:(CatalyzeFailureBlock)failure {
     [CatalyzeFileManager updateHeaders];
     
-    [[CatalyzeFileManager fileClient] GET:[NSString stringWithFormat:@"/v2/users/files/%@",filesId] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [[CatalyzeFileManager fileClient] GET:[NSString stringWithFormat:@"%@/users/files/%@",kCatalyzeAPIVersionPath,filesId] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if (success) {
             success(responseObject);
         }
@@ -66,13 +66,13 @@
 + (void)deleteFile:(NSString *)filesId success:(CatalyzeSuccessBlock)success failure:(CatalyzeFailureBlock)failure {
     [CatalyzeFileManager updateHeaders];
     
-    [[CatalyzeFileManager fileClient] DELETE:[NSString stringWithFormat:@"/v2/users/files/%@",filesId] parameters:nil success:[CatalyzeFileManager successBlock:success] failure:[CatalyzeFileManager failureBlock:failure]];
+    [[CatalyzeFileManager fileClient] DELETE:[NSString stringWithFormat:@"%@/users/files/%@",kCatalyzeAPIVersionPath,filesId] parameters:nil success:[CatalyzeFileManager successBlock:success] failure:[CatalyzeFileManager failureBlock:failure]];
 }
 
 + (void)uploadFileToOtherUser:(NSData *)file usersId:(NSString *)usersId phi:(BOOL)phi mimeType:(NSString *)mimeType success:(CatalyzeJsonSuccessBlock)success failure:(CatalyzeFailureBlock)failure {
     [CatalyzeFileManager updateHeaders];
     
-    [[CatalyzeFileManager fileClient] POST:[NSString stringWithFormat:@"/v2/users/%@/files",usersId] parameters:@{@"phi":[NSNumber numberWithBool:phi]} constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+    [[CatalyzeFileManager fileClient] POST:[NSString stringWithFormat:@"%@/users/%@/files",kCatalyzeAPIVersionPath,usersId] parameters:@{@"phi":[NSNumber numberWithBool:phi]} constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
         [formData appendPartWithFileData:file name:@"file" fileName:@"filename" mimeType:mimeType];
     } success:[CatalyzeFileManager successBlock:success] failure:[CatalyzeFileManager failureBlock:failure]];
 }
@@ -80,13 +80,13 @@
 + (void)listFilesForUser:(NSString *)usersId success:(CatalyzeArraySuccessBlock)success failure:(CatalyzeFailureBlock)failure {
     [CatalyzeFileManager updateHeaders];
     
-    [[CatalyzeFileManager fileClient] GET:[NSString stringWithFormat:@"/v2/users/%@/files", usersId] parameters:nil success:[CatalyzeFileManager successBlock:success] failure:[CatalyzeFileManager failureBlock:failure]];
+    [[CatalyzeFileManager fileClient] GET:[NSString stringWithFormat:@"%@/users/%@/files",kCatalyzeAPIVersionPath,usersId] parameters:nil success:[CatalyzeFileManager successBlock:success] failure:[CatalyzeFileManager failureBlock:failure]];
 }
 
 + (void)retrieveFileFromUser:(NSString *)filesId usersId:(NSString *)usersId success:(CatalyzeDataSuccessBlock)success failure:(CatalyzeFailureBlock)failure {
     [CatalyzeFileManager updateHeaders];
     
-    [[CatalyzeFileManager fileClient] GET:[NSString stringWithFormat:@"/v2/users/%@/files/%@",usersId,filesId] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [[CatalyzeFileManager fileClient] GET:[NSString stringWithFormat:@"%@/users/%@/files/%@",kCatalyzeAPIVersionPath,usersId,filesId] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if (success) {
             success(responseObject);
         }
@@ -96,7 +96,7 @@
 + (void)deleteFileFromUser:(NSString *)filesId usersId:(NSString *)usersId success:(CatalyzeSuccessBlock)success failure:(CatalyzeFailureBlock)failure {
     [CatalyzeFileManager updateHeaders];
     
-    [[CatalyzeFileManager fileClient] DELETE:[NSString stringWithFormat:@"/v2/users/%@/files/%@",usersId,filesId] parameters:nil success:[CatalyzeFileManager successBlock:success] failure:[CatalyzeFileManager failureBlock:failure]];
+    [[CatalyzeFileManager fileClient] DELETE:[NSString stringWithFormat:@"%@/users/%@/files/%@",kCatalyzeAPIVersionPath,usersId,filesId] parameters:nil success:[CatalyzeFileManager successBlock:success] failure:[CatalyzeFileManager failureBlock:failure]];
 }
 
 + (void (^)(AFHTTPRequestOperation *operation, id responseObject))successBlock:(CatalyzeSuccessBlock)success {
@@ -116,8 +116,8 @@
 }
 
 + (void)updateHeaders {
-    [[CatalyzeFileManager fileClient].requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",[[NSUserDefaults standardUserDefaults] valueForKey:@"Authorization"]] forHTTPHeaderField:@"Authorization"];
-    [[CatalyzeFileManager fileClient].requestSerializer setValue:[NSString stringWithFormat:@"%@", [Catalyze apiKey]] forHTTPHeaderField:@"X-Api-Key"];
+    [[CatalyzeFileManager fileClient].requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",[[NSUserDefaults standardUserDefaults] valueForKey:kCatalyzeAuthorizationKey]] forHTTPHeaderField:kCatalyzeAuthorizationHeader];
+    [[CatalyzeFileManager fileClient].requestSerializer setValue:[NSString stringWithFormat:@"%@", [Catalyze apiKey]] forHTTPHeaderField:kCatalyzeApiKeyHeader];
 }
 
 @end

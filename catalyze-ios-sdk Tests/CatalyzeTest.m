@@ -28,11 +28,11 @@
 //the following values are generated for test environments and inserted manually for now
 static const NSString * const username = @"test@catalyze.io";
 static const NSString * const password = @"password";
-static const NSString * const apiKey = @"ios io.catalyze.Mobile-Mom c9c7c2c1-6a2b-4e15-b506-07cff5719ca4";
-static const NSString * const appId = @"4fae0ac7-7c9f-41f0-9390-340473af7128";
+static const NSString * const apiKey = @"ios io.catalyze.Mobile-Mom 36580477-acc7-4776-af2e-6a9226c8fb61";
+static const NSString * const appId = @"77cfb302-fe46-4ade-94d7-5bc388ecfc47";
 const NSString * const secondaryUsername = @"test-secondary@catalyze.io";
 const NSString * const secondaryPassword = @"password";
-const NSString * const secondaryUsersId = @"f54704fb-2d1a-4636-96a4-1551edc51437";
+const NSString * const secondaryUsersId = @"429e26b8-ec81-472a-84e1-27208a62c49a";
 
 //class level
 + (void)setUp {
@@ -40,7 +40,7 @@ const NSString * const secondaryUsersId = @"f54704fb-2d1a-4636-96a4-1551edc51437
     
     __block BOOL finished = NO;
     
-    [Catalyze setApiKey:apiKey.copy applicationId:appId.copy];
+    [Catalyze setApiKey:apiKey.copy applicationId:appId.copy baseUrl:@"https://10.0.1.4:8443"];
     
     [CatalyzeUser logInWithUsernameInBackground:username.copy password:password.copy success:^(CatalyzeUser *result) {
         finished = YES;

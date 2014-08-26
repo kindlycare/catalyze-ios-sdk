@@ -35,7 +35,7 @@
     static AFHTTPRequestOperationManager *httpClient = nil;
     static dispatch_once_t oncePredicate;
     dispatch_once(&oncePredicate, ^{
-        httpClient = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:kCatalyzeBaseURL]];
+        httpClient = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:[[NSUserDefaults standardUserDefaults] valueForKey:kCatalyzeBaseUrlKey]]];
 #ifdef LOCAL_ENV
         httpClient.securityPolicy = [AFSecurityPolicy policyWithPinningMode:AFSSLPinningModeNone];
         httpClient.securityPolicy.allowInvalidCertificates = YES;
@@ -51,25 +51,25 @@
 + (void)doGet:(NSString *)urlString success:(CatalyzeSuccessBlock)success failure:(CatalyzeFailureBlock)failure {
     [CatalyzeHTTPManager updateHeaders];
     
-    [[CatalyzeHTTPManager httpClient] GET:[NSString stringWithFormat:@"/v2%@",urlString] parameters:nil success:[CatalyzeHTTPManager successBlock:success] failure:[CatalyzeHTTPManager failureBlock:failure]];
+    [[CatalyzeHTTPManager httpClient] GET:[NSString stringWithFormat:@"%@%@",kCatalyzeAPIVersionPath,urlString] parameters:nil success:[CatalyzeHTTPManager successBlock:success] failure:[CatalyzeHTTPManager failureBlock:failure]];
 }
 
 + (void)doPost:(NSString *)urlString withParams:(NSDictionary *)params success:(CatalyzeSuccessBlock)success failure:(CatalyzeFailureBlock)failure {
     [CatalyzeHTTPManager updateHeaders];
     
-    [[CatalyzeHTTPManager httpClient] POST:[NSString stringWithFormat:@"/v2%@",urlString] parameters:params success:[CatalyzeHTTPManager successBlock:success] failure:[CatalyzeHTTPManager failureBlock:failure]];
+    [[CatalyzeHTTPManager httpClient] POST:[NSString stringWithFormat:@"%@%@",kCatalyzeAPIVersionPath,urlString] parameters:params success:[CatalyzeHTTPManager successBlock:success] failure:[CatalyzeHTTPManager failureBlock:failure]];
 }
 
 + (void)doPut:(NSString *)urlString withParams:(NSDictionary *)params success:(CatalyzeSuccessBlock)success failure:(CatalyzeFailureBlock)failure {
     [CatalyzeHTTPManager updateHeaders];
     
-    [[CatalyzeHTTPManager httpClient] PUT:[NSString stringWithFormat:@"/v2%@",urlString] parameters:params success:[CatalyzeHTTPManager successBlock:success] failure:[CatalyzeHTTPManager failureBlock:failure]];
+    [[CatalyzeHTTPManager httpClient] PUT:[NSString stringWithFormat:@"%@%@",kCatalyzeAPIVersionPath,urlString] parameters:params success:[CatalyzeHTTPManager successBlock:success] failure:[CatalyzeHTTPManager failureBlock:failure]];
 }
 
 + (void)doDelete:(NSString *)urlString success:(CatalyzeSuccessBlock)success failure:(CatalyzeFailureBlock)failure {
     [CatalyzeHTTPManager updateHeaders];
     
-    [[CatalyzeHTTPManager httpClient] DELETE:[NSString stringWithFormat:@"/v2%@",urlString] parameters:nil success:[CatalyzeHTTPManager successBlock:success] failure:[CatalyzeHTTPManager failureBlock:failure]];
+    [[CatalyzeHTTPManager httpClient] DELETE:[NSString stringWithFormat:@"%@%@",kCatalyzeAPIVersionPath,urlString] parameters:nil success:[CatalyzeHTTPManager successBlock:success] failure:[CatalyzeHTTPManager failureBlock:failure]];
 }
 
 + (void (^)(AFHTTPRequestOperation *operation, id responseObject))successBlock:(CatalyzeSuccessBlock)success {
@@ -89,8 +89,8 @@
 }
 
 + (void)updateHeaders {
-    [[CatalyzeHTTPManager httpClient].requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",[[NSUserDefaults standardUserDefaults] valueForKey:@"Authorization"]] forHTTPHeaderField:@"Authorization"];
-    [[CatalyzeHTTPManager httpClient].requestSerializer setValue:[NSString stringWithFormat:@"%@", [Catalyze apiKey]] forHTTPHeaderField:@"X-Api-Key"];
+    [[CatalyzeHTTPManager httpClient].requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@",[[NSUserDefaults standardUserDefaults] valueForKey:kCatalyzeAuthorizationKey]] forHTTPHeaderField:kCatalyzeAuthorizationHeader];
+    [[CatalyzeHTTPManager httpClient].requestSerializer setValue:[NSString stringWithFormat:@"%@", [Catalyze apiKey]] forHTTPHeaderField:kCatalyzeApiKeyHeader];
 }
 
 @end
