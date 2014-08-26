@@ -8,14 +8,14 @@ Pod::Spec.new do |spec|
         :type => 'Apache License, Version 2.0',
         :file => 'LICENSE'
     }
-    spec.author            = {
+    spec.authors           = {
         'Josh Ault' => 'josh@catalyze.io'
     }
     spec.source            = {
         :git => 'https://github.com/catalyzeio/catalyze-ios-sdk.git',
         :tag => spec.version.to_s
     }
-    spec.source_files      = 'catalyze-ios-sdk/*.{m,h}'
+    spec.source_files      = 'catalyze-ios-sdk/*.{h,m}'
     spec.requires_arc      = true
     spec.platform = :ios, '7.0'
     spec.dependency 'AFNetworking', '~> 2.3'
