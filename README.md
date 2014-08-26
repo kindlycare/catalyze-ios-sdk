@@ -231,10 +231,96 @@ Another option you have **with appropriate privileges** is to query another user
         //query completed successfully with an array CatalyzeEntry instances
     } failure:^(NSDictionary *result, int status, NSError *error) {
         //query failed
-    }];  
+    }];
+
+File Management
+===============
+Rather than just saving simple data types such as strings, numbers, or booleans, you can also store files on the Catalyze API using the iOS SDK. All file management tasks are done through the `CatalyzeFileManager` class. You can upload files, download files, list your files, or delete files. You can also perform those same operations for another user **with the appropriate permission level** of course.
+
+Uploading Files
+---------------
+Uploading a file requires an instance of NSData and to know the mime-type of the file you are uploading. If you have a file named `testFile.txt` in your main bundle, uploading a file would look like this
+
+	NSString *path = [[NSBundle mainBundle] pathForResource:@"testFile" ofType:@"txt"];
+    NSData *data = [NSData dataWithContentsOfFile:path];
+	[CatalyzeFileManager uploadFileToUser:data phi:NO mimeType:@"text/plain" success:^(NSDictionary *result) {
+        NSString *filesId = [result valueForKey:@"filesId"];
+        //store the filesId somewhere
+    } failure:^(NSDictionary *result, int status, NSError *error) {
+        //something went wrong, check the result dictionary
+    }];
+    
+If you want to upload a file for another user you must first know their usersId
+
+	NSString *path = [[NSBundle mainBundle] pathForResource:@"testFile" ofType:@"txt"];
+    NSData *data = [NSData dataWithContentsOfFile:path];
+	[CatalyzeFileManager uploadFileToOtherUser:data usersId:@"{usersId}" phi:NO mimeType:@"text/plain" success:^(NSDictionary *result) {
+        NSString *filesId = [result valueForKey:@"filesId"];
+        //store the filesId somewhere
+    } failure:^(NSDictionary *result, int status, NSError *error) {
+        //something went wrong, check the result dictionary
+    }];
+
+Downloading Files
+-----------------
+After we have uploaded a file, remember to store the filesId. The filesId is what you use to download a file. It uniquely identifies the file
+
+	[CatalyzeFileManager retrieveFile:filesId success:^(NSData *result) {
+        //save the data to disk, construct an image, etc.
+    } failure:^(NSDictionary *result, int status, NSError *error) {
+        //something went wrong, check the result dictionary
+    }];
+    
+Similarly if you uploaded a file for another user, you can download that file **with the appropriate permissions** like this
+
+	[CatalyzeFileManager retrieveFileFromUser:filesId usersId:@"{usersId}" success:^(NSData *result) {
+        //save the data to disk, construct an image, etc.
+    } failure:^(NSDictionary *result, int status, NSError *error) {
+        //something went wrong, check the result dictionary
+    }];
+
+Listing Files
+-------------
+If you don't save your filesId or you just want to give your user a list of all the files they have and let them choose which one they want, you can list all the files that belong to the currently logged in user
+
+	[CatalyzeFileManager listFiles:^(NSArray *result) {
+        for (NSDictionary *dict in result) {
+            [dict valueForKey:@"filesId"];
+        }
+    } failure:^(NSDictionary *result, int status, NSError *error) {
+        //something went wrong, check the result dictionary
+    }];
+    
+Similarly for another user, you can list their files as well **with the appropriate permissions**
+
+	[CatalyzeFileManager listFilesForUser:@"{usersId}" success:^(NSArray *result) {
+        for (NSDictionary *dict in result) {
+            [dict valueForKey:@"filesId"];
+        }
+    } failure:^(NSDictionary *result, int status, NSError *error) {
+        //something went wrong, check the result dictionary
+    }];
+
+Deleting Files
+--------------
+Deleting a file is straightforward and follows the same pattern as the other file management routes. If you know the filesId you can delete a file like this
+
+	[CatalyzeFileManager deleteFile:filesId success:^(id result) {
+        //the files has been deleted
+    } failure:^(NSDictionary *result, int status, NSError *error) {
+        //something went wrong, check the result dictionary
+    }];
+
+Similarly for another user, you can delete one of their files **with the appropriate permissions** like this
+
+	[CatalyzeFileManager deleteFileFromUser:filesId usersId:@"{usersId}" success:^(id result) {
+        //the files has been deleted
+    } failure:^(NSDictionary *result, int status, NSError *error) {
+        //something went wrong, check the result dictionary
+    }];
 
 License
---------
+=======
 
     Copyright 2014 catalyze.io, Inc.
 
