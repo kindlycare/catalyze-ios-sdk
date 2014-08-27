@@ -74,23 +74,7 @@
 }
 
 - (void)retrieveInBackgroundWithSuccess:(CatalyzeArraySuccessBlock)success failure:(CatalyzeFailureBlock)failure; {
-    //For compatibility with the current API the old implementation is left here. After 8/26/14 the following
-    //line should be uncommented and the rest of the method removed.
-    //[self retrieveInBackgroundForUsersId:[[CatalyzeUser currentUser] usersId] block:block];
-    
-    [CatalyzeHTTPManager doGet:[NSString stringWithFormat:@"/classes/%@/query?pageSize=%i&pageNumber=%i%@%@",[self catalyzeClassName], _pageSize, _pageNumber, [self constructQueryFieldParam], [self constructQueryValueParam]] success:^(id result) {
-        if (success) {
-            NSArray *array = (NSArray *)result;
-            NSMutableArray *entries = [NSMutableArray array];
-            for (id dict in array) {
-                CatalyzeEntry *entry = [CatalyzeEntry entryWithClassName:_catalyzeClassName];
-                [entry setValuesForKeysWithDictionary:dict];
-                entry.content = [NSMutableDictionary dictionaryWithDictionary:entry.content]; // to keep mutability
-                [entries addObject:entry];
-            }
-            success(entries);
-        }
-    } failure:failure];
+    [self retrieveInBackgroundForUsersId:[[CatalyzeUser currentUser] usersId] success:success failure:failure];
 }
 
 - (void)retrieveInBackgroundWithTarget:(id)target selector:(SEL)selector {
