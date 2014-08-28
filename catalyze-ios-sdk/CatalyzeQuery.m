@@ -50,7 +50,7 @@
 #pragma mark Retrieve
 
 - (void)retrieveAllEntriesInBackgroundWithSuccess:(CatalyzeArraySuccessBlock)success failure:(CatalyzeFailureBlock)failure; {
-    [CatalyzeHTTPManager doGet:[NSString stringWithFormat:@"/classes/%@/query?pageSize=%i&pageNumber=%i%@%@",[self catalyzeClassName], _pageSize, _pageNumber, [self constructQueryFieldParam], [self constructQueryValueParam]] success:^(id result) {
+    [CatalyzeHTTPManager doGet:[NSString stringWithFormat:@"/classes/%@/query?pageSize=%i&pageNumber=%i%@%@",[CatalyzeHTTPManager percentEncode:[self catalyzeClassName]], _pageSize, _pageNumber, [self constructQueryFieldParam], [self constructQueryValueParam]] success:^(id result) {
         if (success) {
             NSArray *array = (NSArray *)result;
             NSMutableArray *entries = [NSMutableArray array];
@@ -86,7 +86,7 @@
 }
 
 - (void)retrieveInBackgroundForUsersId:(NSString *)usersId success:(CatalyzeArraySuccessBlock)success failure:(CatalyzeFailureBlock)failure; {
-    [CatalyzeHTTPManager doGet:[NSString stringWithFormat:@"/classes/%@/query/%@?pageSize=%i&pageNumber=%i%@%@",[self catalyzeClassName], usersId, _pageSize, _pageNumber, [self constructQueryFieldParam], [self constructQueryValueParam]] success:^(id result) {
+    [CatalyzeHTTPManager doGet:[NSString stringWithFormat:@"/classes/%@/query/%@?pageSize=%i&pageNumber=%i%@%@",[CatalyzeHTTPManager percentEncode:[self catalyzeClassName]], usersId, _pageSize, _pageNumber, [self constructQueryFieldParam], [self constructQueryValueParam]] success:^(id result) {
         if (success) {
             NSArray *array = (NSArray *)result;
             NSMutableArray *entries = [NSMutableArray array];
@@ -114,16 +114,20 @@
 
 - (NSString *)constructQueryFieldParam {
     NSString *queryFieldParam = @"";
-    if (_queryField && ![_queryField isEqualToString:@""]) {
-        queryFieldParam = [NSString stringWithFormat:@"&field=%@", _queryField];
+    if (_queryField) {
+        if (![_queryField isKindOfClass:[NSString class]] || ([_queryField isKindOfClass:[NSString class]] && ![_queryField isEqualToString:@""])) {
+            queryFieldParam = [NSString stringWithFormat:@"&field=%@", [CatalyzeHTTPManager percentEncode:_queryField]];
+        }
     }
     return queryFieldParam;
 }
 
 - (NSString *)constructQueryValueParam {
     NSString *queryValueParam = @"";
-    if (_queryValue && ![_queryValue isEqualToString:@""]) {
-        queryValueParam = [NSString stringWithFormat:@"&searchBy=%@", _queryValue];
+    if (_queryValue) {
+        if (![_queryValue isKindOfClass:[NSString class]] || ([_queryValue isKindOfClass:[NSString class]] && ![_queryValue isEqualToString:@""])) {
+            queryValueParam = [NSString stringWithFormat:@"&searchBy=%@", [CatalyzeHTTPManager percentEncode:_queryValue]];
+        }
     }
     return queryValueParam;
 }

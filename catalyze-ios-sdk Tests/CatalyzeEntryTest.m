@@ -161,6 +161,30 @@ static const NSString * const className = @"medications";
     }
 }
 
+- (void)testRetrieveHashEntryIdFormat {
+    CatalyzeEntry *myEntry = [CatalyzeEntry entryWithClassName:className.copy];
+    [myEntry setEntryId:@"1234  "];
+    
+    __block BOOL finished = NO;
+    [myEntry retrieveInBackgroundWithSuccess:^(id result) {
+        XCTFail(@"Retrieved invalid entry");
+    } failure:^(NSDictionary *result, int status, NSError *error) {
+        XCTAssertNotNil(error);
+        XCTAssertNotNil(result);
+        XCTAssertEqual(status, 404, @"Unexpected status");
+        XCTAssertNotNil([result objectForKey:@"errors"]);
+        finished = YES;
+    }];
+    
+    NSDate *loopUntil = [NSDate dateWithTimeIntervalSinceNow:10];
+    while (finished == NO && [loopUntil timeIntervalSinceNow] > 0) {
+        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:loopUntil];
+    }
+    if (!finished) {
+        XCTFail(@"Could not run %s due to network issues", __PRETTY_FUNCTION__);
+    }
+}
+
 - (void)testUpdate {
     CatalyzeEntry *myEntry = [CatalyzeEntry entryWithClassName:className.copy];
     NSDictionary *content = @{@"medication":@"vicodin", @"frequency":@2};
