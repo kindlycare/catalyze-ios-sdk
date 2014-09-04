@@ -40,7 +40,8 @@ const NSString * const secondaryUsersId = @"b488fd80-9ab7-470b-990b-9381f1b4dfb8
     
     __block BOOL finished = NO;
     
-    [Catalyze setApiKey:apiKey.copy applicationId:appId.copy baseUrl:@"https://10.0.1.4:8443"];
+    [Catalyze setApiKey:apiKey.copy applicationId:appId.copy baseUrl:@"https://10.0.1.5:8443"];
+    [Catalyze setLoggingLevel:kLoggingLevelDebug];
     
     [CatalyzeUser logInWithUsernameInBackground:username.copy password:password.copy success:^(CatalyzeUser *result) {
         finished = YES;
