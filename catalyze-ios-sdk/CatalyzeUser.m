@@ -46,10 +46,7 @@
 #define kEncodeKeyType @"type"
 #define kEncodeKeyExtras @"extras"
 
-@interface CatalyzeUser() {
-    BOOL dirty;
-    NSMutableArray *dirtyFields;
-}
+@interface CatalyzeUser()
 
 @end
 
@@ -279,11 +276,6 @@ static CatalyzeUser *currentUser;
 
 #pragma mark - CatalyzeObject
 
-- (void)resetDirty {
-    dirty = NO;
-    dirtyFields = [[NSMutableArray alloc] init];
-}
-
 - (void)createInBackground {
     [NSException raise:@"MethodUnavailable" format:@"%s is not available on CatalyzeUser", __PRETTY_FUNCTION__];
 }
@@ -302,9 +294,6 @@ static CatalyzeUser *currentUser;
 
 - (void)saveInBackgroundWithSuccess:(CatalyzeSuccessBlock)success failure:(CatalyzeFailureBlock)failure {
     [CatalyzeHTTPManager doPut:[NSString stringWithFormat:@"/users/%@", _usersId] withParams:[self JSON:[CatalyzeUser class]] success:^(id result) {
-        dirty = NO;
-        [dirtyFields removeAllObjects];
-        
         NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithDictionary:result];
         
         dict = [CatalyzeUser modifyDict:dict];
@@ -330,9 +319,6 @@ static CatalyzeUser *currentUser;
 
 - (void)retrieveInBackgroundWithSuccess:(CatalyzeSuccessBlock)success failure:(CatalyzeFailureBlock)failure {
     [CatalyzeHTTPManager doGet:[NSString stringWithFormat:@"/users/%@", _usersId] success:^(id result) {
-        dirty = NO;
-        [dirtyFields removeAllObjects];
-        
         NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithDictionary:result];
         
         dict = [CatalyzeUser modifyDict:dict];

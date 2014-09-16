@@ -22,4 +22,8 @@ Pod::Spec.new do |spec|
     spec.subspec 'logging' do |ss|
         ss.dependency 'AFNetworkActivityLogger', '~> 2.0'
     end
+
+    spec.subspec 'HealthKit' do |ss|
+        ss.source_files = 'catalyze-ios-sdk/CatalyzeHealthKit/*.{h,m}'
+    end
 end

@@ -28,11 +28,11 @@
 //the following values are generated for test environments and inserted manually for now
 static const NSString * const username = @"test@catalyze.io";
 static const NSString * const password = @"password";
-static const NSString * const apiKey = @"ios io.catalyze.Mobile-Mom 0885a1cc-c100-4d2a-afed-bd73faa3321a";
-static const NSString * const appId = @"f8a3c90d-13b4-4f84-a7ee-8d83cd335692";
+static const NSString * const apiKey = @"a1ac5b13-5dec-4035-bbee-48b4e776f363";//@"ios io.catalyze.Mobile-Mom a1ac5b13-5dec-4035-bbee-48b4e776f363";
+static const NSString * const appId = @"897b4e65-7a62-4f2e-9505-d040d41845c3";
 const NSString * const secondaryUsername = @"test-secondary@catalyze.io";
 const NSString * const secondaryPassword = @"password";
-const NSString * const secondaryUsersId = @"b488fd80-9ab7-470b-990b-9381f1b4dfb8";
+const NSString * const secondaryUsersId = @"23e6478f-cb55-4c14-9358-7a59d4d80ad8";
 
 //class level
 + (void)setUp {
