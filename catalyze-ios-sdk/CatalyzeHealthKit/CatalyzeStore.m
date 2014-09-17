@@ -39,13 +39,14 @@
     [vital.extras setObject:[formatter stringFromDate:endDate] forKey:@"endDate"];
     
     CatalyzeObservation *observation = [[CatalyzeObservation alloc] init];
-    observation.code = identifier;
-    observation.codeSystem = identifier;
+    observation.name = identifier;
+    int maxLength = MIN((int)identifier.length, 45); // this is an API restriction for code and codeSystem
+    observation.code = [identifier substringToIndex:maxLength];
+    observation.codeSystem = observation.code;
     observation.value = [NSString stringWithFormat:@"%f", value];
     observation.uom = unitString;
     
     [vital.observations addObject:observation];
-    NSLog(@"vital! %@", [vital JSON:[CatalyzeVital class]]);
     [vital createInBackgroundWithSuccess:^(id result) {
         NSLog(@"successfully created vital!");
     } failure:^(NSDictionary *result, int status, NSError *error) {
