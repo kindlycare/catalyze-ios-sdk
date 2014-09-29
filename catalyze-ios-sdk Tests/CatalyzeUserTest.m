@@ -124,6 +124,7 @@
     __block BOOL finished = NO;
     [CatalyzeUser logInWithUsernameInBackground:secondaryUsername.copy password:secondaryPassword.copy success:^(CatalyzeUser *result) {
         [result setType:@"Physician"];
+        [result setDob:[NSDate date]];
         [result saveInBackgroundWithSuccess:^(id result) {
             CatalyzeUser *resultUser = (CatalyzeUser *)result;
             XCTAssertEqualObjects(resultUser.type, @"Physician");
@@ -136,7 +137,7 @@
                 XCTFail(@"Could not retrieve the user");
             }];
         } failure:^(NSDictionary *result, int status, NSError *error) {
-            XCTFail(@"Could not save the user");
+            XCTFail(@"Could not save the user %@", result);
         }];
     } failure:^(NSDictionary *result, int status, NSError *error) {
         XCTFail(@"Could not login the user");
@@ -188,10 +189,32 @@
             XCTAssertFalse([result isAuthenticated], @"Session information not cleared on delete");
             finished = YES;
         } failure:^(NSDictionary *result, int status, NSError *error) {
-            XCTFail(@"Could not delete a user");
+            XCTFail(@"Could not delete a user: %@", result);
         }];
     } failure:^(NSDictionary *result, int status, NSError *error) {
         XCTFail(@"Could not sign up a new user");
+    }];
+    NSDate *loopUntil = [NSDate dateWithTimeIntervalSinceNow:10];
+    while (finished == NO && [loopUntil timeIntervalSinceNow] > 0) {
+        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:loopUntil];
+    }
+    [super setUp]; //log back in the admin user so other tests can run successfully
+}
+
+- (void)testCreatedAtUpdatedAtDobAreDates {
+    __block BOOL finished = NO;
+    [CatalyzeUser logInWithUsernameInBackground:secondaryUsername.copy password:secondaryPassword.copy success:^(CatalyzeUser *result) {
+        [result retrieveInBackgroundWithSuccess:^(id result) {
+            CatalyzeUser *resultUser = (CatalyzeUser *)result;
+            XCTAssertTrue([resultUser.createdAt isKindOfClass:[NSDate class]], @"\"createdAt\" is not of type NSDate");
+            XCTAssertTrue([resultUser.updatedAt isKindOfClass:[NSDate class]], @"\"updatedAt\" is not of type NSDate");
+            XCTAssertTrue(!resultUser.dob || [resultUser.dob isKindOfClass:[NSDate class]], @"\"dob\" is not of type NSDate: %@", [resultUser.dob class]);
+            finished = YES;
+        } failure:^(NSDictionary *result, int status, NSError *error) {
+            XCTFail(@"Could not retrieve the user");
+        }];
+    } failure:^(NSDictionary *result, int status, NSError *error) {
+        XCTFail(@"Could not login the user");
     }];
     NSDate *loopUntil = [NSDate dateWithTimeIntervalSinceNow:10];
     while (finished == NO && [loopUntil timeIntervalSinceNow] > 0) {

@@ -273,4 +273,34 @@ static const NSString * const className = @"medications";
     }
 }
 
+- (void)testCreatedAtUpdatedAtAreDates {
+    CatalyzeEntry *myEntry = [CatalyzeEntry entryWithClassName:className.copy];
+    NSDictionary *content = @{@"medication":@"vicodin", @"frequency":@2};
+    [myEntry setContent:[NSMutableDictionary dictionaryWithDictionary:content]];
+    
+    __block BOOL finished = NO;
+    [myEntry createInBackgroundWithSuccess:^(id result) {
+        CatalyzeEntry *retrieveEntry = [CatalyzeEntry entryWithClassName:className.copy];
+        [retrieveEntry setEntryId:myEntry.entryId];
+        [retrieveEntry retrieveInBackgroundWithSuccess:^(id result) {
+            CatalyzeEntry *entry = (CatalyzeEntry *)result;
+            XCTAssertTrue([entry.createdAt isKindOfClass:[NSDate class]], @"\"createdAt\" is not of type NSDate");
+            XCTAssertTrue([entry.updatedAt isKindOfClass:[NSDate class]], @"\"updatedAt\" is not of type NSDate");
+            finished = YES;
+        } failure:^(NSDictionary *result, int status, NSError *error) {
+            XCTFail(@"Failed to retrieve a custom class entry");
+        }];
+    } failure:^(NSDictionary *result, int status, NSError *error) {
+        XCTFail(@"Failed to create a custom class entry");
+    }];
+    
+    NSDate *loopUntil = [NSDate dateWithTimeIntervalSinceNow:10];
+    while (finished == NO && [loopUntil timeIntervalSinceNow] > 0) {
+        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:loopUntil];
+    }
+    if (!finished) {
+        XCTFail(@"Could not run %s due to network issues", __PRETTY_FUNCTION__);
+    }
+}
+
 @end
