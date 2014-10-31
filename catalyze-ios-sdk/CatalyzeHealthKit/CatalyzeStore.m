@@ -7,8 +7,7 @@
 //
 
 #import "CatalyzeStore.h"
-#import "CatalyzeVital.h"
-#import "CatalyzeObservation.h"
+#import "CatalyzeEntry.h"
 
 @implementation CatalyzeStore
 
@@ -22,35 +21,25 @@
 }
 
 + (void)saveQuantitySampleWithUnitString:(NSString *)unitString value:(double)value identifier:(NSString *)identifier startDate:(NSDate *)startDate endDate:(NSDate *)endDate metadata:(NSDictionary *)metadata completion:(void (^)(BOOL, NSError *))completion {
-    //create a CatalyzeVital object and save to the Catalyze API
-    CatalyzeVital *vital = [[CatalyzeVital alloc] init];
-    
-    //the API will set createdAt equal to now, which will approximately be
-    //equal to sample.endDate, so lets set documentedAt to sample.startDate. This is when the
-    //data collection started.
-    vital.documentedAt = startDate;
+    //create a CatalyzeEntry and save to the Catalyze API
+    CatalyzeEntry *entry = [CatalyzeEntry entryWithClassName:@"health_kit"];
     
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"]];
     [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
     [formatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
     
-    [vital.extras setObject:[formatter stringFromDate:startDate] forKey:@"startDate"];
-    [vital.extras setObject:[formatter stringFromDate:endDate] forKey:@"endDate"];
+    [entry.content setObject:[formatter stringFromDate:startDate] forKey:@"startDate"];
+    [entry.content setObject:[formatter stringFromDate:endDate] forKey:@"endDate"];
     
-    CatalyzeObservation *observation = [[CatalyzeObservation alloc] init];
-    observation.name = identifier;
-    int maxLength = MIN((int)identifier.length, 45); // this is an API restriction for code and codeSystem
-    observation.code = [identifier substringToIndex:maxLength];
-    observation.codeSystem = observation.code;
-    observation.value = [NSString stringWithFormat:@"%f", value];
-    observation.uom = unitString;
+    [entry.content setValue:identifier forKey:@"identifier"];
+    [entry.content setValue:[NSNumber numberWithDouble:value] forKey:@"value"];
+    [entry.content setValue:unitString forKey:@"units"];
     
-    [vital.observations addObject:observation];
-    [vital createInBackgroundWithSuccess:^(id result) {
-        NSLog(@"successfully created vital!");
+    [entry createInBackgroundWithSuccess:^(id result) {
+        NSLog(@"successfully created entry!");
     } failure:^(NSDictionary *result, int status, NSError *error) {
-        NSLog(@"Failed to create vital! %i - %@", status, result);
+        NSLog(@"Failed to create entry! %i - %@", status, result);
     }];
     
     //save to healthkit

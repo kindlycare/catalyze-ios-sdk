@@ -86,8 +86,6 @@
 		278FBAF119A79FE900FC41C4 /* CatalyzeObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 278FBAF019A79FE900FC41C4 /* CatalyzeObject.m */; };
 		278FBAF219A7A12700FC41C4 /* CatalyzeObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 278FBAEF19A79FE900FC41C4 /* CatalyzeObject.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		278FBAF319A7A12E00FC41C4 /* CatalyzeObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 278FBAF019A79FE900FC41C4 /* CatalyzeObject.m */; };
-		279207DE19B7F0E60090AFBF /* CatalyzeVital.m in Sources */ = {isa = PBXBuildFile; fileRef = 279207DD19B7F0E60090AFBF /* CatalyzeVital.m */; };
-		279207E119B7F17C0090AFBF /* CatalyzeObservation.m in Sources */ = {isa = PBXBuildFile; fileRef = 279207E019B7F17C0090AFBF /* CatalyzeObservation.m */; };
 		279207E419B7F2990090AFBF /* CatalyzeStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 279207E319B7F2990090AFBF /* CatalyzeStore.m */; };
 		279602D519742F9B009BAD41 /* AFNetworkActivityLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 279602D419742F9B009BAD41 /* AFNetworkActivityLogger.m */; };
 		279602E919743284009BAD41 /* AFHTTPRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 279602D719743284009BAD41 /* AFHTTPRequestOperation.m */; };
@@ -166,10 +164,6 @@
 		278FBAED19A6D68600FC41C4 /* testFile.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = testFile.txt; path = resources/testFile.txt; sourceTree = "<group>"; };
 		278FBAEF19A79FE900FC41C4 /* CatalyzeObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CatalyzeObject.h; sourceTree = "<group>"; };
 		278FBAF019A79FE900FC41C4 /* CatalyzeObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CatalyzeObject.m; sourceTree = "<group>"; };
-		279207DC19B7F0E60090AFBF /* CatalyzeVital.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CatalyzeVital.h; sourceTree = "<group>"; };
-		279207DD19B7F0E60090AFBF /* CatalyzeVital.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CatalyzeVital.m; sourceTree = "<group>"; };
-		279207DF19B7F17C0090AFBF /* CatalyzeObservation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CatalyzeObservation.h; sourceTree = "<group>"; };
-		279207E019B7F17C0090AFBF /* CatalyzeObservation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CatalyzeObservation.m; sourceTree = "<group>"; };
 		279207E219B7F2990090AFBF /* CatalyzeStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CatalyzeStore.h; sourceTree = "<group>"; };
 		279207E319B7F2990090AFBF /* CatalyzeStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CatalyzeStore.m; sourceTree = "<group>"; };
 		279602D319742F9B009BAD41 /* AFNetworkActivityLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFNetworkActivityLogger.h; sourceTree = "<group>"; };
@@ -299,10 +293,6 @@
 		279207DB19B7F0770090AFBF /* CatalyzeHealthKit */ = {
 			isa = PBXGroup;
 			children = (
-				279207DC19B7F0E60090AFBF /* CatalyzeVital.h */,
-				279207DD19B7F0E60090AFBF /* CatalyzeVital.m */,
-				279207DF19B7F17C0090AFBF /* CatalyzeObservation.h */,
-				279207E019B7F17C0090AFBF /* CatalyzeObservation.m */,
 				279207E219B7F2990090AFBF /* CatalyzeStore.h */,
 				279207E319B7F2990090AFBF /* CatalyzeStore.m */,
 			);
@@ -691,7 +681,6 @@
 				27B9C28217CBBAC600B8FA02 /* CatalyzeEntry.m in Sources */,
 				279602EE19743284009BAD41 /* AFURLConnectionOperation.m in Sources */,
 				279602ED19743284009BAD41 /* AFSecurityPolicy.m in Sources */,
-				279207DE19B7F0E60090AFBF /* CatalyzeVital.m in Sources */,
 				27B9C28317CBBAC600B8FA02 /* CatalyzeQuery.m in Sources */,
 				278FBAE919A6BE4900FC41C4 /* CatalyzeFileManager.m in Sources */,
 				279602EB19743284009BAD41 /* AFHTTPSessionManager.m in Sources */,
@@ -710,7 +699,6 @@
 				279602EC19743284009BAD41 /* AFNetworkReachabilityManager.m in Sources */,
 				279602F019743284009BAD41 /* AFURLResponseSerialization.m in Sources */,
 				279602EF19743284009BAD41 /* AFURLRequestSerialization.m in Sources */,
-				279207E119B7F17C0090AFBF /* CatalyzeObservation.m in Sources */,
 				27CFF39F18DF98CA00004FEE /* SocialId.m in Sources */,
 				27CFF49D18DFB84400004FEE /* CatalyzeReference.m in Sources */,
 				275658D918DFC45500C3D5D1 /* JSONObject.m in Sources */,
