@@ -15,15 +15,11 @@ Pod::Spec.new do |spec|
         :git => 'https://github.com/catalyzeio/catalyze-ios-sdk.git',
         :tag => spec.version.to_s
     }
-    spec.source_files      = 'catalyze-ios-sdk/*.{h,m}'
+    spec.source_files      = 'catalyze-ios-sdk/**/*.{h,m}'
     spec.requires_arc      = true
     spec.platform = :ios, '7.0'
     spec.dependency 'AFNetworking', '~> 2.3'
     spec.subspec 'logging' do |ss|
         ss.dependency 'AFNetworkActivityLogger', '~> 2.0'
-    end
-
-    spec.subspec 'HealthKit' do |ss|
-        ss.source_files = 'catalyze-ios-sdk/CatalyzeHealthKit/*.{h,m}'
     end
 end
