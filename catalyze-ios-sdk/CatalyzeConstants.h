@@ -33,8 +33,8 @@ typedef void (^CatalyzeFailureBlock)(NSDictionary *result, int status, NSError *
 /**
  The base URL for the catalyze.io API.
  */
-#define LOCAL_ENV
-#define kCatalyzeBaseUrl @"https://apiv2.catalyze.io"
+//#define LOCAL_ENV
+#define kCatalyzeBaseUrl @"https://api.catalyze.io"
 #define kCatalyzeAPIVersionPath @"/v2"
 
 #define kCatalyzeAuthorizationHeader @"Authorization"
