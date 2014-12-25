@@ -22,6 +22,28 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		02DCE93A1A4C09F1006AC7CE /* Catalyze.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 27B9C27317CBBAC600B8FA02 /* Catalyze.h */; };
+		02DCE93B1A4C09F1006AC7CE /* CatalyzeConstants.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 27B9C27517CBBAC600B8FA02 /* CatalyzeConstants.h */; };
+		02DCE93C1A4C09F1006AC7CE /* CatalyzeObjectProtocol.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 275658DA18DFC9B400C3D5D1 /* CatalyzeObjectProtocol.h */; };
+		02DCE93D1A4C09F1006AC7CE /* CatalyzeHTTPManager.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 27B9C27617CBBAC600B8FA02 /* CatalyzeHTTPManager.h */; };
+		02DCE93E1A4C09F1006AC7CE /* CatalyzeFileManager.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 278FBAE719A6BE4900FC41C4 /* CatalyzeFileManager.h */; };
+		02DCE93F1A4C09F1006AC7CE /* CatalyzeEntry.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 27B9C27817CBBAC600B8FA02 /* CatalyzeEntry.h */; };
+		02DCE9401A4C09F1006AC7CE /* CatalyzeObject.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 278FBAEF19A79FE900FC41C4 /* CatalyzeObject.h */; };
+		02DCE9411A4C09F1006AC7CE /* CatalyzeReference.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 27CFF49B18DFB84400004FEE /* CatalyzeReference.h */; };
+		02DCE9421A4C09F1006AC7CE /* CatalyzeQuery.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 27B9C27A17CBBAC600B8FA02 /* CatalyzeQuery.h */; };
+		02DCE9431A4C09F1006AC7CE /* CatalyzeUser.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 27CFF38518DF946D00004FEE /* CatalyzeUser.h */; };
+		02DCE9441A4C09F1006AC7CE /* Email.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 27CFF38818DF95B700004FEE /* Email.h */; };
+		02DCE9451A4C09F1006AC7CE /* Name.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 27CFF38B18DF95FE00004FEE /* Name.h */; };
+		02DCE9461A4C09F1006AC7CE /* PhoneNumber.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 27CFF38E18DF964C00004FEE /* PhoneNumber.h */; };
+		02DCE9471A4C09F1006AC7CE /* Address.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 27CFF39118DF968900004FEE /* Address.h */; };
+		02DCE9481A4C09F1006AC7CE /* Geocode.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 27CFF39418DF96DF00004FEE /* Geocode.h */; };
+		02DCE9491A4C09F1006AC7CE /* Guardian.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 27CFF39718DF984600004FEE /* Guardian.h */; };
+		02DCE94A1A4C09F1006AC7CE /* Language.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 27CFF39A18DF98A100004FEE /* Language.h */; };
+		02DCE94B1A4C09F1006AC7CE /* SocialId.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 27CFF39D18DF98CA00004FEE /* SocialId.h */; };
+		02DCE94C1A4C09F1006AC7CE /* Mrn.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 27CFF3A018DF98EB00004FEE /* Mrn.h */; };
+		02DCE94D1A4C09F1006AC7CE /* HealthPlan.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 27CFF3A318DF991F00004FEE /* HealthPlan.h */; };
+		02DCE94E1A4C09F1006AC7CE /* JSONObject.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 275658D718DFC45500C3D5D1 /* JSONObject.h */; };
+		02DCE94F1A4C09F1006AC7CE /* NSObject+Properties.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 274A9FC219ABF27A00DB7039 /* NSObject+Properties.h */; };
 		271D663A19AFB571004FED88 /* CatalyzeQueryTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 271D663919AFB571004FED88 /* CatalyzeQueryTest.m */; };
 		274833CC19A3E68100F3B940 /* Catalyze.m in Sources */ = {isa = PBXBuildFile; fileRef = 27B9C27417CBBAC600B8FA02 /* Catalyze.m */; };
 		274833CD19A3E68B00F3B940 /* CatalyzeHTTPManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 27B9C27717CBBAC600B8FA02 /* CatalyzeHTTPManager.m */; };
@@ -86,7 +108,6 @@
 		278FBAF119A79FE900FC41C4 /* CatalyzeObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 278FBAF019A79FE900FC41C4 /* CatalyzeObject.m */; };
 		278FBAF219A7A12700FC41C4 /* CatalyzeObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 278FBAEF19A79FE900FC41C4 /* CatalyzeObject.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		278FBAF319A7A12E00FC41C4 /* CatalyzeObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 278FBAF019A79FE900FC41C4 /* CatalyzeObject.m */; };
-		279207E419B7F2990090AFBF /* CatalyzeStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 279207E319B7F2990090AFBF /* CatalyzeStore.m */; };
 		279602D519742F9B009BAD41 /* AFNetworkActivityLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 279602D419742F9B009BAD41 /* AFNetworkActivityLogger.m */; };
 		279602E919743284009BAD41 /* AFHTTPRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 279602D719743284009BAD41 /* AFHTTPRequestOperation.m */; };
 		279602EA19743284009BAD41 /* AFHTTPRequestOperationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 279602D919743284009BAD41 /* AFHTTPRequestOperationManager.m */; };
@@ -134,12 +155,36 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				02DCE93A1A4C09F1006AC7CE /* Catalyze.h in CopyFiles */,
+				02DCE93B1A4C09F1006AC7CE /* CatalyzeConstants.h in CopyFiles */,
+				02DCE93C1A4C09F1006AC7CE /* CatalyzeObjectProtocol.h in CopyFiles */,
+				02DCE93D1A4C09F1006AC7CE /* CatalyzeHTTPManager.h in CopyFiles */,
+				02DCE93E1A4C09F1006AC7CE /* CatalyzeFileManager.h in CopyFiles */,
+				02DCE93F1A4C09F1006AC7CE /* CatalyzeEntry.h in CopyFiles */,
+				02DCE9401A4C09F1006AC7CE /* CatalyzeObject.h in CopyFiles */,
+				02DCE9411A4C09F1006AC7CE /* CatalyzeReference.h in CopyFiles */,
+				02DCE9421A4C09F1006AC7CE /* CatalyzeQuery.h in CopyFiles */,
+				02DCE9431A4C09F1006AC7CE /* CatalyzeUser.h in CopyFiles */,
+				02DCE9441A4C09F1006AC7CE /* Email.h in CopyFiles */,
+				02DCE9451A4C09F1006AC7CE /* Name.h in CopyFiles */,
+				02DCE9461A4C09F1006AC7CE /* PhoneNumber.h in CopyFiles */,
+				02DCE9471A4C09F1006AC7CE /* Address.h in CopyFiles */,
+				02DCE9481A4C09F1006AC7CE /* Geocode.h in CopyFiles */,
+				02DCE9491A4C09F1006AC7CE /* Guardian.h in CopyFiles */,
+				02DCE94A1A4C09F1006AC7CE /* Language.h in CopyFiles */,
+				02DCE94B1A4C09F1006AC7CE /* SocialId.h in CopyFiles */,
+				02DCE94C1A4C09F1006AC7CE /* Mrn.h in CopyFiles */,
+				02DCE94D1A4C09F1006AC7CE /* HealthPlan.h in CopyFiles */,
+				02DCE94E1A4C09F1006AC7CE /* JSONObject.h in CopyFiles */,
+				02DCE94F1A4C09F1006AC7CE /* NSObject+Properties.h in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		02DCE9501A4C0A23006AC7CE /* CatalyzeStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CatalyzeStore.h; path = "catalyze-ios-sdk/CatalyzeStore.h"; sourceTree = SOURCE_ROOT; };
+		02DCE9511A4C0A23006AC7CE /* CatalyzeStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CatalyzeStore.m; path = "catalyze-ios-sdk/CatalyzeStore.m"; sourceTree = SOURCE_ROOT; };
 		271D663919AFB571004FED88 /* CatalyzeQueryTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CatalyzeQueryTest.m; sourceTree = "<group>"; };
 		274A9FBE19ABEC6D00DB7039 /* CatalyzeUserTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CatalyzeUserTest.m; sourceTree = "<group>"; };
 		274A9FC019ABECBB00DB7039 /* CatalyzeEntryTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CatalyzeEntryTest.m; sourceTree = "<group>"; };
@@ -164,8 +209,6 @@
 		278FBAED19A6D68600FC41C4 /* testFile.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = testFile.txt; path = resources/testFile.txt; sourceTree = "<group>"; };
 		278FBAEF19A79FE900FC41C4 /* CatalyzeObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CatalyzeObject.h; sourceTree = "<group>"; };
 		278FBAF019A79FE900FC41C4 /* CatalyzeObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CatalyzeObject.m; sourceTree = "<group>"; };
-		279207E219B7F2990090AFBF /* CatalyzeStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CatalyzeStore.h; sourceTree = "<group>"; };
-		279207E319B7F2990090AFBF /* CatalyzeStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CatalyzeStore.m; sourceTree = "<group>"; };
 		279602D319742F9B009BAD41 /* AFNetworkActivityLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFNetworkActivityLogger.h; sourceTree = "<group>"; };
 		279602D419742F9B009BAD41 /* AFNetworkActivityLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFNetworkActivityLogger.m; sourceTree = "<group>"; };
 		279602D619743284009BAD41 /* AFHTTPRequestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPRequestOperation.h; sourceTree = "<group>"; };
@@ -293,8 +336,8 @@
 		279207DB19B7F0770090AFBF /* CatalyzeHealthKit */ = {
 			isa = PBXGroup;
 			children = (
-				279207E219B7F2990090AFBF /* CatalyzeStore.h */,
-				279207E319B7F2990090AFBF /* CatalyzeStore.m */,
+				02DCE9501A4C0A23006AC7CE /* CatalyzeStore.h */,
+				02DCE9511A4C0A23006AC7CE /* CatalyzeStore.m */,
 			);
 			path = CatalyzeHealthKit;
 			sourceTree = "<group>";
@@ -693,7 +736,6 @@
 				279602EA19743284009BAD41 /* AFHTTPRequestOperationManager.m in Sources */,
 				27CFF38D18DF95FE00004FEE /* Name.m in Sources */,
 				279602E919743284009BAD41 /* AFHTTPRequestOperation.m in Sources */,
-				279207E419B7F2990090AFBF /* CatalyzeStore.m in Sources */,
 				279602F119743284009BAD41 /* AFURLSessionManager.m in Sources */,
 				27CFF38718DF946D00004FEE /* CatalyzeUser.m in Sources */,
 				279602EC19743284009BAD41 /* AFNetworkReachabilityManager.m in Sources */,
